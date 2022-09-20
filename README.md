@@ -1,1 +1,1 @@
-# internhun-backend
+# internhunt-backend
