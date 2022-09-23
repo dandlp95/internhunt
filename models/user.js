@@ -6,6 +6,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  email:{
+    type: String,
+    required: true
+  },
   password: {
     type: String,
     required: true,
@@ -14,14 +18,19 @@ const UserSchema = new Schema({
     type: Number,
     default: 0,
   },
-  suspended: {
-    type: Boolean,
-    default: false,
+  suspension: {
+    isSuspended: {
+      type: Boolean,
+      default: false,
+    },
+    expire: Date,
   },
-  strikes: {
-    type: Number,
-    default: 0,
-  },
+  warnings: [
+    {
+      warningText: String,
+      date: Date,
+    },
+  ],
 });
 
 const User = mongoose.model("User", UserSchema);

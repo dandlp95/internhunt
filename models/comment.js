@@ -13,6 +13,7 @@ const CommentSchema = new Schema({
   },
   rating: {
     type: Number,
+    default: 0
   },
   date: {
     type: Date,
