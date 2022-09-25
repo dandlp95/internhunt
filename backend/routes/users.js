@@ -13,9 +13,11 @@ router.post("/add", userController.addUser)
 
 router.post("/login", userController.login)
 
-router.patch("/strike/:id", userController.strikeUser)
+router.patch("/warn/:id", userController.warnUser)
 
-router.patch("/suspend/:id", userController.strikeUser)
+router.patch("/suspend/:id", userController.suspendUser)
+
+router.patch("/removeSuspension/:id", userController.removeSuspension)
 
 module.exports = router;
 
