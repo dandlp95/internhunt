@@ -12,7 +12,8 @@ const PostSchema = new Schema({
     },
     date:{
         type:Date,
-        required:true
+        required:true,
+        default: new Date()
     },
     owner: {
         type: Schema.Types.ObjectId,
@@ -20,7 +21,8 @@ const PostSchema = new Schema({
         required: true,
     },
     rating:{
-        type:Number
+        type:Number,
+        default: 0
     },
     city:{
         type:String

@@ -74,8 +74,17 @@ const addComment = (req, res, next) => {
   const comment = {
     content: req.body.content,
     owner: req.body.owner,
-    
-  }
+    post: req.body.post,
+  };
+
+  CommentModel.create(comment, (err, doc) => {
+    if (err) {
+      const apiError400 = new ApiError400();
+      next(apiError400);
+    } else {
+      res.status(200).send(doc);
+    }
+  });
 };
 
 module.exports = {

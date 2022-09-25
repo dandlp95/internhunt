@@ -7,7 +7,7 @@ const controllers = require("./genericControllers");
 
 const getAllUsers = (req, res, next) => {
   // Double checks Ids are sent...
-  UserModel.find({}, "userName", (err, docs) => {
+  UserModel.find({}, "firstName lastName", (err, docs) => {
     if (err) {
       const apiError = new ApiError400(err.message);
       next(apiError);
@@ -21,11 +21,11 @@ const getAllUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  UserModel.findById(req.params.id, "userName", (err, doc) => {
+  UserModel.findById(req.params.id, "firstName lastName", (err, doc) => {
     if (err) {
       const apiError = new ApiError400(err.message);
       next(apiError);
-    } else if (!docs) {
+    } else if (!doc) {
       const apiError = new ApiError404(err.message);
       next(apiError);
     } else {
@@ -38,7 +38,7 @@ const getAllUsersPrivate = (req, res, next) => {
   // Obviously check for authentication.
   UserModel.find(
     {},
-    "userName email accessLevel suspension warnings",
+    "firstName lastName email accessLevel suspension warnings",
     (err, doc) => {
       if (err) {
         const apiError = new ApiError400(err.message);
@@ -57,7 +57,7 @@ const getUserByIdPrivate = (req, res, next) => {
   // Obviously check for authentication.
   UserModel.findById(
     req.params.id,
-    "userName email accessLevel suspension warnings",
+    "firstName lastName email accessLevel suspension warnings",
     (err, doc) => {
       if (err) {
         const apiError = new ApiError400(err.message);
@@ -74,7 +74,8 @@ const getUserByIdPrivate = (req, res, next) => {
 
 const editUser = (req, res, next) => {
   const edits = {
-    userName: req.body.userName,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
   };
 
   UserModel.findByIdAndUpdate(edits, (err, doc) => {
@@ -106,9 +107,10 @@ const deleteUser = (req, res, next) => {
 
 const addUser = (req, res, next) => {
   const newUser = {
-    userName: req.body.userName,
+    email: req.body.email,
     password: req.body.password,
-    // Check the default fields are added...
+    firstName: req.body.firstName,
+    lastName: req.body.lastName
   };
 
   UserModel.create(newUser, (err, doc) => {
@@ -208,7 +210,45 @@ const editPassword = async (req, res, next) => {
   });
 };
 
-const login = (req, res, next) => {};
+const login = (req, res, next) => {
+
+
+  const email = req.body.email;
+  const password = req.body.password;
+
+  let accountInfo;
+
+  AccountModel.findOne({ email: email })
+    .then((account) => {
+      if (account.currStatus == "inactive") {
+        // If account doc doesn't exist will default to false too.
+        const apiError = new Api404Error("Account not found.");
+        throw apiError;
+      }
+      accountInfo = account;
+      return bcrypt.compare(password, account.password);
+    })
+    .then((matches) => {
+      if (!matches) {
+        const apiError = new Api401Error("Wrong password.");
+        throw apiError;
+      }
+      const token = jwt.sign(
+        {
+          email: accountInfo.email,
+          id: accountInfo._id.toString(),
+        },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1h" }
+      );
+      res
+        .status(200)
+        .send({ token: token, userId: accountInfo._id.toString() });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
 
 module.exports = {
   getAllUsers,
@@ -222,4 +262,5 @@ module.exports = {
   editPassword,
   removeSuspension,
   getAllUsersPrivate,
+  getUserByIdPrivate
 };
