@@ -110,7 +110,8 @@ const addUser = (req, res, next) => {
     email: req.body.email,
     password: req.body.password,
     firstName: req.body.firstName,
-    lastName: req.body.lastName
+    lastName: req.body.lastName,
+    major: req.body.major,
   };
 
   UserModel.create(newUser, (err, doc) => {
@@ -211,8 +212,6 @@ const editPassword = async (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-
-
   const email = req.body.email;
   const password = req.body.password;
 
@@ -262,5 +261,5 @@ module.exports = {
   editPassword,
   removeSuspension,
   getAllUsersPrivate,
-  getUserByIdPrivate
+  getUserByIdPrivate,
 };

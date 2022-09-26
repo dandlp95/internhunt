@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import { useState, useEffect } from "react";
+import styles from "./App";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [userToken, setUserToken] = useState("");
+  // useEffect(()=>{}) Use useEffect() to check if there is a jwt first
+
+  const handleLogin = () => {};
+
+  if (!userToken) {
+    return (
+      <div>
+        <form>
+          <label>
+            Enter username:
+            <input type="text" name="username" />
+          </label>
+          <label>
+            Enter password:
+            <input type="text" name="password" />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+    );
+  }
 }
 
 export default App;

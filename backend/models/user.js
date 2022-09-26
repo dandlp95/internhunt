@@ -44,6 +44,10 @@ const UserSchema = new Schema({
     type: Boolean, // This will be used to verify if a user has confirmed their account...
     default: false,
   },
+  major: {
+    type:String,
+    required:true,
+  }
 });
 
 const User = mongoose.model("User", UserSchema);
