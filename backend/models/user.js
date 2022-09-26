@@ -2,17 +2,18 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  email:{
+  email: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
   firstName: {
-    type:String,
-    required:true,
+    type: String,
+    required: true,
   },
   lastName: {
-    type:String,
-    required:true
+    type: String,
+    required: true,
   },
   // img: {
   //   // We will see how I will implement this...
@@ -38,6 +39,11 @@ const UserSchema = new Schema({
       date: Date,
     },
   ],
+
+  active: {
+    type: Boolean, // This will be used to verify if a user has confirmed their account...
+    default: false,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
