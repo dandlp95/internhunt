@@ -2,26 +2,54 @@ import React from "react";
 import "./App.css";
 import { useState, useEffect } from "react";
 import styles from "./App";
+import { getApiRoot } from "./utils/getApiRoot";
+import Register from "./components/register"
 
 function App() {
   const [userToken, setUserToken] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   // useEffect(()=>{}) Use useEffect() to check if there is a jwt first
 
-  const handleLogin = () => {};
+  const handleLogin = async () => {
+
+    const options = {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    };
+
+    const response = await fetch(getApiRoot() + "/users/login", options);
+    const userData = await response.json();
+    console.log(userData);
+
+    localStorage.setItem(
+      "userData",
+      JSON.stringify({ userId: userData.userId, jwt: userData.token })
+    );
+  };
 
   if (!userToken) {
     return (
       <div>
-        <form>
+        <form onSubmit={(e) => e.preventDefault()}>
           <label>
-            Enter username:
-            <input type="text" name="username" />
+            Enter email:
+            <input
+              type="text"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </label>
           <label>
             Enter password:
-            <input type="text" name="password" />
+            <input
+              type="text"
+              name="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </label>
-          <input type="submit" value="Submit" />
+          <input type="submit" value="Submit" onClick={handleLogin} />
         </form>
       </div>
     );
