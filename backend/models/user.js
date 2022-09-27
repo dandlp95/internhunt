@@ -31,7 +31,10 @@ const UserSchema = new Schema({
       type: Boolean,
       default: false,
     },
-    expire: Date,
+    expire: {
+      type: Date,
+      default: null,
+    },
   },
   warnings: [
     {
@@ -45,9 +48,9 @@ const UserSchema = new Schema({
     default: false,
   },
   major: {
-    type:String,
-    required:true,
-  }
+    type: String,
+    required: true,
+  },
 });
 
 const User = mongoose.model("User", UserSchema);

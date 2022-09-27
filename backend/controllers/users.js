@@ -4,6 +4,9 @@ const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
+const { encryptPassword } = require("../utils/encrypt");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const getAllUsers = (req, res, next) => {
   // Double checks Ids are sent...
@@ -105,10 +108,11 @@ const deleteUser = (req, res, next) => {
   });
 };
 
-const addUser = (req, res, next) => {
+const addUser = async (req, res, next) => {
+  const encryptedPassword = await encryptPassword(req.body.password);
   const newUser = {
     email: req.body.email,
-    password: req.body.password,
+    password: encryptedPassword,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     major: req.body.major,
@@ -122,7 +126,7 @@ const addUser = (req, res, next) => {
       const apiError = new ApiError404(err.message);
       next(apiError);
     } else {
-      res.status(200).send(!doc);
+      res.status(200).send(doc);
     }
   });
 };
@@ -197,8 +201,9 @@ const removeSuspension = async (req, res, next) => {
 };
 
 const editPassword = async (req, res, next) => {
-  // This needs to be changed so passed password is encrypted...
-  UserModel.findByIdAndUpdate(req.params.id, req.body.password, (err, doc) => {
+
+  const encryptedPassword = encryptPassword(req.body.password);
+  UserModel.findByIdAndUpdate(req.params.id, encryptedPassword, (err, doc) => {
     if (err) {
       const apiError400 = new ApiError400(err.message);
       next(err);
@@ -217,11 +222,11 @@ const login = (req, res, next) => {
 
   let accountInfo;
 
-  AccountModel.findOne({ email: email })
+  UserModel.findOne({ email: email })
     .then((account) => {
       if (account.currStatus == "inactive") {
         // If account doc doesn't exist will default to false too.
-        const apiError = new Api404Error("Account not found.");
+        const apiError = new ApiError404("Account not found.");
         throw apiError;
       }
       accountInfo = account;
@@ -229,7 +234,7 @@ const login = (req, res, next) => {
     })
     .then((matches) => {
       if (!matches) {
-        const apiError = new Api401Error("Wrong password.");
+        const apiError = new ApiError404("Wrong password.");
         throw apiError;
       }
       const token = jwt.sign(
