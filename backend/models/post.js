@@ -34,11 +34,8 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  major: {
-    type: Schema.Types.ObjectId,
-    ref: "Major",
-    required: true,
-  },
+  // The user will not add the department manually, the backend will do when they get the majors parameters. It will get the department for a major and add
+  departments: [String],
 });
 
 const Post = mongoose.model("Post", PostSchema);

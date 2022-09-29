@@ -1,4 +1,5 @@
 const UserModel = require("../models/user");
+const MajorModel = require("../models/major");
 const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
@@ -109,26 +110,36 @@ const deleteUser = (req, res, next) => {
 };
 
 const addUser = async (req, res, next) => {
-  const encryptedPassword = await encryptPassword(req.body.password);
-  const newUser = {
-    email: req.body.email,
-    password: encryptedPassword,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    major: req.body.major,
-  };
+  try {
+    const encryptedPassword = await encryptPassword(req.body.password);
+    const major = MajorModel.find({ name: req.body.major });
 
-  UserModel.create(newUser, (err, doc) => {
-    if (err) {
-      const apiError = new ApiError400(err.message);
-      next(apiError);
-    } else if (!doc) {
-      const apiError = new ApiError404(err.message);
-      next(apiError);
-    } else {
-      res.status(200).send(doc);
+    if (!major) {
+      throw new ApiError400("Invalid major");
     }
-  });
+
+    const newUser = {
+      email: req.body.email,
+      password: encryptedPassword,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      major: major._id,
+    };
+
+    UserModel.create(newUser, (err, doc) => {
+      if (err) {
+        const apiError = new ApiError400(err.message);
+        next(apiError);
+      } else if (!doc) {
+        const apiError = new ApiError404(err.message);
+        next(apiError);
+      } else {
+        res.status(200).send(doc);
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const warnUser = async (req, res, next) => {
@@ -201,7 +212,6 @@ const removeSuspension = async (req, res, next) => {
 };
 
 const editPassword = async (req, res, next) => {
-
   const encryptedPassword = encryptPassword(req.body.password);
   UserModel.findByIdAndUpdate(req.params.id, encryptedPassword, (err, doc) => {
     if (err) {

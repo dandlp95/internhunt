@@ -11,6 +11,8 @@ router.patch("/edit/:id", postController.editPost)
 
 router.delete("/delete/:id", postController.deletePost)
 
-router.post("/add", postController.addPost)
+router.post("/add/", postController.addPost)
+
+router.get("/getPostsByMajor/:department", postController.getPostsByDepartment)
 
 module.exports = router

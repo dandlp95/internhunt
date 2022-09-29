@@ -42,14 +42,13 @@ const UserSchema = new Schema({
       date: Date,
     },
   ],
-
   active: {
     type: Boolean, // This will be used to verify if a user has confirmed their account...
     default: false,
   },
   major: {
-    type: String,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "major",
   },
 });
 
