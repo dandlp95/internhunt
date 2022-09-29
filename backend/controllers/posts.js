@@ -107,6 +107,24 @@ const getPostsByDepartment = (req, res, next) => {
   });
 };
 
+const getPostsByMajor = async (req, res, next) => {
+  const major = req.params.major;
+  const foundMajor = await MajorModel.find({ name: major });
+  const department = foundMajor.department;
+
+  PostModel.find({ departments: department }, (err, docs) => {
+    if (err) {
+      const apiError400 = new ApiError400(err.message);
+      next(apiError400);
+    } else if (!docs) {
+      const apiError404 = new ApiError404("No documents found");
+      next(apiError404);
+    } else {
+      res.status(200).send(docs);
+    }
+  });
+};
+
 module.exports = {
   getAllPosts,
   getPostById,
@@ -115,4 +133,5 @@ module.exports = {
   addPost,
   getPostByUser,
   getPostsByDepartment,
+  getPostsByMajor
 };

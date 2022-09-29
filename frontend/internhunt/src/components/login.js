@@ -10,7 +10,6 @@ function Login() {
   // useEffect(()=>{}) Use useEffect() to check if there is a jwt first
 
   const handleLogin = async () => {
-
     const options = {
       method: "POST",
       headers: { "Content-type": "application/json" },
@@ -23,7 +22,11 @@ function Login() {
 
     localStorage.setItem(
       "userData",
-      JSON.stringify({ userId: userData.userId, jwt: userData.token })
+      JSON.stringify({
+        userId: userData.userId,
+        jwt: userData.token,
+        major: userData.major,
+      })
     );
   };
 

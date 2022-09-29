@@ -13,6 +13,8 @@ router.delete("/delete/:id", postController.deletePost)
 
 router.post("/add/", postController.addPost)
 
-router.get("/getPostsByMajor/:department", postController.getPostsByDepartment)
+router.get("/getPostsByDepartment/:department", postController.getPostsByDepartment)
+
+router.get("/getPostsByMajor/:major", postController.getPostsByMajor)
 
 module.exports = router

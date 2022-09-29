@@ -257,7 +257,11 @@ const login = (req, res, next) => {
       );
       res
         .status(200)
-        .send({ token: token, userId: accountInfo._id.toString() });
+        .send({
+          token: token,
+          userId: accountInfo._id.toString(),
+          major: accountInfo.major,
+        });
     })
     .catch((err) => {
       next(err);
