@@ -33,9 +33,7 @@ const App = () => {
     };
 
     const response = await fetch(getApiRoot() + "/users/add", options);
-    console.log(response);
     const jsonResponse = await response.json();
-    console.log(jsonResponse);
 
     if (response.ok) {
       // logic after they have registered.
