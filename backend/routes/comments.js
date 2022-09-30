@@ -3,7 +3,7 @@ const commentController = require("../controllers/comments")
 
 router.get("/", commentController.getAllComments)
 
-router.get("/:id", commentController.getCommentById)
+router.get("/getById/:id", commentController.getCommentById)
 
 router.get("/getByPost/:id", commentController.getCommentByPost)
 

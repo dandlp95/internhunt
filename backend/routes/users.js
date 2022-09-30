@@ -3,7 +3,7 @@ const userController = require("../controllers/users");
 
 router.get("/", userController.getAllUsers);
 
-router.get("/:id", userController.getUserById);
+router.get("/getById/:id", userController.getUserById);
 
 router.patch("/edit/:id", userController.editUser);
 

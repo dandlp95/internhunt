@@ -3,7 +3,7 @@ const postController = require("../controllers/posts")
 
 router.get("/", postController.getAllPosts)
 
-router.get("/:id", postController.getPostById)
+router.get("/getById/:id", postController.getPostById)
 
 router.get("/getPostByUser", postController.getPostByUser)
 
@@ -13,7 +13,7 @@ router.delete("/delete/:id", postController.deletePost)
 
 router.post("/add/", postController.addPost)
 
-router.get("/getPostsByDepartment/:department", postController.getPostsByDepartment)
+router.get("/getPostsByDepartment", postController.getPostsByDepartment)
 
 router.get("/getPostsByMajor/:major", postController.getPostsByMajor)
 

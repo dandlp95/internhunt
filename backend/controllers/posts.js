@@ -48,10 +48,15 @@ const deletePost = (req, res, next) => {
 
 const addPost = async (req, res, next) => {
   try {
-    const departments = req.body.majors.map(async (major) => {
-      const majorDoc = await MajorModel({ major: major });
-      return majorDoc.department;
-    });
+    const majors = req.body.majors;
+    const departments = await Promise.all(
+      majors.map(async (major) => {
+        const majorDoc = await MajorModel.findOne({ name: major });
+        if (majorDoc) {
+          return majorDoc.department;
+        }
+      })
+    );
 
     if (!departments) {
       throw new ApiError404("No departments found.");
@@ -67,18 +72,17 @@ const addPost = async (req, res, next) => {
       type: req.body.type,
       departments: departments,
     };
+    PostModel.create(post, (err, doc) => {
+      if (err) {
+        const apiError400 = new ApiError400(err.message);
+        next(apiError400);
+      } else {
+        res.status(200).send(doc);
+      }
+    });
   } catch (err) {
     next(err);
   }
-
-  PostModel.create(post, (err, doc) => {
-    if (err) {
-      const apiError400 = new ApiError400();
-      next(apiError400);
-    } else {
-      res.status(200).send(doc);
-    }
-  });
 };
 
 const getPostByUser = (req, res, next) => {
@@ -93,7 +97,7 @@ const getPostByUser = (req, res, next) => {
 };
 
 const getPostsByDepartment = (req, res, next) => {
-  const department = req.params.department;
+  const department = req.body.department;
   PostModel.find({ departments: department }, (err, docs) => {
     if (err) {
       const apiError400 = new ApiError400(err.message);
@@ -108,9 +112,10 @@ const getPostsByDepartment = (req, res, next) => {
 };
 
 const getPostsByMajor = async (req, res, next) => {
-  const major = req.params.major;
-  const foundMajor = await MajorModel.find({ name: major });
+  const major = decodeURI(req.params.major);
+  const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
   const department = foundMajor.department;
+  console.log(department)
 
   PostModel.find({ departments: department }, (err, docs) => {
     if (err) {
@@ -133,5 +138,5 @@ module.exports = {
   addPost,
   getPostByUser,
   getPostsByDepartment,
-  getPostsByMajor
+  getPostsByMajor,
 };

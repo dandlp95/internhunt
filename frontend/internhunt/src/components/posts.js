@@ -1,7 +1,7 @@
 import React from "react";
 import "./post.css";
 import { useState, useEffect } from "react";
-import { getApiRoot } from "./utils/getApiRoot";
+import { getApiRoot } from "../utils/getApiRoot";
 import { useParams, Link, Route, Routes } from "react-router-dom";
 
 const Posts = () => {
@@ -10,8 +10,10 @@ const Posts = () => {
   const { major } = useParams();
 
   useEffect(() => {
+    localStorage.setItem("userData", JSON.stringify({ major: "Geology" }));
     const userData = localStorage.getItem("userData");
-    const userMajor = userData.major;
+    const userDataJson = JSON.parse(userData);
+    const userMajor = userDataJson.major;
 
     const getPosts = async () => {
       const options = {
@@ -20,26 +22,49 @@ const Posts = () => {
       };
 
       const response = await fetch(
-        getApiRoot() + "/posts/getPostsByMajor/" + userMajor,
+        getApiRoot() + "/posts/getPostsByMajor/" + encodeURI(userMajor),
         options
       );
 
       if (response.ok) {
         // do something
-        const posts = await response.json();
-        setPosts(posts)
+        console.log(response);
+        const foundPosts = await response.json();
+        setPosts(foundPosts);
+        console.log(foundPosts);
       } else {
         // do something
+        console.log(response);
       }
     };
+    getPosts();
   }, []);
 
   useEffect(() => {}, [queryMajor]); //There will be a button that will change queryMajor to something else, which will cause page to re-render
 
-  useEffect(()=>{}, []) // There will be a third use effect to sort data from new to old, etc...
+  useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
 
-
-  return <div></div>;
+  return (
+    <div>
+      <div className="make new post and filter..."></div>
+      <div className="the queries to see other majors and such"></div>
+      <div className="The posts and pagination will be on this one.">
+        <div className="posts">
+          posts here.
+          {posts.map((post) => (
+            <section>
+              <div>
+                <h3>{post.title}</h3>
+                <p>{post.rating}</p>
+              </div>
+              <p>{post.content}</p>
+            </section>
+          ))}
+        </div>
+        <div className="pagination"></div>
+      </div>
+    </div>
+  );
 };
 
 export default Posts;
