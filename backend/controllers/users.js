@@ -268,10 +268,15 @@ const login = (req, res, next) => {
 
 const isLoggedIn = async (req, res, next) => {
   try {
+    console.log("this was started")
     const accountId = req.accountId;
     if (!accountId) {
+      console.log(accountId)
+      console.log("error here.")
       throw new ApiError401("Not authenticated.");
     } else {
+      console.log(accountId)
+      console.log("error here.")
       const account = await UserModel.findById(accountId);
       if (!account || !account.active) {
         throw new ApiError404("Account not found");

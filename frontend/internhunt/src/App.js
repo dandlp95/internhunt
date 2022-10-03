@@ -16,6 +16,11 @@ const App = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // This next couple of lines are for testing:
+    const tokenValue =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbDE3MDExQGJ5dWkuZWR1IiwiaWQiOiI2MzMyNTlmZjliNjk0ZDg0YmU3MDE3YWIiLCJpYXQiOjE2NjQ3NzI3MzksImV4cCI6MTY2NDc3NjMzOX0.mHbmfJSjWyjpqZ2DABK3TALO8rRS9BeMNH8FSzSG4AY";
+    localStorage.setItem("userData", JSON.stringify({ token: tokenValue }));
+
     const isLoggedIn = async () => {
       const userData = localStorage.getItem("userData");
       if (!userData) {
@@ -28,14 +33,21 @@ const App = () => {
       }
       const options = {
         method: "GET",
-        headers: { "Content-type": "application/json" },
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
       };
-      const response = await fetch(getApiRoot() + "/users/isAuthorized");
+      const response = await fetch(
+        getApiRoot() + "/users/isAuthorized",
+        options
+      );
       if (response.ok) {
         navigate("/posts");
       }
     };
-  });
+    isLoggedIn();
+  }, []);
 
   useEffect(() => {
     const getMajors = async () => {
@@ -70,7 +82,7 @@ const App = () => {
 
   return (
     <div className="registrationPage">
-      <div class="registration-container">
+      <div className="registration-container">
         <div className="pageInfo">
           <section className="pageInfoSection">
             <h2>Internhunt</h2>

@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const Api401Error = require("./error-handling/apiError401");
 
 exports.getAuthToken = (req, res, next) => {
+  console.log("auth this was called.")
   if (!req.get("Authorization")) {
     throw new Api401Error("Not authenticated.");
   }
