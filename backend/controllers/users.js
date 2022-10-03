@@ -255,17 +255,33 @@ const login = (req, res, next) => {
         process.env.JWT_SECRET_KEY,
         { expiresIn: "1h" }
       );
-      res
-        .status(200)
-        .send({
-          token: token,
-          userId: accountInfo._id.toString(),
-          major: accountInfo.major,
-        });
+      res.status(200).send({
+        token: token,
+        userId: accountInfo._id.toString(),
+        major: accountInfo.major,
+      });
     })
     .catch((err) => {
       next(err);
     });
+};
+
+const isLoggedIn = async (req, res, next) => {
+  try {
+    const accountId = req.accountId;
+    if (!accountId) {
+      throw new ApiError401("Not authenticated.");
+    } else {
+      const account = await UserModel.findById(accountId);
+      if (!account || !account.active) {
+        throw new ApiError404("Account not found");
+      } else {
+        res.status(200).send("authenticated.");
+      }
+    }
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {
@@ -281,4 +297,5 @@ module.exports = {
   removeSuspension,
   getAllUsersPrivate,
   getUserByIdPrivate,
+  isLoggedIn
 };

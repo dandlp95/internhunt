@@ -1,7 +1,10 @@
 const router = require("express").Router();
 const userController = require("../controllers/users");
+const isAuth = require("../middleware/auth");
 
 router.get("/", userController.getAllUsers);
+
+router.get("/isAuthorized", isAuth.getAuthToken, userController.isLoggedIn);
 
 router.get("/getById/:id", userController.getUserById);
 

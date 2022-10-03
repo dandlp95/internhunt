@@ -10,7 +10,8 @@ const Posts = () => {
   const { major } = useParams();
 
   useEffect(() => {
-    localStorage.setItem("userData", JSON.stringify({ major: "Geology" }));
+
+    localStorage.setItem("userData", JSON.stringify({ major: "Geology" })); // This is just for testing purposes
     const userData = localStorage.getItem("userData");
     const userDataJson = JSON.parse(userData);
     const userMajor = userDataJson.major;
