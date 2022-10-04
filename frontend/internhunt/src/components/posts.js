@@ -3,6 +3,7 @@ import "./post.css";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import { useParams, Link, Route, Routes } from "react-router-dom";
+import PostPreview from "./postPreview";
 
 const Posts = () => {
   const [queryMajor, setQueryMajor] = useState(""); // This is to create another call to the backend for a different major, this will be used in the second use effect
@@ -11,7 +12,7 @@ const Posts = () => {
 
   useEffect(() => {
 
-    localStorage.setItem("userData", JSON.stringify({ major: "Geology" })); // This is just for testing purposes
+    //localStorage.setItem("userData", JSON.stringify({ major: "Geology" })); // This is just for testing purposes
     const userData = localStorage.getItem("userData");
     const userDataJson = JSON.parse(userData);
     const userMajor = userDataJson.major;
@@ -53,13 +54,7 @@ const Posts = () => {
         <div className="posts">
           posts here.
           {posts.map((post) => (
-            <section>
-              <div>
-                <h3>{post.title}</h3>
-                <p>{post.rating}</p>
-              </div>
-              <p>{post.content}</p>
-            </section>
+            <PostPreview post={post}/>
           ))}
         </div>
         <div className="pagination"></div>

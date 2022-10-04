@@ -112,18 +112,20 @@ const deleteUser = (req, res, next) => {
 const addUser = async (req, res, next) => {
   try {
     const encryptedPassword = await encryptPassword(req.body.password);
-    const major = MajorModel.find({ name: req.body.major });
-
+    const major = await MajorModel.findOne({ name: req.body.major }); 
+    console.log(major)
+    console.log(req.body.major)
     if (!major) {
       throw new ApiError400("Invalid major");
     }
+    const majorId = major._id
 
     const newUser = {
       email: req.body.email,
       password: encryptedPassword,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      major: major._id,
+      major: majorId,
     };
 
     UserModel.create(newUser, (err, doc) => {
@@ -134,7 +136,13 @@ const addUser = async (req, res, next) => {
         const apiError = new ApiError404(err.message);
         next(apiError);
       } else {
-        res.status(200).send(doc);
+        const token = jwt.sign(
+          { email: req.body.email, id: doc._id },
+          process.env.JWT_SECRET_KEY,
+          { expiresIn: "1h" }
+        );
+        console.log("major: ", major)
+        res.status(200).send({token: token, userId: doc._id, major: major.name});
       }
     });
   } catch (err) {
@@ -268,15 +276,15 @@ const login = (req, res, next) => {
 
 const isLoggedIn = async (req, res, next) => {
   try {
-    console.log("this was started")
+    console.log("this was started");
     const accountId = req.accountId;
     if (!accountId) {
-      console.log(accountId)
-      console.log("error here.")
+      console.log(accountId);
+      console.log("error here.");
       throw new ApiError401("Not authenticated.");
     } else {
-      console.log(accountId)
-      console.log("error here.")
+      console.log(accountId);
+      console.log("error here.");
       const account = await UserModel.findById(accountId);
       if (!account || !account.active) {
         throw new ApiError404("Account not found");
@@ -302,5 +310,5 @@ module.exports = {
   removeSuspension,
   getAllUsersPrivate,
   getUserByIdPrivate,
-  isLoggedIn
+  isLoggedIn,
 };

@@ -2,8 +2,9 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "./utils/getApiRoot";
 import "./App.css";
-import Background from "./components/background";
+//import Background from "./components/background";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
+import FailMessage from "./components/failMessage";
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -13,13 +14,14 @@ const App = () => {
   const [major, setMajor] = useState("");
   const [majorsList, setMajorsList] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [fail, setFail] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     // This next couple of lines are for testing:
-    const tokenValue =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbDE3MDExQGJ5dWkuZWR1IiwiaWQiOiI2MzMyNTlmZjliNjk0ZDg0YmU3MDE3YWIiLCJpYXQiOjE2NjQ3NzI3MzksImV4cCI6MTY2NDc3NjMzOX0.mHbmfJSjWyjpqZ2DABK3TALO8rRS9BeMNH8FSzSG4AY";
-    localStorage.setItem("userData", JSON.stringify({ token: tokenValue }));
+    // const tokenValue =
+    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbDE3MDExQGJ5dWkuZWR1IiwiaWQiOiI2MzMyNTlmZjliNjk0ZDg0YmU3MDE3YWIiLCJpYXQiOjE2NjQ3NzI3MzksImV4cCI6MTY2NDc3NjMzOX0.mHbmfJSjWyjpqZ2DABK3TALO8rRS9BeMNH8FSzSG4AY";
+    // localStorage.setItem("userData", JSON.stringify({ token: tokenValue }));
 
     const isLoggedIn = async () => {
       const userData = localStorage.getItem("userData");
@@ -35,7 +37,7 @@ const App = () => {
         method: "GET",
         headers: {
           "Content-type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       };
       const response = await fetch(
@@ -69,14 +71,14 @@ const App = () => {
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({ email, password, firstName, lastName, major }),
     };
-
     const response = await fetch(getApiRoot() + "/users/add", options);
-    const jsonResponse = await response.json();
 
     if (response.ok) {
-      // logic after they have registered.
+      const jsonResponse = await response.json();
+      localStorage.setItem("userData", JSON.stringify(jsonResponse));
+      navigate("/posts");
     } else {
-      // logic if the backend response was not correct.
+      setFail(true)
     }
   };
 
@@ -145,6 +147,7 @@ const App = () => {
             <p>
               Already have an account? <Link to={`/login`}>Click here.</Link>
             </p>
+            {fail ? <FailMessage action="register" /> : <p></p>}
           </form>
         </div>
       </div>
