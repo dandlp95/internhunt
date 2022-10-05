@@ -3,12 +3,9 @@ import { useState, useEffect } from "react";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 
 const PostPreview = (props) => {
-  useEffect(() => {
-    console.log(props._id)
-  }, []);
 
   return (
-    <Link to={`/post?postid=${props.post._id}`}>
+    <Link to={`/post?postId=${props.post._id}`}>
       <section>
         <div>
           <h3>{props.post.title}</h3>

@@ -70,6 +70,7 @@ function Login() {
           major: userData.major,
         })
       );
+      navigate("/posts");
     } else {
       setFail(true);
     }
