@@ -30,10 +30,8 @@ const Posts = () => {
 
       if (response.ok) {
         // do something
-        console.log(response);
         const foundPosts = await response.json();
         setPosts(foundPosts);
-        console.log(foundPosts);
       } else {
         // do something
         console.log(response);

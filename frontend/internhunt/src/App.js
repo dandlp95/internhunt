@@ -5,6 +5,7 @@ import "./App.css";
 //import Background from "./components/background";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import FailMessage from "./components/failMessage";
+import { isAuth } from "../src/utils/isLoggedIn";
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -13,37 +14,13 @@ const App = () => {
   const [lastName, setLastName] = useState("");
   const [major, setMajor] = useState("");
   const [majorsList, setMajorsList] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [fail, setFail] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // This next couple of lines are for testing:
-    // const tokenValue =
-    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbDE3MDExQGJ5dWkuZWR1IiwiaWQiOiI2MzMyNTlmZjliNjk0ZDg0YmU3MDE3YWIiLCJpYXQiOjE2NjQ3NzI3MzksImV4cCI6MTY2NDc3NjMzOX0.mHbmfJSjWyjpqZ2DABK3TALO8rRS9BeMNH8FSzSG4AY";
-    // localStorage.setItem("userData", JSON.stringify({ token: tokenValue }));
-
     const isLoggedIn = async () => {
-      const userData = localStorage.getItem("userData");
-      if (!userData) {
-        return;
-      }
-      const userDataJson = JSON.parse(userData);
-      const token = userDataJson.token;
-      if (!token) {
-        return;
-      }
-      const options = {
-        method: "GET",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await fetch(
-        getApiRoot() + "/users/isAuthorized",
-        options
-      );
+      const response = await isAuth()
+      console.log("hello")
       if (response.ok) {
         navigate("/posts");
       }

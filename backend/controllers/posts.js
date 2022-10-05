@@ -114,8 +114,8 @@ const getPostsByDepartment = (req, res, next) => {
 const getPostsByMajor = async (req, res, next) => {
   const major = decodeURI(req.params.major);
   const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
+  console.log(foundMajor)
   const department = foundMajor.department;
-  console.log(department)
 
   PostModel.find({ departments: department }, (err, docs) => {
     if (err) {

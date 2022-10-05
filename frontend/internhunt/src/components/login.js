@@ -21,12 +21,13 @@ function Login() {
     // localStorage.setItem("userData", JSON.stringify({ token: tokenValue, major: "Geology" }));
 
     const isLoggedIn = async () => {
+      console.log("its called...")
       const userData = localStorage.getItem("userData");
       if (!userData) {
         return;
       }
       const userDataJson = JSON.parse(userData);
-      const token = userDataJson.token;
+      const token = userDataJson.jwt;
       if (!token) {
         return;
       }
@@ -41,6 +42,7 @@ function Login() {
         getApiRoot() + "/users/isAuthorized",
         options
       );
+      
       if (response.ok) {
         navigate("/posts");
       }
