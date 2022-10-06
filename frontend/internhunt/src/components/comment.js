@@ -4,7 +4,7 @@ import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import { getApiRoot } from "../utils/getApiRoot";
 
 const Comment = (props) => {
-  const [commentUser, setCommentUser] = useState();
+  const [commentUser, setCommentUser] = useState("");
   useEffect(() => {
     const getUserInfo = async () => {
       const commentUserId = props.comment.owner;
@@ -13,26 +13,25 @@ const Comment = (props) => {
         headers: { "Content-type": "application/json" },
       };
       const response = await fetch(
-        getApiRoot() + "/users/getById/" + commentUserId
+        getApiRoot() + "/users/getById/" + commentUserId,
+        options
       );
       if (response.ok) {
         const responseJson = await response.json();
         setCommentUser(responseJson);
       } else {
         const noResponse = {};
-        noResponse.firstName = "No";
-        noResponse.lastName = "username";
-        setCommentUser(noResponse)
+        noResponse.firstName = "[Deleted user]";
+        setCommentUser(noResponse);
       }
     };
+    getUserInfo();
   }, []);
+
   return (
     <div>
-        <p>This is a comment</p>
       <div>
-        <p>
-          {commentUser.firstName} {commentUser.lastName}
-        </p>
+        <p>{commentUser.firstName}</p>
       </div>
       <div>
         <p>{props.comment.content}</p>
@@ -41,4 +40,4 @@ const Comment = (props) => {
   );
 };
 
-export default Comment
+export default Comment;

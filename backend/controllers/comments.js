@@ -26,6 +26,7 @@ const getCommentByUser = (req, res, next) => {
 
 const getCommentByPost = (req, res, next) => {
   const postId = req.params.id;
+  console.log(postId)
   CommentModel.find({ post: postId }, (err, docs) => {
     if (err) {
       const apiError = new ApiError400(err.message);

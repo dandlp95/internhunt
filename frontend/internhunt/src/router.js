@@ -2,11 +2,12 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import App from "./App";
 import PostsPage from "./components/posts";
-import PostPage from "./components/post";
+//import PostPage from "./components/post";
 import AccountPortal from "./components/accountPortal";
 import AboutPage from "./components/about";
 import Guidelines from "./components/guidelines";
 import Login from "./components/login";
+import PostPage from "./pages/postPage";
 
 const router = () => {
   return (
