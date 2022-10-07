@@ -2,10 +2,10 @@ import React from "react";
 import "./login.css";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
-import Background from "./background";
+import Background from "../components/background";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import "./login.css";
-import FailMessage from "./failMessage";
+import FailMessage from "../components/failMessage";
 
 function Login() {
   const [userToken, setUserToken] = useState("");

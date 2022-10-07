@@ -1,9 +1,10 @@
 import React from "react";
-import "./post.css";
+import "./posts.css";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import { useParams, Link, Route, Routes } from "react-router-dom";
-import PostPreview from "./postPreview";
+import PostPreview from "../components/postPreview";
+import InputInterface from "../components/inputInterface";
 
 const Posts = () => {
   const [queryMajor, setQueryMajor] = useState(""); // This is to create another call to the backend for a different major, this will be used in the second use effect
@@ -46,7 +47,11 @@ const Posts = () => {
 
   return (
     <div>
-      <div className="make new post and filter..."></div>
+      <div className="make new post and filter...">
+      <Link to={`/`}>
+        <InputInterface placeholder="Create a post"/>
+        </Link>
+      </div>
       <div className="the queries to see other majors and such"></div>
       <div className="The posts and pagination will be on this one.">
         <div className="posts">

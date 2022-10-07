@@ -4,6 +4,7 @@ import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import { getApiRoot } from "../utils/getApiRoot";
 import Comment from "../components/comment";
 import Post from "../components/post";
+import InputInterface from "../components/inputInterface"
 // Need to add handling for when I get back a 200 but nothing was found, although map would probably take care of this...
 const PostPage = () => {
   const queryString = window.location.search;
@@ -78,6 +79,7 @@ const PostPage = () => {
     return (
       <div>
         <Post user={user} post={post} />
+        <InputInterface placeholder="What are your thoughts?"/>
         {comments.map((comment) => (
           <Comment comment={comment} />
         ))}
