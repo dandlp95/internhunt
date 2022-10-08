@@ -8,6 +8,7 @@ import AboutPage from "./pages/aboutPage";
 import Guidelines from "./pages/guidelines";
 import Login from "./pages/login";
 import PostPage from "./pages/postPage";
+import CreatePost from "./pages/createPost";
 
 const router = () => {
   return (
@@ -21,6 +22,7 @@ const router = () => {
         <Route path="/account-portal" element={<AccountPortal />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/guidelines" element={<Guidelines />} />
+        <Route path="/create-post" element={<CreatePost />} />
       </Routes>
     </Router>
   );

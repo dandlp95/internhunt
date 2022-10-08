@@ -48,7 +48,7 @@ const Posts = () => {
   return (
     <div>
       <div className="make new post and filter...">
-      <Link to={`/`}>
+      <Link to={`/create-post`}>
         <InputInterface placeholder="Create a post"/>
         </Link>
       </div>
