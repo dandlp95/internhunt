@@ -3,6 +3,9 @@ import Button from "../components/button";
 import { useState, useEffect, useRef } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import FetchCalls from "../utils/fetchCalls";
+import { isAuth } from "../utils/isLoggedIn";
+import { Navigate, useNavigate } from "react-router-dom";
+import getUserById from "../utils/getUserId";
 
 /* MajorInput component */
 const MajorInput = (props) => {
@@ -47,17 +50,45 @@ const CreatePost = () => {
   majorList refers to the list of majors... */
   const [majorInputList, setMajorInputList] = useState([]);
   const [majorList, setMajorList] = useState([]);
+  const [title, setTitle] = useState();
+  const [content, setContent] = useState();
+  const [user, setUser] = useState();
+  const navigate = useNavigate();
 
   const getInputMajors = (major) => {
     const newMajorList = majorList.slice();
     newMajorList.push(major);
     setMajorList(newMajorList);
   };
+
+  // Maybe instead of using 2 useEffects, create the isLoggedIn function outside and call it inside the next one
+  useEffect(() => {
+    const isLoggedIn = async () => {
+      const response = await isAuth();
+      if (response.ok) {
+      } else {
+        alert("Please log in");
+        Navigate("/");
+      }
+    };
+    isLoggedIn();
+  }, []);
+
   useEffect(() => {
     setMajorInputList(
       majorInputList.concat(<MajorInput callback={getInputMajors} />)
     );
   }, [majorList]);
+
+  const postPost = async (e) => {
+    const response = await getUserById()    
+    const body = {
+      title: title,
+      content: content,
+      owner: owner, // will add owner in a second...
+      majors: majorList,
+    };
+  };
 
   return (
     <div>

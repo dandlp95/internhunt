@@ -20,7 +20,6 @@ const App = () => {
   useEffect(() => {
     const isLoggedIn = async () => {
       const response = await isAuth()
-      console.log("hello")
       if (response.ok) {
         navigate("/posts");
       }

@@ -7,6 +7,7 @@ class FetchCalls {
     this.token = token;
     this.body = body;
   }
+
   async publicGet() {
     const options = {
       method: this.method,
@@ -18,7 +19,31 @@ class FetchCalls {
 
     return response;
   }
-  async protectedGet() {}
+  async protectedGet() {
+    const options = {
+      method: this.method,
+      headers: {
+        "Content-type": "application/json",
+        // Authorization token will be here once all routes are protected...
+      },
+    };
+    const response = await fetch(getApiRoot() + this.endpoint, options);
+
+    return response;
+  }
+
+  async protectedPost() {
+    const options = {
+      method: this.method,
+      headers: {
+        "Content-type": "application/json",
+        // Once all routes are protected, authorization token will be here
+      },
+      body: this.body,
+    };
+    const response = await fetch(getApiRoot() + this.endpoint, options);
+    return response;
+  }
 }
 
 export default FetchCalls;
