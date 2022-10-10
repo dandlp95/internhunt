@@ -64,6 +64,10 @@ const CreatePost = () => {
     setMajorList(newMajorList);
   };
 
+  const handleChange = (e) => {
+    setState(e.target.value);
+  };
+
   // Maybe instead of using 2 useEffects, create the isLoggedIn function outside and call it inside the next one
   useEffect(() => {
     const isLoggedIn = async () => {
@@ -112,7 +116,7 @@ const CreatePost = () => {
       alert("Error!");
     }
   };
-
+  console.log(state)
   return (
     <div>
       <div>
@@ -171,7 +175,8 @@ const CreatePost = () => {
           </div>
           <div>
             <label>State</label>
-            <select onChange={(e) => setState(e.target.value)}>
+            <select onChange={handleChange}>
+              <option value="">--Select a state--</option>
               <option value="AL">Alabama</option>
               <option value="AK">Alaska</option>
               <option value="AZ">Arizona</option>
