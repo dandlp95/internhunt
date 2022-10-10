@@ -1,4 +1,4 @@
-.buttonComponent {
+.buttonComponent input{
   display: block;
   background-color: #0b3954;
   border: 1px solid rgba(27, 31, 35, 0.15);
@@ -18,11 +18,11 @@
   margin-top: 1rem;
 }
 
-.buttonComponent {
+.buttonComponent input:hover{
   background-color: #5fa0d0;
 }
 
-.buttonComponent {
+.buttonComponent input:active{
   background-color: #0b3954;
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }
