@@ -39,7 +39,7 @@ class FetchCalls {
         "Content-type": "application/json",
         // Once all routes are protected, authorization token will be here
       },
-      body: this.body,
+      body: JSON.stringify(this.body),
     };
     const response = await fetch(getApiRoot() + this.endpoint, options);
     return response;

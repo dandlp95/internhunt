@@ -67,7 +67,7 @@ const addPost = async (req, res, next) => {
       content: req.body.content,
       // date: new Date(), Its added by default in the db
       owner: req.body.owner,
-      city: req.body.city,
+      state: req.body.state,
       company: req.body.company,
       type: req.body.type,
       departments: departments,

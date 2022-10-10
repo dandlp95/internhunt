@@ -12,7 +12,7 @@ const getUserById = async () => {
   if (!userId) {
     return response;
   }
-  const callObject = new FetchCalls("users/getById/" + userId, "GET"); // Once routes are protected, add a thir parameter for the token
+  const callObject = new FetchCalls("/users/getById/" + userId, "GET"); // Once routes are protected, add a thir parameter for the token
   response = await callObject.protectedGet();
 
   return response;

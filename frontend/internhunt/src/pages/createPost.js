@@ -98,9 +98,8 @@ const CreatePost = () => {
         type: type,
         majors: majorList,
       };
-
       const postObject = new FetchCalls("/posts/add", "POST", null, body);
-      const response2 = postObject.protectedPost();
+      const response2 = await postObject.protectedPost();
 
       if (response2.ok) {
         const newPost = await response2.json();
@@ -229,7 +228,7 @@ const CreatePost = () => {
         </section>
       </div>
       <div>
-        <Button text="Post" onClick={postPost} />
+        <Button text="Post" action={postPost} />
       </div>
     </div>
   );
