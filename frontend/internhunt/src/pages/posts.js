@@ -16,7 +16,7 @@ const Posts = () => {
     const userDataJson = JSON.parse(userData);
     const userMajor = userDataJson.major;
 
-    const getPosts = async () => {
+    const getPostsByMajor = async () => {
       const options = {
         method: "GET",
         headers: { "Content-type": "application/json" },
@@ -36,7 +36,13 @@ const Posts = () => {
         console.log(response);
       }
     };
-    getPosts();
+
+    const getPostsByQuery = async () => {};
+    // If url serach parameters is null, run the function below
+    getPostsByMajor();
+
+    // If url search parameters is not null, run the function below
+    getPostsByMajor();
   }, []);
 
   useEffect(() => {}, [queryMajor]); //There will be a button that will change queryMajor to something else, which will cause page to re-render

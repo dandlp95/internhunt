@@ -17,6 +17,6 @@ router.get("/getPostsByDepartment", postController.getPostsByDepartment)
 
 router.get("/getPostsByMajor/:major", postController.getPostsByMajor)
 
-router.get("/getPostByQuery/:query", postController.getPostsByQuery)
+router.get("/getPostByQuery/:major/:query", postController.getPostsByQuery)
 
 module.exports = router

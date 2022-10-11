@@ -130,11 +130,13 @@ const getPostsByMajor = async (req, res, next) => {
 };
 
 const getPostsByQuery = async (req, res, next) => {
+  const major = req.params.major;
   const query = decodeURI(req.params.query);
   let QString = query.split(" ").map((string) => new RegExp(string));
   PostModel.find(
     {
       $or: [{ title: { $in: QString } }, { content: { $in: QString } }],
+      // Add query to only get posts from major
     },
     (err, docs) => {
       if (err) {

@@ -6,11 +6,10 @@ const Header = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate()
 
-  useEffect(() => {
-    
-    navigate()
+  const searchPost = async () => {
+    navigate(`/posts?search=${encodeURI(searchQuery)}`)
+  } 
 
-  }, []);
 
   return (
     <div>
