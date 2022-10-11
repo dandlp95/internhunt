@@ -13,11 +13,13 @@ const PostPage = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const postId = urlParams.get("postId");
+  const search = urlParams.get("search")
 
   const [post, setPost] = useState();
   const [postUser, setPostuser] = useState(null);
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState();
+  const [sort, setSort] = useState(); // This will be used to add functionality to sort comments later.
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -111,8 +113,8 @@ const PostPage = () => {
     if (response.ok) {
       alert("Success");
       setComments(comments);
-    }else{
-      alert("Error")  
+    } else {
+      alert("Error");
     }
   };
 

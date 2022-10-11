@@ -114,7 +114,6 @@ const getPostsByDepartment = (req, res, next) => {
 const getPostsByMajor = async (req, res, next) => {
   const major = decodeURI(req.params.major);
   const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
-  console.log(foundMajor)
   const department = foundMajor.department;
 
   PostModel.find({ departments: department }, (err, docs) => {
@@ -130,6 +129,27 @@ const getPostsByMajor = async (req, res, next) => {
   });
 };
 
+const getPostsByQuery = async (req, res, next) => {
+  const query = decodeURI(req.params.query);
+  let QString = query.split(" ").map((string) => new RegExp(string));
+  PostModel.find(
+    {
+      $or: [{ title: { $in: QString } }, { content: { $in: QString } }],
+    },
+    (err, docs) => {
+      if (err) {
+        const apiError = new ApiError400(err.message);
+        next(apiError);
+      } else if (!docs) {
+        const apiError404 = new ApiError404("No documents found");
+        next(apiError404);
+      } else {
+        res.status(200).send(docs);
+      }
+    }
+  );
+};
+
 module.exports = {
   getAllPosts,
   getPostById,
@@ -139,4 +159,5 @@ module.exports = {
   getPostByUser,
   getPostsByDepartment,
   getPostsByMajor,
+  getPostsByQuery,
 };
