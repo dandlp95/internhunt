@@ -12,7 +12,6 @@ const Posts = () => {
   const { major } = useParams();
 
   useEffect(() => {
-
     //localStorage.setItem("userData", JSON.stringify({ major: "Geology" })); // This is just for testing purposes
     const userData = localStorage.getItem("userData");
     const userDataJson = JSON.parse(userData);
@@ -48,8 +47,10 @@ const Posts = () => {
   return (
     <div>
       <div className="make new post and filter...">
-      <Link to={`/create-post`}>
-        <InputInterface placeholder="Create a post"/>
+        <Link to={`/create-post`}>
+          <div>
+            <input placeholder="Create post" />
+          </div>
         </Link>
       </div>
       <div className="the queries to see other majors and such"></div>
@@ -57,7 +58,7 @@ const Posts = () => {
         <div className="posts">
           posts here.
           {posts.map((post) => (
-            <PostPreview post={post}/>
+            <PostPreview post={post} />
           ))}
         </div>
         <div className="pagination"></div>

@@ -4,21 +4,34 @@ import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import { getApiRoot } from "../utils/getApiRoot";
 import Comment from "../components/comment";
 import Post from "../components/post";
-import InputInterface from "../components/inputInterface"
+import InputInterface from "../components/inputInterface";
+import { isAuth } from "../utils/isLoggedIn";
+import FetchCalls from "../utils/fetchCalls";
+
 // Need to add handling for when I get back a 200 but nothing was found, although map would probably take care of this...
 const PostPage = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const productId = urlParams.get("postId");
+  const postId = urlParams.get("postId");
 
   const [post, setPost] = useState();
-  const [user, setUser] = useState(null);
+  const [postUser, setPostuser] = useState(null);
   const [comments, setComments] = useState([]);
-  const [postId, setPostId] = useState(productId);
+  const [user, setUser] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    //setPostId(productId);
+    const isLoggedIn = async () => {
+      const res = await isAuth();
+      if (!res.ok) {
+        alert("Please log in");
+        navigate("/");
+      }
+    };
+    isLoggedIn();
+  }, []);
 
+  useEffect(() => {
     const options = {
       method: "GET",
       headers: { "Content-type": "application/json" },
@@ -33,7 +46,7 @@ const PostPage = () => {
 
     const getPost = async () => {
       const response = await fetch(
-        getApiRoot() + "/posts/getById/" + productId,
+        getApiRoot() + "/posts/getById/" + postId,
         options
       );
       if (response.ok) {
@@ -48,14 +61,22 @@ const PostPage = () => {
 
         if (response2.ok) {
           const foundUser = await response2.json();
-          setUser(foundUser);
+          setPostuser(foundUser);
         } else {
-          setUser(deletedUser);
+          setPostuser(deletedUser);
         }
       } else {
         setPost(unexistentPost);
-        setUser(deletedUser);
+        setPostuser(deletedUser);
       }
+    };
+    getPost();
+  }, []);
+
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      headers: { "Content-type": "application/json" },
     };
 
     const getComments = async () => {
@@ -63,7 +84,6 @@ const PostPage = () => {
         getApiRoot() + "/comments/getByPost/" + postId,
         options
       );
-
       if (response.ok) {
         const commentList = await response.json();
         setComments(commentList);
@@ -71,15 +91,40 @@ const PostPage = () => {
         setComments([]);
       }
     };
-    getPost();
     getComments();
-  }, []);
+  }, [comments]);
 
-  if (user && post && comments) {
+  const postComment = async (comment) => {
+    const userData = localStorage.getItem("userData");
+    const userDataJSON = JSON.parse(userData);
+    const token = userDataJSON.jwt;
+
+    const body = {
+      content: comment,
+      owner: userDataJSON.userId,
+      post: postId,
+    };
+
+    const ReqClass = new FetchCalls("/comments/add", "POST", token, body);
+    const response = await ReqClass.protectedPost();
+
+    if (response.ok) {
+      alert("Success");
+      setComments(comments);
+    }else{
+      alert("Error")  
+    }
+  };
+
+  if (postUser && post && comments) {
     return (
       <div>
-        <Post user={user} post={post} />
-        <InputInterface placeholder="What are your thoughts?"/>
+        <Post user={postUser} post={post} />
+        <InputInterface
+          placeholder="What are your thoughts?"
+          action={postComment}
+          buttonText="Comment"
+        />
         {comments.map((comment) => (
           <Comment comment={comment} />
         ))}
