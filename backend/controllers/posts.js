@@ -6,8 +6,6 @@ const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
 
-//const getAllPosts = controllers.getAll(PostModel);
-
 const getPostById = controllers.getById(PostModel);
 
 const editPost = (req, res, next) => {
@@ -111,24 +109,6 @@ const getPostsByDepartment = (req, res, next) => {
   });
 };
 
-// const getPostsByMajor = async (req, res, next) => {
-//   const major = decodeURI(req.params.major);
-//   const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
-//   const department = foundMajor.department;
-
-//   PostModel.find({ departments: department }, (err, docs) => {
-//     if (err) {
-//       const apiError400 = new ApiError400(err.message);
-//       next(apiError400);
-//     } else if (!docs) {
-//       const apiError404 = new ApiError404("No documents found");
-//       next(apiError404);
-//     } else {
-//       res.status(200).send(docs);
-//     }
-//   });
-// };
-
 const getPosts = async (req, res, next) => {
   let search = req.query.search;
   let QString;
@@ -140,11 +120,12 @@ const getPosts = async (req, res, next) => {
   }
 
   let major = req.query.major;
-  let department;
   if (major) {
     const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
-    department = foundMajor.department;
-
+    let department;
+    if (foundMajor) {
+      department = foundMajor.department;
+    }
     PostModel.find(
       {
         $and: [
@@ -187,7 +168,6 @@ const getPosts = async (req, res, next) => {
 };
 
 module.exports = {
-  //getAllPosts,
   getPostById,
   editPost,
   deletePost,

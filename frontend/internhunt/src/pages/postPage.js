@@ -13,7 +13,6 @@ const PostPage = () => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const postId = urlParams.get("postId");
-  const search = urlParams.get("search")
 
   const [post, setPost] = useState();
   const [postUser, setPostuser] = useState(null);

@@ -7,15 +7,14 @@ import PostPreview from "../components/postPreview";
 import InputInterface from "../components/inputInterface";
 
 const Posts = () => {
-  const [queryMajor, setQueryMajor] = useState(""); // This is to create another call to the backend for a different major, this will be used in the second use effect
   const [posts, setPosts] = useState([]);
-  const { major } = useParams();
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const major = urlParams.get("major");
+  const search = urlParams.get("search");
 
   useEffect(() => {
-    console.log(major)
-    const userData = localStorage.getItem("userData");
-    const userDataJson = JSON.parse(userData);
-    const userMajor = userDataJson.major;
 
     const getPostsByMajor = async () => {
       const options = {
@@ -23,8 +22,17 @@ const Posts = () => {
         headers: { "Content-type": "application/json" },
       };
 
+      let URIQuery;
+      if (major && search) {
+        URIQuery = `search=${search}&major=${major}`;
+      } else if (major && !search){
+        URIQuery = `major=${major}`
+      } else if (!major && search) {
+        URIQuery = `search=${search}`
+      }
+
       const response = await fetch(
-        getApiRoot() + "/posts/getPostsByMajor/" + encodeURI(userMajor),
+        getApiRoot() + "/posts/getPosts?" + encodeURI(URIQuery),
         options
       );
 
@@ -38,19 +46,13 @@ const Posts = () => {
       }
     };
 
-    const getPostsByQuery = async () => {
-
-
-
-    };
+    const getPostsByQuery = async () => {};
     // If url search parameters is null, run the function below
     getPostsByMajor();
 
     // If url search parameters is not null, run the function below
     getPostsByMajor();
   }, []);
-
-  useEffect(() => {}, [queryMajor]); //There will be a button that will change queryMajor to something else, which will cause page to re-render
 
   useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
 

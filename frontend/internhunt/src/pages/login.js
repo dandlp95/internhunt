@@ -36,9 +36,11 @@ function Login() {
         getApiRoot() + "/users/isAuthorized",
         options
       );
-      
+
       if (response.ok) {
-        navigate("/posts");
+        const userMajor = userDataJson.major;
+        const URLQuery = `?major=${encodeURI(userMajor)}`;
+        navigate(`/posts${URLQuery}`);
       }
     };
     isLoggedIn();
@@ -64,7 +66,10 @@ function Login() {
           major: userData.major,
         })
       );
-      navigate("/posts");
+
+      const userMajor = userData.major;
+      const URLQuery = `?major=${encodeURI(userMajor)}`;
+      navigate(`/posts${URLQuery}`);
     } else {
       setFail(true);
     }
