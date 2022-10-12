@@ -7,19 +7,14 @@ import PostPreview from "../components/postPreview";
 import InputInterface from "../components/inputInterface";
 import Header from "../components/header";
 import { isAuth } from "../utils/isLoggedIn";
+import { useLocation } from "react-router-dom";
 
 const Posts = () => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const major = urlParams.get("major");
-  const search = urlParams.get("search");
 
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(major);
-  const [majorQuery, setMajorQuery] = useState(search);
   const navigate = useNavigate();
-  const [test, setTest] = useState();
+  const location = useLocation();
 
   useEffect(() => {
     const isLoggedIn = async () => {
@@ -37,7 +32,12 @@ const Posts = () => {
   }, []);
 
   useEffect(() => {
-    console.log("this was called");
+    console.log("Location changed");
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const major = urlParams.get("major");
+    const search = urlParams.get("search");
 
     const getPosts = async () => {
       const options = {
@@ -46,12 +46,12 @@ const Posts = () => {
       };
 
       let URIQuery;
-      if (majorQuery && searchQuery) {
-        URIQuery = `search=${searchQuery}&major=${majorQuery}`;
-      } else if (majorQuery && !searchQuery) {
-        URIQuery = `major=${majorQuery}`;
-      } else if (!majorQuery && searchQuery) {
-        URIQuery = `search=${searchQuery}`;
+      if (major && search) {
+        URIQuery = `search=${search}&major=${major}`;
+      } else if (major && !search) {
+        URIQuery = `major=${major}`;
+      } else if (!major && search) {
+        URIQuery = `search=${search}`;
       }
 
       const response = await fetch(
@@ -69,20 +69,12 @@ const Posts = () => {
       }
     };
     getPosts();
-  }, [majorQuery, searchQuery]);
+  }, [location]);
 
   useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
 
   const getUrlQuery = (urlQuery) => {
     navigate(urlQuery);
-
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const major = urlParams.get("major");
-    const search = urlParams.get("search");
-
-    setMajorQuery(major)
-    setSearchQuery(search)
   };
 
   return (
