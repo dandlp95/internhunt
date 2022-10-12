@@ -111,13 +111,16 @@ const getPostsByDepartment = (req, res, next) => {
 
 const getPosts = async (req, res, next) => {
   let search = req.query.search;
+
   let QString;
+
   if (search) {
-    QString = search.split(" ").map((string) => new RegExp(string));
+    QString = search.split(" ").map((string) => new RegExp(string, "i"));
   } else {
     search = "";
     QString = search.split(" ").map((string) => new RegExp(string));
   }
+  console.log(QString);
 
   let major = req.query.major;
   if (major) {

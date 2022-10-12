@@ -7,6 +7,7 @@ import Post from "../components/post";
 import InputInterface from "../components/inputInterface";
 import { isAuth } from "../utils/isLoggedIn";
 import FetchCalls from "../utils/fetchCalls";
+import Header from "../components/header"
 
 // Need to add handling for when I get back a 200 but nothing was found, although map would probably take care of this...
 const PostPage = () => {
@@ -27,6 +28,10 @@ const PostPage = () => {
       if (!res.ok) {
         alert("Please log in");
         navigate("/");
+      }else{
+        const userData = localStorage.getItem("userData");
+        const userDataJson = JSON.parse(userData);
+        setUser(userDataJson.userId)
       }
     };
     isLoggedIn();
@@ -120,6 +125,7 @@ const PostPage = () => {
   if (postUser && post && comments) {
     return (
       <div>
+        <Header accountId={user}/>
         <Post user={postUser} post={post} />
         <InputInterface
           placeholder="What are your thoughts?"

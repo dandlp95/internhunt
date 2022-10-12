@@ -4,12 +4,16 @@ import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 
 const Header = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const navigate = useNavigate()
+  const userData = localStorage.getItem("userData");
+  const userDataJson = JSON.parse(userData);
 
-  const searchPost = async () => {
-    navigate(`/posts?search=${encodeURI(searchQuery)}`)
-  } 
-
+  const searchPost = () => {
+    props.action(
+      `/posts?major=${encodeURI(userDataJson.major)}&search=${encodeURI(
+        searchQuery
+      )}`
+    );
+  };
 
   return (
     <div>
@@ -29,7 +33,7 @@ const Header = (props) => {
         </div>
         <div>
           <input type="text" onChange={(e) => setSearchQuery(e.target.value)} />
-          <button>Search</button>
+          <button onClick={searchPost}>Search</button>
         </div>
         <div>
           <Link to={`/account-portal/?accountId=${props.accountId}`}>
@@ -40,3 +44,5 @@ const Header = (props) => {
     </div>
   );
 };
+
+export default Header;
