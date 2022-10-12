@@ -37,8 +37,12 @@ const Posts = () => {
       }
     };
 
-    const getPostsByQuery = async () => {};
-    // If url serach parameters is null, run the function below
+    const getPostsByQuery = async () => {
+      
+
+
+    };
+    // If url search parameters is null, run the function below
     getPostsByMajor();
 
     // If url search parameters is not null, run the function below

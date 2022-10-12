@@ -111,36 +111,44 @@ const getPostsByDepartment = (req, res, next) => {
   });
 };
 
+// const getPostsByMajor = async (req, res, next) => {
+//   const major = decodeURI(req.params.major);
+//   const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
+//   const department = foundMajor.department;
+
+//   PostModel.find({ departments: department }, (err, docs) => {
+//     if (err) {
+//       const apiError400 = new ApiError400(err.message);
+//       next(apiError400);
+//     } else if (!docs) {
+//       const apiError404 = new ApiError404("No documents found");
+//       next(apiError404);
+//     } else {
+//       res.status(200).send(docs);
+//     }
+//   });
+// };
+
 const getPostsByMajor = async (req, res, next) => {
+  let search = req.query.search;
+  let QString;
+  if (search) {
+    QString = search.split(" ").map((string) => new RegExp(string));
+  } else {
+    search = "";
+    QString = search.split(" ").map((string) => new RegExp(string));
+  }
   const major = decodeURI(req.params.major);
   const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
   const department = foundMajor.department;
 
-  PostModel.find({ departments: department }, (err, docs) => {
-    if (err) {
-      const apiError400 = new ApiError400(err.message);
-      next(apiError400);
-    } else if (!docs) {
-      const apiError404 = new ApiError404("No documents found");
-      next(apiError404);
-    } else {
-      res.status(200).send(docs);
-    }
-  });
-};
+ // const query = decodeURI(req.params.query);
 
-const getPostsByQuery = async (req, res, next) => {
-  const major = decodeURI(req.params.major);
-  const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
-  const department = foundMajor.department;
-  
-  const query = decodeURI(req.params.query);
-  let QString = query.split(" ").map((string) => new RegExp(string));
   PostModel.find(
     {
       $and: [
         { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
-        {departments: department} ,
+        { departments: department },
       ],
     },
     (err, docs) => {
@@ -166,5 +174,4 @@ module.exports = {
   getPostByUser,
   getPostsByDepartment,
   getPostsByMajor,
-  getPostsByQuery,
 };
