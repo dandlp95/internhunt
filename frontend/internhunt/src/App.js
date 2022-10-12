@@ -21,7 +21,11 @@ const App = () => {
     const isLoggedIn = async () => {
       const response = await isAuth();
       if (response.ok) {
-        navigate("/posts");
+        const userData = localStorage.getItem("userData");
+        const userDataJson = JSON.parse(userData);
+        const major = userDataJson.major;
+        const urlQuery = `?major=${encodeURI(major)}`;
+        navigate(`/posts${urlQuery}`);
       }
     };
     isLoggedIn();
