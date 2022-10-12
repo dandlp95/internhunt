@@ -15,13 +15,7 @@ function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // This next couple of lines are for testing:
-    // const tokenValue =
-    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbDE3MDExQGJ5dWkuZWR1IiwiaWQiOiI2MzMyNTlmZjliNjk0ZDg0YmU3MDE3YWIiLCJpYXQiOjE2NjQ4NDQ2NzMsImV4cCI6MTY2NDg0ODI3M30.g7J0HW37DJ2FlSD1CGNmB-kyxtWiv4e-9hbZCMOBLq8";
-    // localStorage.setItem("userData", JSON.stringify({ token: tokenValue, major: "Geology" }));
-
     const isLoggedIn = async () => {
-      console.log("its called...")
       const userData = localStorage.getItem("userData");
       if (!userData) {
         return;

@@ -19,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     const isLoggedIn = async () => {
-      const response = await isAuth()
+      const response = await isAuth();
       if (response.ok) {
         navigate("/posts");
       }
@@ -52,9 +52,11 @@ const App = () => {
     if (response.ok) {
       const jsonResponse = await response.json();
       localStorage.setItem("userData", JSON.stringify(jsonResponse));
-      navigate("/posts");
+      const userMajor = jsonResponse.major;
+
+      navigate(`/posts/${userMajor}`);
     } else {
-      setFail(true)
+      setFail(true);
     }
   };
 

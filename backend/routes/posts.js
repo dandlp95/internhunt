@@ -1,7 +1,7 @@
 const router = require("express").Router()
 const postController = require("../controllers/posts")
 
-router.get("/", postController.getAllPosts)
+//router.get("/", postController.getAllPosts)
 
 router.get("/getById/:id", postController.getPostById)
 
@@ -17,6 +17,6 @@ router.get("/getPostsByDepartment", postController.getPostsByDepartment)
 
 //router.get("/getPostsByMajor/:major", postController.getPostsByMajor)
 
-router.get("/getPostsByMajor/:major", postController.getPostsByMajor)
+router.get("/getPosts", postController.getPosts)
 
 module.exports = router

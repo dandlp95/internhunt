@@ -6,7 +6,7 @@ const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
 
-const getAllPosts = controllers.getAll(PostModel);
+//const getAllPosts = controllers.getAll(PostModel);
 
 const getPostById = controllers.getById(PostModel);
 
@@ -129,7 +129,7 @@ const getPostsByDepartment = (req, res, next) => {
 //   });
 // };
 
-const getPostsByMajor = async (req, res, next) => {
+const getPosts = async (req, res, next) => {
   let search = req.query.search;
   let QString;
   if (search) {
@@ -138,40 +138,61 @@ const getPostsByMajor = async (req, res, next) => {
     search = "";
     QString = search.split(" ").map((string) => new RegExp(string));
   }
-  const major = decodeURI(req.params.major);
-  const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
-  const department = foundMajor.department;
 
- // const query = decodeURI(req.params.query);
+  let major = req.query.major;
+  let department;
+  if (major) {
+    const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
+    department = foundMajor.department;
 
-  PostModel.find(
-    {
-      $and: [
-        { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
-        { departments: department },
-      ],
-    },
-    (err, docs) => {
-      if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
-      } else if (!docs) {
-        const apiError404 = new ApiError404("No documents found");
-        next(apiError404);
-      } else {
-        res.status(200).send(docs);
+    PostModel.find(
+      {
+        $and: [
+          { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
+          { departments: department },
+        ],
+      },
+      (err, docs) => {
+        if (err) {
+          const apiError = new ApiError400(err.message);
+          next(apiError);
+        } else if (!docs) {
+          const apiError404 = new ApiError404("No documents found");
+          next(apiError404);
+        } else {
+          res.status(200).send(docs);
+        }
       }
-    }
-  );
+    );
+  } else {
+    PostModel.find(
+      {
+        $and: [
+          { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
+        ],
+      },
+      (err, docs) => {
+        if (err) {
+          const apiError = new ApiError400(err.message);
+          next(apiError);
+        } else if (!docs) {
+          const apiError404 = new ApiError404("No documents found");
+          next(apiError404);
+        } else {
+          res.status(200).send(docs);
+        }
+      }
+    );
+  }
 };
 
 module.exports = {
-  getAllPosts,
+  //getAllPosts,
   getPostById,
   editPost,
   deletePost,
   addPost,
   getPostByUser,
   getPostsByDepartment,
-  getPostsByMajor,
+  getPosts,
 };

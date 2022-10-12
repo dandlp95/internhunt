@@ -12,6 +12,7 @@ const Posts = () => {
   const { major } = useParams();
 
   useEffect(() => {
+    console.log(major)
     const userData = localStorage.getItem("userData");
     const userDataJson = JSON.parse(userData);
     const userMajor = userDataJson.major;
@@ -38,7 +39,7 @@ const Posts = () => {
     };
 
     const getPostsByQuery = async () => {
-      
+
 
 
     };
