@@ -130,13 +130,18 @@ const getPostsByMajor = async (req, res, next) => {
 };
 
 const getPostsByQuery = async (req, res, next) => {
-  const major = req.params.major;
+  const major = decodeURI(req.params.major);
+  console.log(major)
+  const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
+  const department = foundMajor.department;
+
   const query = decodeURI(req.params.query);
   let QString = query.split(" ").map((string) => new RegExp(string));
   PostModel.find(
     {
       $or: [{ title: { $in: QString } }, { content: { $in: QString } }],
       // Add query to only get posts from major
+      $and: [{department: department}]
     },
     (err, docs) => {
       if (err) {
