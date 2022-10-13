@@ -48,11 +48,11 @@ const MajorInput = (props) => {
 const CreatePost = () => {
   /* majorInputList refers to the input boxes to add the major
   majorList refers to the list of majors... */
+
   const [majorInputList, setMajorInputList] = useState([]);
   const [majorList, setMajorList] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  //const [user, setUser] = useState("");
   const [state, setState] = useState("");
   const [company, setCompany] = useState("");
   const [type, setType] = useState("");
@@ -88,25 +88,24 @@ const CreatePost = () => {
   }, [majorList]);
 
   const postPost = async () => {
-    const response1 = await getUserById();
+    let userData = localStorage.getItem("userData");
+    userData = JSON.parse(userData);
 
-    if (response1.ok) {
-      const owner = await response1.json();
-      const userId = owner._id;
+    if (userData.userId && userData.jwt) {
       const body = {
         title: title,
         content: content,
-        owner: userId,
+        owner: userData.userId,
         state: state,
         company: company,
         type: type,
         majors: majorList,
       };
-      const postObject = new FetchCalls("/posts/add", "POST", null, body);
-      const response2 = await postObject.protectedPost();
+      const postObject = new FetchCalls("/posts/add", "POST", userData.jwt, body);
+      const response = await postObject.protectedPost();
 
-      if (response2.ok) {
-        const newPost = await response2.json();
+      if (response.ok) {
+        const newPost = await response.json();
         const postId = newPost._id;
         navigate(`/post?postId=${postId}`);
       } else {
@@ -116,7 +115,7 @@ const CreatePost = () => {
       alert("Error!");
     }
   };
-  console.log(state)
+  console.log(state);
   return (
     <div>
       <div>

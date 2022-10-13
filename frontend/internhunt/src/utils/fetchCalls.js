@@ -24,7 +24,7 @@ class FetchCalls {
       method: this.method,
       headers: {
         "Content-type": "application/json",
-        // Authorization token will be here once all routes are protected...
+        "Authorization": `Bearer ${this.token}`,
       },
     };
     const response = await fetch(getApiRoot() + this.endpoint, options);
@@ -37,7 +37,7 @@ class FetchCalls {
       method: this.method,
       headers: {
         "Content-type": "application/json",
-        // Once all routes are protected, authorization token will be here
+        "Authorization": `Bearer ${this.token}`
       },
       body: JSON.stringify(this.body),
     };

@@ -9,8 +9,9 @@ const { encryptPassword } = require("../utils/encrypt");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authError = new ApiError401("Not authorized.");
+
 const getAllUsers = (req, res, next) => {
-  // Double checks Ids are sent...
+  // Double checks Ids arent sent...
   UserModel.find({}, "firstName lastName", (err, docs) => {
     if (err) {
       const apiError = new ApiError400(err.message);
