@@ -5,10 +5,11 @@ import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import Button from "./button";
 
 const InputInterface = (props) => {
-  const [comment, setComment] = useState();
+  const [input, setInput] = useState();
+  
 
   const sendData = () => {
-      props.action(comment);
+      props.action(input);
   };
   
   return (
@@ -17,7 +18,7 @@ const InputInterface = (props) => {
         <input
           placeholder={props.placeholder}
           type="text"
-          onChange={(e) => setComment(e.target.value)}
+          onChange={(e) => setInput(e.target.value)}
         />
       </div>
       <Button text={props.buttonText} action={sendData} />

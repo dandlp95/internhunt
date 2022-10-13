@@ -337,7 +337,7 @@ const isLoggedIn = async (req, res, next) => {
       if (!account || !account.active) {
         throw new ApiError404("Account not found");
       } else {
-        res.status(200).send("authenticated.");
+        res.status(200).send(account._id);
       }
     }
   } catch (err) {

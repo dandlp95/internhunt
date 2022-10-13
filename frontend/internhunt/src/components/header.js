@@ -14,12 +14,15 @@ const Header = (props) => {
       )}`
     );
   };
-
+  // The img tag will link them to all the posts.
   return (
     <div>
       <header>
         <div>
-          <img />
+          <Link to={`/posts?major=${encodeURI(userDataJson.major)}`}>
+          <img /> 
+          <p>Img placehodler</p>
+          </Link>
         </div>
         <div>
           <Link to={`/about`}>
