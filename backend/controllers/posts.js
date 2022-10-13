@@ -5,47 +5,79 @@ const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
+const Api404Error = require("../middleware/error-handling/apiError404");
+
+const apiAuthError = new ApiError401("Unathorized.");
 
 const getPostById = controllers.getById(PostModel);
 
-const editPost = (req, res, next) => {
-  edit = {
-    title: req.body.title,
-    content: req.body.content,
-    city: req.body.city,
-    company: req.body.company,
-    type: req.body.type,
-  };
-
-  PostModel.findByIdAndUpdate(req.params.id, edit, (err, doc) => {
-    if (err) {
-      const apiError400 = new ApiError400(err.message);
-      next(apiError400);
-    } else if (!doc) {
-      const apiError404 = new ApiError404("Post not found.");
-      next(apiError404);
-    } else {
-      res.status(200).send(doc);
+const editPost = async (req, res, next) => {
+  try {
+    if (!req.accountId) {
+      throw apiAuthError;
     }
-  });
+    edit = {
+      title: req.body.title,
+      content: req.body.content,
+      city: req.body.city,
+      company: req.body.company,
+      type: req.body.type,
+    };
+
+    const postDoc = await PostModel.findById(req.accountId);
+
+    if (!postDoc) {
+      throw new Api404Error("No post found.");
+    }
+
+    if (postDoc.owner != req.accountId) {
+      throw apiAuthError;
+    }
+
+    postDoc.updateOne(edit, (err, doc) => {
+      if (err) {
+        const apiError = new ApiError400(err.message);
+        next(apiError);
+      } else {
+        res.status(200).send(doc);
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
-const deletePost = (req, res, next) => {
-  PostModel.findByIdAndDelete(req.params.id, (err, doc) => {
-    if (err) {
-      const apiError400 = new ApiError400(err.message);
-      next(apiError400);
-    } else if (!doc) {
-      const apiError404 = new ApiError404("Post not found.");
-      next(apiError404);
-    } else {
-      res.status(200).send(doc);
+const deletePost = async (req, res, next) => {
+  try {
+    if (!req.accountId) {
+      throw apiAuthError;
     }
-  });
+    const postDoc = await PostModel.findById(req.params.id);
+    if (!postDoc) {
+      throw new Api404Error("No post found.");
+    }
+    if (postDoc.owner != req.accountId) {
+      throw apiAuthError;
+    }
+    postDoc.deleteOne((err, doc) => {
+      if (err) {
+        const apiError = new ApiError400(err.message);
+        next(apiError);
+      } else {
+        res.status(200).send(doc);
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const addPost = async (req, res, next) => {
   try {
+    if (!req.accountId || req.accountId != req.body.owner) {
+      throw apiAuthError;
+    }
+
     const majors = req.body.majors;
     const departments = await Promise.all(
       majors.map(async (major) => {
@@ -63,7 +95,6 @@ const addPost = async (req, res, next) => {
     const post = {
       title: req.body.title,
       content: req.body.content,
-      // date: new Date(), Its added by default in the db
       owner: req.body.owner,
       state: req.body.state,
       company: req.body.company,

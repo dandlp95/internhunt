@@ -4,6 +4,7 @@ const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
 const controllers = require("./genericControllers");
+const Api400Error = require("../middleware/error-handling/apiError400");
 
 const getAllComments = controllers.getAll(CommentModel);
 
@@ -54,9 +55,14 @@ const editComment = async (req, res, next) => {
     if (req.accountId != commentDoc.owner) {
       throw new ApiError401("Unauthorized user.");
     }
-    await commentDoc.updateOne(edit);
-    await commentDoc.save();
-    res.status(200).send(commentDoc);
+    commentDoc.updateOne(edit, (err, doc) => {
+      if (err) {
+        const apiError = new Api400Error(err.message);
+        next(apiError);
+      } else {
+        res.status(200).send(doc);
+      }
+    });
   } catch (err) {
     next(err);
   }
@@ -90,8 +96,8 @@ const deleteComment = async (req, res, next) => {
 
 const addComment = (req, res, next) => {
   try {
-    if(!req.accountId){
-      throw new ApiError400("Unauthorized.")
+    if (!req.accountId || req.accountId != req.body.owner) {
+      throw new ApiError400("Unauthorized.");
     }
     const comment = {
       content: req.body.content,
