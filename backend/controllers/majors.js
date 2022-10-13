@@ -4,24 +4,37 @@ const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
 const MajorModel = require("../models/major");
+const UserModel = require("../models/user");
 
 const getMajors = controllers.getAll(MajorModel);
 
 const getMajor = controllers.getById(MajorModel);
 
-const addMajor = () => {
-  const newMajor = {
-    name: req.body.name,
-  };
-
-  MajorModel.create(newMajor, (err, doc) => {
-    if (err) {
-      const apiError400 = new ApiError400();
-      next(apiError400);
-    } else {
-      res.status(200).send(doc);
+const addMajor = async () => {
+  try {
+    const apiAuthError = new ApiError401("Unauthorized");
+    if (!req.accountId) {
+      throw apiAuthError;
     }
-  });
+    const userDoc = await UserModel.findById(req.accountId);
+    if (!userDoc || userDoc.accessLevel != 1) {
+      throw apiAuthError;
+    }
+    const newMajor = {
+      name: req.body.name,
+    };
+
+    MajorModel.create(newMajor, (err, doc) => {
+      if (err) {
+        const apiError400 = new ApiError400(err.message);
+        next(apiError400);
+      } else {
+        res.status(200).send(doc);
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {
