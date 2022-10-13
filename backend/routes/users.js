@@ -8,18 +8,24 @@ router.get("/isAuthorized", isAuth.getAuthToken, userController.isLoggedIn);
 
 router.get("/getById/:id", userController.getUserById);
 
-router.patch("/edit/:id", userController.editUser);
+router.patch("/edit/:id", isAuth.getAuthToken, userController.editUser);
 
-router.delete("/delete/:id", userController.deleteUser);
+router.delete("/delete/:id", isAuth.getAuthToken, userController.deleteUser);
 
 router.post("/add", userController.addUser);
 
 router.post("/login", userController.login);
 
-router.patch("/warn/:id", userController.warnUser);
+router.patch("/warn/:id", isAuth.getAuthToken, userController.warnUser);
 
-router.patch("/suspend/:id", userController.suspendUser);
+router.patch("/suspend/:id", isAuth.getAuthToken, userController.suspendUser);
 
-router.patch("/removeSuspension/:id", userController.removeSuspension);
+router.patch(
+  "/removeSuspension/:id",
+  isAuth.getAuthToken,
+  userController.removeSuspension
+);
+
+router.patch("/edit-password/:id", isAuth.getAuthToken, userController.editPassword)
 
 module.exports = router;

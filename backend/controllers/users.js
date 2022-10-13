@@ -8,7 +8,7 @@ const controllers = require("./genericControllers");
 const { encryptPassword } = require("../utils/encrypt");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const authError = new ApiError401("Not authorized.");
 const getAllUsers = (req, res, next) => {
   // Double checks Ids are sent...
   UserModel.find({}, "firstName lastName", (err, docs) => {
@@ -77,36 +77,51 @@ const getUserByIdPrivate = (req, res, next) => {
 };
 
 const editUser = (req, res, next) => {
-  const edits = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-  };
-
-  UserModel.findByIdAndUpdate(edits, (err, doc) => {
-    if (err) {
-      const apiError = new ApiError400(err.message);
-      next(apiError);
-    } else if (!doc) {
-      const apiError = new ApiError404(err.message);
-      next(apiError);
-    } else {
-      res.status(200).send("success");
+  try {
+    if (!req.accountId || req.accountId != req.params.id) {
+      throw authError;
     }
-  });
+
+    const edits = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+    };
+
+    UserModel.findByIdAndUpdate(req.params.id, edits, (err, doc) => {
+      if (err) {
+        const apiError = new ApiError400(err.message);
+        next(apiError);
+      } else if (!doc) {
+        const apiError = new ApiError404(err.message);
+        next(apiError);
+      } else {
+        res.status(200).send("success");
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const deleteUser = (req, res, next) => {
-  UserModel.findByIdAndDelete(req.params.id, (err, doc) => {
-    if (err) {
-      const apiError = new ApiError400(err.message);
-      next(apiError);
-    } else if (!doc) {
-      const apiError = new ApiError404(err.message);
-      next(apiError);
-    } else {
-      res.status(200).send("user deleted.");
+  try {
+    if (!req.accountId || req.accountId != req.params.id) {
+      throw authError;
     }
-  });
+    UserModel.findByIdAndDelete(req.params.id, (err, doc) => {
+      if (err) {
+        const apiError = new ApiError400(err.message);
+        next(apiError);
+      } else if (!doc) {
+        const apiError = new ApiError404(err.message);
+        next(apiError);
+      } else {
+        res.status(200).send("user deleted.");
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 const addUser = async (req, res, next) => {
@@ -152,6 +167,14 @@ const addUser = async (req, res, next) => {
 
 const warnUser = async (req, res, next) => {
   try {
+    if (!req.accountId) {
+      throw authError;
+    }
+    const admin = await UserModel.findById(req.accountId);
+    if (!admin || admin.accessLevel != 1) {
+      throw authError;
+    }
+
     const user = await UserModel.findById(req.params.id);
 
     if (!user) {
@@ -187,6 +210,14 @@ const warnUser = async (req, res, next) => {
 
 const suspendUser = async (req, res, next) => {
   try {
+    if (!req.accountId) {
+      throw authError;
+    }
+    const admin = await UserModel.findById(req.accountId);
+    if (!admin || admin.accessLevel != 1) {
+      throw authError;
+    }
+
     const user = UserModel.findById(req.params.id);
 
     const suspension = {
@@ -204,6 +235,14 @@ const suspendUser = async (req, res, next) => {
 
 const removeSuspension = async (req, res, next) => {
   try {
+    if (!req.accountId) {
+      throw authError;
+    }
+    const admin = await UserModel.findById(req.accountId);
+    if (!admin || admin.accessLevel != 1) {
+      throw authError;
+    }
+
     const user = UserModel.findById(req.params.id);
 
     const suspension = {
@@ -220,18 +259,30 @@ const removeSuspension = async (req, res, next) => {
 };
 
 const editPassword = async (req, res, next) => {
-  const encryptedPassword = encryptPassword(req.body.password);
-  UserModel.findByIdAndUpdate(req.params.id, encryptedPassword, (err, doc) => {
-    if (err) {
-      const apiError400 = new ApiError400(err.message);
-      next(err);
-    } else if (!doc) {
-      const apiError404 = new Api404Error("Account not found.");
-      next(apiError404);
-    } else {
-      res.status(200).send("password changed.");
+  try {
+    if (!req.accountId || req.accountId != req.params.id) {
+      throw authError;
     }
-  });
+
+    const encryptedPassword = await encryptPassword(req.body.password);
+    UserModel.findByIdAndUpdate(
+      req.params.id,
+      encryptedPassword,
+      (err, doc) => {
+        if (err) {
+          const apiError400 = new ApiError400(err.message);
+          next(err);
+        } else if (!doc) {
+          const apiError404 = new Api404Error("Account not found.");
+          next(apiError404);
+        } else {
+          res.status(200).send("password changed.");
+        }
+      }
+    );
+  } catch (err) {
+    next(err);
+  }
 };
 
 const login = (req, res, next) => {
@@ -295,6 +346,7 @@ const isLoggedIn = async (req, res, next) => {
 
 module.exports = {
   getAllUsers,
+  isLoggedIn,
   getUserById,
   editUser,
   deleteUser,
@@ -302,9 +354,8 @@ module.exports = {
   login,
   warnUser,
   suspendUser,
-  editPassword,
   removeSuspension,
+  editPassword,
   getAllUsersPrivate,
   getUserByIdPrivate,
-  isLoggedIn,
 };
