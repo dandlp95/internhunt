@@ -102,7 +102,7 @@ const CreatePost = () => {
         majors: majorList,
       };
       const postObject = new FetchCalls("/posts/add", "POST", userData.jwt, body);
-      const response = await postObject.protectedPost();
+      const response = await postObject.protectedBody();
 
       if (response.ok) {
         const newPost = await response.json();

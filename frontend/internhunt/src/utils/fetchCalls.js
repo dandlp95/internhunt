@@ -19,7 +19,7 @@ class FetchCalls {
 
     return response;
   }
-  async protectedGet() {
+  async protectedNoBody() {
     const options = {
       method: this.method,
       headers: {
@@ -32,7 +32,7 @@ class FetchCalls {
     return response;
   }
 
-  async protectedPost() {
+  async protectedBody() {
     const options = {
       method: this.method,
       headers: {

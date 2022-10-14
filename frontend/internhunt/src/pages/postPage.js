@@ -7,7 +7,7 @@ import Post from "../components/post";
 import InputInterface from "../components/inputInterface";
 import { isAuth } from "../utils/isLoggedIn";
 import FetchCalls from "../utils/fetchCalls";
-import Header from "../components/header"
+import Header from "../components/header";
 
 // Need to add handling for when I get back a 200 but nothing was found, although map would probably take care of this...
 const PostPage = () => {
@@ -28,10 +28,10 @@ const PostPage = () => {
       if (!res.ok) {
         alert("Please log in");
         navigate("/");
-      }else{
+      } else {
         const userData = localStorage.getItem("userData");
         const userDataJson = JSON.parse(userData);
-        setUser(userDataJson.userId)
+        setUser(userDataJson.userId);
       }
     };
     isLoggedIn();
@@ -112,7 +112,7 @@ const PostPage = () => {
     };
 
     const ReqClass = new FetchCalls("/comments/add", "POST", token, body);
-    const response = await ReqClass.protectedPost();
+    const response = await ReqClass.protectedBody();
 
     if (response.ok) {
       setComments(comments);
@@ -123,26 +123,50 @@ const PostPage = () => {
 
   const editPost = async (editPost) => {
     const body = {
-      content: editPost
-    }
-    console.log(body)
-
+      content: editPost,
+    };
     let userData = localStorage.getItem("userData");
-    userData = JSON.parse(userData)
-    const fetchCall = new FetchCalls(`/posts/edit/${post._id}`, "PATCH", userData.jwt, body)
-    const response = await fetchCall.protectedPost()
-    console.log("response", response)
-    if(response.ok){
-      const responseJson = await response.json()
-      setPost(responseJson)
+    userData = JSON.parse(userData);
+    const fetchCall = new FetchCalls(
+      `/posts/edit/${post._id}`,
+      "PATCH",
+      userData.jwt,
+      body
+    );
+    const response = await fetchCall.protectedBody();
+    if (response.ok) {
+      const responseJson = await response.json();
+      setPost(responseJson);
     }
-  } 
+  };
+
+  const deletePost = async () => {
+    let userData = localStorage.getItem("userData");
+    userData = JSON.parse(userData);
+    const fetchCall = new FetchCalls(
+      `/posts/delete/${post._id}`,
+      "DELETE",
+      userData.jwt
+    );
+    const response = await fetchCall.protectedNoBody();
+    if (response.ok) {
+      alert("Post was deleted");
+      navigate(`/posts?major=${encodeURI(userData.major)}`);
+    } else {
+      alert("error deleting the post");
+    }
+  };
 
   if (postUser && post && comments) {
     return (
       <div>
-        <Header accountId={user}/>
-        <Post user={postUser} post={post} editAction={editPost}/>
+        <Header accountId={user} />
+        <Post
+          user={postUser}
+          post={post}
+          editAction={editPost}
+          deleteAction={deletePost}
+        />
         <InputInterface
           placeholder="What are your thoughts?"
           action={postComment}

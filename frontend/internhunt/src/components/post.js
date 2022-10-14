@@ -1,8 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
-import { getApiRoot } from "../utils/getApiRoot";
-import Comment from "./comment";
 import { isAuth } from "../utils/isLoggedIn";
 import Button from "./button";
 
@@ -35,6 +33,10 @@ const Post = (props) => {
     props.editAction(postEdit);
   };
 
+  const handleDeleteClick = () => {
+    props.deleteAction()
+  }
+
   if (!editMode) {
     return (
       <div>
@@ -45,7 +47,10 @@ const Post = (props) => {
         </section>
         <div>
           {isPostCreator ? (
-            <Button text="Edit" action={activateEdit} />
+            <div>
+              <Button text="Edit" action={activateEdit} />
+              <Button text="Delete" action={handleDeleteClick}/>
+            </div>
           ) : (
             <div></div>
           )}
@@ -77,3 +82,6 @@ const Post = (props) => {
 };
 
 export default Post;
+
+// Extra functionality
+// Add a cancel button when they are editing something
