@@ -24,24 +24,22 @@ const editPost = async (req, res, next) => {
       type: req.body.type,
     };
 
-    const postDoc = await PostModel.findById(req.accountId);
-
-    if (!postDoc) {
-      throw new Api404Error("No post found.");
-    }
-
-    if (postDoc.owner != req.accountId) {
-      throw apiAuthError;
-    }
-
-    postDoc.updateOne(edit, (err, doc) => {
-      if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
-      } else {
-        res.status(200).send(doc);
+    PostModel.findOneAndUpdate(
+      { _id: req.params.id, owner: req.accountId },
+      edit,
+      { new: true },
+      (err, doc) => {
+        if (err) {
+          const apiError = new ApiError400(err.message);
+          next(apiError);
+        } else if (!doc) {
+          const apiError = new Api404Error("No document found");
+          next(apiError);
+        } else {
+          res.status(200).send(doc);
+        }
       }
-    });
+    );
   } catch (err) {
     next(err);
   }
@@ -52,21 +50,20 @@ const deletePost = async (req, res, next) => {
     if (!req.accountId) {
       throw apiAuthError;
     }
-    const postDoc = await PostModel.findById(req.params.id);
-    if (!postDoc) {
-      throw new Api404Error("No post found.");
-    }
-    if (postDoc.owner != req.accountId) {
-      throw apiAuthError;
-    }
-    postDoc.deleteOne((err, doc) => {
-      if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
-      } else {
-        res.status(200).send(doc);
+    PostModel.findOneAndDelete(
+      { _id: req.params.id, owner: req.accountId },
+      (err, doc) => {
+        if (err) {
+          const apiError = new ApiError400(err.message);
+          next(apiError);
+        } else if (!doc) {
+          const apiError = new Api404Error("No document found");
+          next(apiError);
+        } else {
+          res.status(200).send(doc);
+        }
       }
-    });
+    ); 
   } catch (err) {
     next(err);
   }

@@ -39,42 +39,62 @@ const getUserById = (req, res, next) => {
   });
 };
 
-const getAllUsersPrivate = (req, res, next) => {
-  // Obviously check for authentication.
-  UserModel.find(
-    {},
-    "firstName lastName email accessLevel suspension warnings",
-    (err, doc) => {
-      if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
-      } else if (!doc) {
-        const apiError = new ApiError404(err.message);
-        next(apiError);
-      } else {
-        res.status(200).send(doc);
-      }
+const getAllUsersPrivate = async (req, res, next) => {
+  try {
+    if (!req.accountId) {
+      throw authError;
     }
-  );
+    const user = await UserModel.findById(req.accountId);
+    if (!user || user.accessLevel != 1) {
+      throw authError;
+    }
+    UserModel.find(
+      {},
+      "firstName lastName email accessLevel suspension warnings",
+      (err, doc) => {
+        if (err) {
+          const apiError = new ApiError400(err.message);
+          next(apiError);
+        } else if (!doc) {
+          const apiError = new ApiError404(err.message);
+          next(apiError);
+        } else {
+          res.status(200).send(doc);
+        }
+      }
+    );
+  } catch (err) {
+    next(err);
+  }
 };
 
-const getUserByIdPrivate = (req, res, next) => {
-  // Obviously check for authentication.
-  UserModel.findById(
-    req.params.id,
-    "firstName lastName email accessLevel suspension warnings",
-    (err, doc) => {
-      if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
-      } else if (!doc) {
-        const apiError = new ApiError404(err.message);
-        next(apiError);
-      } else {
-        res.status(200).send(doc);
-      }
+const getUserByIdPrivate = async (req, res, next) => {
+  try {
+    if (!req.accountId) {
+      throw authError;
     }
-  );
+    const user = await UserModel.findById(req.accountId);
+    if (!user || user.accessLevel != 1) {
+      throw authError;
+    }
+    UserModel.findById(
+      req.params.id,
+      "firstName lastName email accessLevel suspension warnings",
+      (err, doc) => {
+        if (err) {
+          const apiError = new ApiError400(err.message);
+          next(apiError);
+        } else if (!doc) {
+          const apiError = new ApiError404(err.message);
+          next(apiError);
+        } else {
+          res.status(200).send(doc);
+        }
+      }
+    );
+  } catch (err) {
+    next(err);
+  }
 };
 
 const editUser = (req, res, next) => {

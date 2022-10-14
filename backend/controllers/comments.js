@@ -11,8 +11,7 @@ const getAllComments = controllers.getAll(CommentModel);
 const getCommentById = controllers.getById(CommentModel);
 
 const getCommentByUser = (req, res, next) => {
-  const userId = req.params.id;
-  CommentModel.find({ owner: userId }, (err, docs) => {
+  CommentModel.find({ owner: req.params.id }, (err, docs) => {
     if (err) {
       const apiError = new ApiError400(err.message);
       next(apiError);
@@ -48,21 +47,22 @@ const editComment = async (req, res, next) => {
     const edit = {
       content: req.body.content,
     };
-    const commentDoc = await CommentModel.findById(req.params.id);
-    if (!commentDoc) {
-      throw new ApiError404("Comment not found");
-    }
-    if (req.accountId != commentDoc.owner) {
-      throw new ApiError401("Unauthorized user.");
-    }
-    commentDoc.updateOne(edit, (err, doc) => {
-      if (err) {
-        const apiError = new Api400Error(err.message);
-        next(apiError);
-      } else {
-        res.status(200).send(doc);
+    CommentModel.findOneAndUpdate(
+      { _id: req.params.id, owner: req.accountId },
+      edit,
+      { new: true },
+      (err, doc) => {
+        if (err) {
+          const apiError = new ApiError400(err.message);
+          next(apiError);
+        } else if (!doc) {
+          const apiError = new ApiError404("No document found");
+          next(apiError);
+        } else {
+          res.status(200).send(doc);
+        }
       }
-    });
+    );
   } catch (err) {
     next(err);
   }
@@ -73,22 +73,20 @@ const deleteComment = async (req, res, next) => {
     if (!req.accountId) {
       throw new ApiError401("Unauthorized user.");
     }
-    const commentDoc = await CommentModel.findById(req.params.id);
-    if (!commentDoc) {
-      throw new ApiError404("Comment not found.");
-    }
-    if (req.accountId != commentDoc.owner) {
-      throw new ApiError401("Unauthorized user.");
-    }
-
-    commentDoc.deleteOne((err, doc) => {
-      if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
-      } else {
-        res.status(200).send(doc);
+    CommentModel.findOneAndDelete(
+      { _id: req.params.id, owner: req.accountId },
+      (err, doc) => {
+        if (err) {
+          const apiError = new ApiError400(err.message);
+          next(apiError);
+        } else if (!doc) {
+          const apiError = new Api404Error("No document found");
+          next(apiError);
+        } else {
+          res.status(200).send(doc);
+        }
       }
-    });
+    );
   } catch (err) {
     next(err);
   }

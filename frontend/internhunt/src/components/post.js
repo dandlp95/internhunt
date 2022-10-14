@@ -9,6 +9,7 @@ import Button from "./button";
 const Post = (props) => {
   const [isPostCreator, setIsPostCreator] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [postEdit, setPostEdit] = useState("");
 
   useEffect(() => {
     const isPostCreator = async () => {
@@ -26,26 +27,52 @@ const Post = (props) => {
   }, []);
 
   const activateEdit = () => {
-    setEditMode(true)
+    setEditMode(true);
   };
 
-  return (
-    <div>
-      <p>Posted by {props.user.firstName}</p>
-      <section>
-        <h2>{props.post.title}</h2>
-        
-        <p>{props.post.content}</p>
-      </section>
+  const handleEditClick = () => {
+    setEditMode(false);
+    props.editAction(postEdit);
+  };
+
+  if (!editMode) {
+    return (
       <div>
-        {isPostCreator ? (
-          <Button value="Edit" action={activateEdit} />
-        ) : (
-          <div></div>
-        )}
+        <p>Posted by {props.user.firstName}</p>
+        <section>
+          <p>{props.post.content}</p>
+        </section>
+        <div>
+          {isPostCreator ? (
+            <Button text="Edit" action={activateEdit} />
+          ) : (
+            <div></div>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div>
+        <p>Posted by {props.user.firstName}</p>
+        <section>
+          <h2>{props.post.title}</h2>
+          <input
+            type="text"
+            value={postEdit}
+            onChange={(e) => setPostEdit(e.target.value)}
+          />
+        </section>
+        <div>
+          {isPostCreator ? (
+            <Button text="Save" action={handleEditClick} />
+          ) : (
+            <div></div>
+          )}
+        </div>
+      </div>
+    );
+  }
 };
 
 export default Post;

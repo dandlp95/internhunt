@@ -122,11 +122,26 @@ const PostPage = () => {
     }
   };
 
+  const editPost = async (editPost) => {
+    const body = {
+      editPost
+    }
+
+    let userData = localStorage.getItem("userData");
+    userData = JSON.parse(userData)
+    const fetchCall = new FetchCalls(`/posts/edit/${post._id}`, "PATCH", userData.jwt, body)
+    const response = await fetchCall.protectedPost()
+    if(response.ok){
+      const responseJson = await response.json()
+      setPost(responseJson)
+    }
+  } 
+
   if (postUser && post && comments) {
     return (
       <div>
         <Header accountId={user}/>
-        <Post user={postUser} post={post} />
+        <Post user={postUser} post={post} editAction={editPost}/>
         <InputInterface
           placeholder="What are your thoughts?"
           action={postComment}
