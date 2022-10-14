@@ -115,7 +115,6 @@ const PostPage = () => {
     const response = await ReqClass.protectedPost();
 
     if (response.ok) {
-      alert("Success");
       setComments(comments);
     } else {
       alert("Error");
@@ -124,13 +123,15 @@ const PostPage = () => {
 
   const editPost = async (editPost) => {
     const body = {
-      editPost
+      content: editPost
     }
+    console.log(body)
 
     let userData = localStorage.getItem("userData");
     userData = JSON.parse(userData)
     const fetchCall = new FetchCalls(`/posts/edit/${post._id}`, "PATCH", userData.jwt, body)
     const response = await fetchCall.protectedPost()
+    console.log("response", response)
     if(response.ok){
       const responseJson = await response.json()
       setPost(responseJson)

@@ -40,6 +40,7 @@ const Post = (props) => {
       <div>
         <p>Posted by {props.user.firstName}</p>
         <section>
+          <h2>{props.post.title}</h2>
           <p>{props.post.content}</p>
         </section>
         <div>
