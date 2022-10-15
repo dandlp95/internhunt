@@ -8,6 +8,7 @@ const Post = (props) => {
   const [isPostCreator, setIsPostCreator] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [postEdit, setPostEdit] = useState("");
+  const route = "posts";
 
   useEffect(() => {
     const isPostCreator = async () => {
@@ -30,12 +31,12 @@ const Post = (props) => {
 
   const handleEditClick = () => {
     setEditMode(false);
-    props.editAction(postEdit);
+    props.editAction(route, props.post._id, postEdit);
   };
 
   const handleDeleteClick = () => {
-    props.deleteAction()
-  }
+    props.deleteAction(route, props.post._id, true);
+  };
 
   if (!editMode) {
     return (
@@ -49,7 +50,7 @@ const Post = (props) => {
           {isPostCreator ? (
             <div>
               <Button text="Edit" action={activateEdit} />
-              <Button text="Delete" action={handleDeleteClick}/>
+              <Button text="Delete" action={handleDeleteClick} />
             </div>
           ) : (
             <div></div>

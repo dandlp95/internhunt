@@ -120,15 +120,15 @@ const PostPage = () => {
       alert("Error");
     }
   };
-
-  const editPost = async (editPost) => {
+/****    ****/
+  const editContent = async (route, id, bodyContent) => {
     const body = {
-      content: editPost,
+      content: bodyContent,
     };
     let userData = localStorage.getItem("userData");
     userData = JSON.parse(userData);
     const fetchCall = new FetchCalls(
-      `/posts/edit/${post._id}`,
+      `/${route}/edit/${id}`,
       "PATCH",
       userData.jwt,
       body
@@ -140,18 +140,20 @@ const PostPage = () => {
     }
   };
 
-  const deletePost = async () => {
+  const deleteContent = async (route, id, isRedirect) => {
     let userData = localStorage.getItem("userData");
     userData = JSON.parse(userData);
     const fetchCall = new FetchCalls(
-      `/posts/delete/${post._id}`,
+      `/${route}/delete/${id}`,
       "DELETE",
       userData.jwt
     );
     const response = await fetchCall.protectedNoBody();
     if (response.ok) {
-      alert("Post was deleted");
-      navigate(`/posts?major=${encodeURI(userData.major)}`);
+      alert("Succesful deletion");
+      if (isRedirect) {
+        navigate(`/posts?major=${encodeURI(userData.major)}`);
+      }
     } else {
       alert("error deleting the post");
     }
@@ -164,8 +166,8 @@ const PostPage = () => {
         <Post
           user={postUser}
           post={post}
-          editAction={editPost}
-          deleteAction={deletePost}
+          editAction={editContent}
+          deleteAction={deleteContent}
         />
         <InputInterface
           placeholder="What are your thoughts?"
@@ -173,7 +175,11 @@ const PostPage = () => {
           buttonText="Comment"
         />
         {comments.map((comment) => (
-          <Comment comment={comment} />
+          <Comment
+            comment={comment}
+            editAction={editContent}
+            deleteAction={deleteContent}
+          />
         ))}
       </div>
     );
