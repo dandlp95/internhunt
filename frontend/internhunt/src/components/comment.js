@@ -4,12 +4,15 @@ import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import { getApiRoot } from "../utils/getApiRoot";
 import { isAuth } from "../utils/isLoggedIn";
 import Button from "./button";
+import FetchCalls from "../utils/fetchCalls";
 
 const Comment = (props) => {
   const [commentUser, setCommentUser] = useState("");
   const [isCommentCreator, setIsCommentCreator] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [commentEdit, setCommentEdit] = useState("");
+  const [comment, setComment] = useState(props.comment)
+
   const route = "comments";
 
   useEffect(() => {
@@ -17,7 +20,7 @@ const Comment = (props) => {
       const response = await isAuth();
       if (response.ok) {
         const userId = await response.json();
-        if (userId === props.comment.owner) {
+        if (userId === comment.owner) {
           setIsCommentCreator(true);
         } else {
           setIsCommentCreator(false);
@@ -29,7 +32,7 @@ const Comment = (props) => {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const commentUserId = props.comment.owner;
+      const commentUserId = comment.owner;
       const options = {
         method: "GET",
         headers: { "Content-type": "application/json" },
@@ -54,13 +57,29 @@ const Comment = (props) => {
     setEditMode(true);
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = async () => {
     setEditMode(false);
-    props.editAction(route, props.comment._id, commentEdit);
+    //props.editAction(route, props.comment._id, commentEdit);
+    const body = {
+      content: commentEdit,
+    };
+    let userData = localStorage.getItem("userData");
+    userData = JSON.parse(userData);
+    const fetchCall = new FetchCalls(
+      `/comments/edit/${comment._id}`,
+      "PATCH",
+      userData.jwt,
+      body
+    );
+    const response = await fetchCall.protectedBody();
+    if (response.ok) {
+      const responseJson = await response.json();
+      setComment(responseJson);
+    }
   };
 
   const handleDeleteClick = () => {
-    props.deleteAction(route, props.comment._id, false);
+    props.deleteAction(route, comment._id, false);
   };
 
   if (!editMode) {
@@ -70,7 +89,7 @@ const Comment = (props) => {
           <p>{commentUser.firstName}</p>
         </div>
         <div>
-          <p>{props.comment.content}</p>
+          <p>{comment.content}</p>
         </div>
         <div>
           {isCommentCreator ? (
