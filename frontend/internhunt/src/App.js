@@ -71,9 +71,7 @@ const App = () => {
           <section className="pageInfoSection">
             <h2>Internhunt</h2>
             <ul>
-              <li>
-                Internhunt information here
-              </li>
+              <li></li>
               <li>Internhunt information </li>
               <li>Internhunt information </li>
               <li>Internhunt information </li>
