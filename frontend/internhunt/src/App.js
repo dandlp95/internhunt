@@ -80,38 +80,35 @@ const App = () => {
         </div>
         <div className="formDiv">
           <form onSubmit={(e) => e.preventDefault()}>
-            <label>
-              Enter email:
-              <input
-                type="text"
-                name="email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </label>
-            <label>
-              Enter password:
-              <input
-                type="text"
-                name="password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </label>
-            <label>
-              Enter first name:
-              <input
-                type="text"
-                name="firstName"
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </label>
-            <label>
-              Enter last name:
-              <input
-                type="text"
-                name="lastName"
-                onChange={(e) => setLastName(e.target.value)}
-              />
-            </label>
+            <label>Enter email:</label>
+            <input
+              type="text"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+
+            <label>Enter password:</label>
+            <input
+              type="text"
+              name="password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <label>Enter first name:</label>
+            <input
+              type="text"
+              name="firstName"
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="Enter first name"
+            />
+
+            <label>Enter last name:</label>
+            <input
+              type="text"
+              name="lastName"
+              onChange={(e) => setLastName(e.target.value)}
+            />
+
             <label>Choose a major: </label>
             <input
               type="text"

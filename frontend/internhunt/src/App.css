@@ -1,80 +1,91 @@
 .registrationPage {
-    background-image: url("./assets/background.jpg");
-    background-size: cover;
-    background-position: top;
-    min-height: 100%;
-    height: 100vh;
-  }
-  
-  .registration-container {
-    width: 70%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 15rem;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-  }
-  
-  .pageInfoSection h2 {
-    font-size: 6rem;
-  }
-  
-  .pageInfoSection li {
-    font-size: 3rem;
-  }
-  
-  .formDiv form {
-    background-color: #f8f8f8;
-    padding: 5rem;
-    font-size: 2rem;
-  }
-  
-  .formDiv input[type="text"] {
-    width: 75%;
-    height: 2rem;
-  }
-  
-  .formDiv label {
-    padding-top: 2rem;
-    display: block;
-  }
-  
-  .formDiv p {
-    font-size: 1rem;
-  }
-  
-  .formDiv input[type="submit"] {
-    display: block;
-    background-color: #0B3954;
-    border: 1px solid rgba(27, 31, 35, 0.15);
-    border-radius: 6px;
-    box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
-    box-sizing: border-box;
-    color: #fff;
-    cursor: pointer;
-    font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
-      sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 20px;
-    padding: 10px 16px;
-    position: relative;
-    text-align: center;
-    margin-top:1rem;
-  }
-  
-  .formDiv input[type="submit"]:hover {
-    background-color: #5FA0D0;
-  }
-  
-  .formDiv input[type="submit"]:active {
-    background-color: #0B3954;
-    box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
-  }
-  
+  background-image: url("./assets/background.jpg");
+  background-size: cover;
+  background-position: top;
+  min-height: 100%;
+  height: 100vh;
+}
+
+.registration-container {
+  width: 70%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 15rem;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.pageInfoSection h2 {
+  font-size: 6rem;
+}
+
+.pageInfoSection li {
+  font-size: 3rem;
+}
+
+.formDiv form {
+  background-color: #f8f8f8;
+  padding: 6rem;
+  font-size: 2rem;
+  border-radius: 10px;
+  align-items: center;
+  width: 40%;
+}
+
+.formDiv input[type="text"] {
+  width: 100%;
+  height: 2rem;
+  outline: 0;
+  border-width: 0 0 2px;
+  border-color: blue;
+}
+
+.formDiv input[type="text"]:focus{
+  border-color: green
+}
+
+.formDiv label {
+  padding-top: 2rem;
+  display: block;
+  width: 100%;
+  margin-right: 0;
+}
+
+.formDiv p {
+  font-size: 1rem;
+}
+
+.formDiv input[type="submit"] {
+  display: block;
+  background-color: #0b3954;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 10px 16px;
+  position: relative;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.formDiv input[type="submit"]:hover {
+  background-color: #5fa0d0;
+}
+
+.formDiv input[type="submit"]:active {
+  background-color: #0b3954;
+  box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
+}

@@ -106,6 +106,9 @@ const AccountPortal = () => {
                 </section>
               ))}
             </section>
+            <section>
+            {/* Add something here for the comments (model it after reddit.) */}
+            </section>
           </div>
         </div>
       </div>
