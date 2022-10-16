@@ -71,7 +71,9 @@ const App = () => {
           <section className="pageInfoSection">
             <h2>Internhunt</h2>
             <ul>
-              <li>Internhunt information here</li>
+              <li>
+                Internhunt information here
+              </li>
               <li>Internhunt information </li>
               <li>Internhunt information </li>
               <li>Internhunt information </li>
@@ -80,43 +82,57 @@ const App = () => {
         </div>
         <div className="formDiv">
           <form onSubmit={(e) => e.preventDefault()}>
-            <label>Enter email:</label>
-            <input
-              type="text"
-              name="email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
+            <div>
+              <input
+                required
+                placeholder="Email"
+                type="text"
+                name="email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-            <label>Enter password:</label>
-            <input
-              type="text"
-              name="password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div>
+              <input
+                required
+                type="text"
+                name="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-            <label>Enter first name:</label>
-            <input
-              type="text"
-              name="firstName"
-              onChange={(e) => setFirstName(e.target.value)}
-              placeholder="Enter first name"
-            />
+            <div>
+              <input
+                placeholder="First Name"
+                required
+                type="text"
+                name="firstName"
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
 
-            <label>Enter last name:</label>
-            <input
-              type="text"
-              name="lastName"
-              onChange={(e) => setLastName(e.target.value)}
-            />
+            <div>
+              <input
+                placeholder="Last name"
+                required
+                type="text"
+                name="lastName"
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
 
-            <label>Choose a major: </label>
-            <input
-              type="text"
-              list="majors"
-              onChange={(e) => {
-                setMajor(e.target.value);
-              }}
-            />
+            <div>
+              <input
+                placeholder="Choose a major"
+                required
+                type="text"
+                list="majors"
+                onChange={(e) => {
+                  setMajor(e.target.value);
+                }}
+              />
+            </div>
             <datalist id="majors">
               {majorsList.map((major) => (
                 <option data-value={major._id} value={major.name} />
