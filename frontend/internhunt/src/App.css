@@ -8,7 +8,7 @@
 }
 
 .registration-container {
-  width: 70%;
+  width: 80%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 15rem;
@@ -28,6 +28,7 @@
 
 .pageInfoSection h2 {
   font-size: 6rem;
+  margin: 0;
 }
 
 .pageInfoSection li {

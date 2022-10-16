@@ -71,10 +71,10 @@ const App = () => {
           <section className="pageInfoSection">
             <h2>Internhunt</h2>
             <ul>
-              <li></li>
-              <li>Internhunt information </li>
-              <li>Internhunt information </li>
-              <li>Internhunt information </li>
+              <li>Network with thousands of students</li>
+              <li>Find and internship</li>
+              <li>Share your experience</li>
+              <li>Help others along the way!</li>
             </ul>
           </section>
         </div>
