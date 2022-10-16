@@ -39,7 +39,7 @@ const Header = (props) => {
           <button onClick={searchPost}>Search</button>
         </div>
         <div>
-          <Link to={`/account-portal/?accountId=${props.accountId}`}>
+          <Link to={`/account-portal/${props.accountId}`}>
             <p>Account</p>
           </Link>
         </div>

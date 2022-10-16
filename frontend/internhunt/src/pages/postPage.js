@@ -150,7 +150,6 @@ const PostPage = () => {
     );
     const response = await fetchCall.protectedNoBody();
     if (response.ok) {
-      alert("Succesful deletion");
       if (isRedirect) {
         navigate(`/posts?major=${encodeURI(userData.major)}`);
       }

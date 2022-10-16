@@ -74,7 +74,7 @@ const getUserByIdPrivate = async (req, res, next) => {
       throw authError;
     }
     const user = await UserModel.findById(req.accountId);
-    if (!user || user.accessLevel != 1) {
+    if (!user && user.accessLevel != 1) {
       throw authError;
     }
     UserModel.findById(

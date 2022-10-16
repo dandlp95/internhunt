@@ -38,8 +38,12 @@ const UserSchema = new Schema({
   },
   warnings: [
     {
+      userViolation: {
+        type: {},
+      },
       warningText: String,
-      date: Date,
+      issued: Date,
+      expiration: Date
     },
   ],
   active: {
@@ -48,8 +52,8 @@ const UserSchema = new Schema({
   },
   major: {
     type: Schema.Types.ObjectId,
-    ref: "major",
-    required: true
+    ref: "Major",
+    required: true,
   },
 });
 

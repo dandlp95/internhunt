@@ -4,7 +4,7 @@ const {getAuthToken} = require("../middleware/auth")
 
 router.get("/getById/:id", postController.getPostById)
 
-router.get("/getPostByUser", postController.getPostByUser)
+router.get("/getPostByUser/:id", postController.getPostByUser)
 
 router.patch("/edit/:id", getAuthToken,postController.editPost)
 

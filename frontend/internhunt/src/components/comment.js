@@ -59,7 +59,6 @@ const Comment = (props) => {
 
   const handleEditClick = async () => {
     setEditMode(false);
-    //props.editAction(route, props.comment._id, commentEdit);
     const body = {
       content: commentEdit,
     };
