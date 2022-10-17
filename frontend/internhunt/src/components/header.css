@@ -1,0 +1,8 @@
+.header-component header{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 8fr 1fr;
+}
+
+.header-component .searchBar input{
+    width: 70%;
+}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
+import "./header.css";
 
 const Header = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -14,31 +15,41 @@ const Header = (props) => {
       )}`
     );
   };
-  // The img tag will link them to all the posts.
+  const isKeyEntered = (e) => {
+    if (!e) e = window.event;
+    var keyCode = e.code || e.key;
+    if (keyCode == "Enter") {
+      searchPost();
+    }
+  };
+
   return (
-    <div>
+    <div className="header-component">
       <header>
-        <div>
+        <div className="logo">
           <Link to={`/posts?major=${encodeURI(userDataJson.major)}`}>
-          <img /> 
-          <p>Img placehodler</p>
+            <img />
+            <p>Img placehodler</p>
           </Link>
         </div>
-        <div>
+        <div className="header-about">
           <Link to={`/about`}>
             <p>About</p>
           </Link>
         </div>
-        <div>
+        <div className="header-guidelines">
           <Link to={`/guidelines`}>
             <p>Community Guidelines</p>
           </Link>
         </div>
-        <div>
-          <input type="text" onChange={(e) => setSearchQuery(e.target.value)} />
-          <button onClick={searchPost}>Search</button>
+        <div className="searchBar">
+          <input
+            type="text"
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => isKeyEntered(e)}
+          />
         </div>
-        <div>
+        <div className="header-account">
           <Link to={`/account-portal/${props.accountId}`}>
             <p>Account</p>
           </Link>

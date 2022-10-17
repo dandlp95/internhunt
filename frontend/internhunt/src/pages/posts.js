@@ -8,9 +8,9 @@ import InputInterface from "../components/inputInterface";
 import Header from "../components/header";
 import { isAuth } from "../utils/isLoggedIn";
 import { useLocation } from "react-router-dom";
+import Footer from "../components/footer";
 
 const Posts = () => {
-
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
   const navigate = useNavigate();
@@ -80,22 +80,39 @@ const Posts = () => {
   return (
     <div>
       <Header accountId={user} action={getUrlQuery} />
-      <div className="make new post and filter...">
-        <Link to={`/create-post`}>
-          <div>
-            <input placeholder="Create post" />
+      <div className="main">
+        <div className="create-post">
+          <Link to={`/create-post`}>
+            <div>
+              <input placeholder="Create post" />
+            </div>
+          </Link>
+          <div className="filter">
+            <button>Filter</button>
           </div>
-        </Link>
-      </div>
-      <div className="the queries to see other majors and such"></div>
-      <div className="The posts and pagination will be on this one.">
-        <div className="posts">
-          posts here.
-          {posts.map((post) => (
-            <PostPreview post={post} />
-          ))}
         </div>
-        <div className="pagination"></div>
+
+        <div>
+          <div className="query">
+            <div>
+              <button>Users</button>
+            </div>
+            <div>
+              <button>Majors</button>
+            </div>
+          </div>
+
+          <div className="posts-div">
+            <div className="posts-container">
+              {posts.map((post) => (
+                <PostPreview post={post} />
+              ))}
+            </div>
+            <div className="pagination"></div>
+          </div>
+        </div>
+
+        <Footer />
       </div>
     </div>
   );
