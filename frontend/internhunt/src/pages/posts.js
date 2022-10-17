@@ -9,6 +9,7 @@ import Header from "../components/header";
 import { isAuth } from "../utils/isLoggedIn";
 import { useLocation } from "react-router-dom";
 import Footer from "../components/footer";
+import Button from "../components/button";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -60,11 +61,9 @@ const Posts = () => {
       );
 
       if (response.ok) {
-        // do something
         const foundPosts = await response.json();
         setPosts(foundPosts);
       } else {
-        // do something
         console.log("something failed", response);
       }
     };
@@ -73,13 +72,10 @@ const Posts = () => {
 
   useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
 
-  const getUrlQuery = (urlQuery) => {
-    navigate(urlQuery);
-  };
 
   return (
     <div>
-      <Header accountId={user} action={getUrlQuery} />
+      <Header accountId={user} />
       <div className="main">
         <div className="create-post">
           <Link to={`/create-post`}>
@@ -87,12 +83,10 @@ const Posts = () => {
               <input placeholder="Create post" />
             </div>
           </Link>
-          <div className="filter">
-            <button>Filter</button>
-          </div>
+            <Button className="buttonComponent" text="Filter" action="filter function here"/>
         </div>
 
-        <div>
+        <div className="posts-query">
           <div className="query">
             <div>
               <button>Users</button>

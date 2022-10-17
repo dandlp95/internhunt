@@ -7,14 +7,16 @@ const Header = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
   const userData = localStorage.getItem("userData");
   const userDataJson = JSON.parse(userData);
+  const navigate = useNavigate();
 
   const searchPost = () => {
-    props.action(
+    navigate(
       `/posts?major=${encodeURI(userDataJson.major)}&search=${encodeURI(
         searchQuery
       )}`
     );
   };
+
   const isKeyEntered = (e) => {
     if (!e) e = window.event;
     var keyCode = e.code || e.key;
@@ -44,9 +46,11 @@ const Header = (props) => {
         </div>
         <div className="searchBar">
           <input
-            type="text"
+            type="search"
+            
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => isKeyEntered(e)}
+            placeholder="  Search..."
           />
         </div>
         <div className="header-account">
