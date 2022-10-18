@@ -6,6 +6,7 @@ import "./App.css";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import FailMessage from "./components/failMessage";
 import { isAuth } from "../src/utils/isLoggedIn";
+import Login from "./pages/login";
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ const App = () => {
   const [major, setMajor] = useState("");
   const [majorsList, setMajorsList] = useState([]);
   const [fail, setFail] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -138,9 +140,13 @@ const App = () => {
             </datalist>
             <input type="submit" value="Register" onClick={handleRegister} />
             <p>
-              Already have an account? <Link to={`/login`}>Click here.</Link>
+              Already have an account?{" "}
+              <a href="javascript:;" onClick={setOpenPopup(true)}>
+                Click here.
+              </a>
             </p>
             {fail ? <FailMessage action="register" /> : <p></p>}
+            {/* {openPopup && <Login />} */}
           </form>
         </div>
       </div>
