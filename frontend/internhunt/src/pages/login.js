@@ -75,33 +75,26 @@ function Login() {
     }
   };
   return (
-    <div className="loginComponent">
-      <div className="loginFormDiv">
-        <form onSubmit={(e) => e.preventDefault()}>
-          <h2>Log in into your account</h2>
+    <div className="loginFormDiv">
+      <form onSubmit={(e) => e.preventDefault()}>
+        <h2>Log in into your account</h2>
 
-          <input
-            placeholder="Email"
-            type="text"
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+        <input
+          placeholder="Email"
+          type="text"
+          name="email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <input
-            placeholder="Password"
-            type="text"
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input type="submit" value="Submit" onClick={handleLogin} />
-          <div className="register-here">
-          <p>Don't have an account?</p>
-          <Link to={`/`}>Register here.</Link>
-          </div>
-          {fail ? <FailMessage action="log in" /> : <p></p>}
-        </form>
-      </div>
-      <div></div>
+        <input
+          placeholder="Password"
+          type="text"
+          name="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input type="submit" value="Submit" onClick={handleLogin} />
+        {fail && <FailMessage action="log in" />}
+      </form>
     </div>
   );
 }

@@ -74,7 +74,7 @@ const App = () => {
             <h2>Internhunt</h2>
             <ul>
               <li>Network with thousands of students</li>
-              <li>Find and internship</li>
+              <li>Find an internship</li>
               <li>Share your experience</li>
               <li>Help others along the way!</li>
             </ul>
@@ -140,15 +140,15 @@ const App = () => {
             </datalist>
             <input type="submit" value="Register" onClick={handleRegister} />
             <p>
-              Already have an account?{" "}
-              <a href="javascript:;" onClick={setOpenPopup(true)}>
+              Already have an account?
+              <a href="javascript:;" onClick={(e) => setOpenPopup(true)}>
                 Click here.
               </a>
             </p>
-            {fail ? <FailMessage action="register" /> : <p></p>}
-            {/* {openPopup && <Login />} */}
+            {fail && <FailMessage action="register" />}
           </form>
         </div>
+        {openPopup && <Login />}
       </div>
     </div>
   );
