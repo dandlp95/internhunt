@@ -2,12 +2,12 @@ import React from "react";
 import "./login.css";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
-import Background from "../components/background";
+import Background from "./background";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import "./login.css";
-import FailMessage from "../components/failMessage";
+import FailMessage from "./failMessage";
 
-function Login() {
+function Login(props) {
   const [userToken, setUserToken] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -75,26 +75,35 @@ function Login() {
     }
   };
   return (
-    <div className="loginFormDiv">
-      <form onSubmit={(e) => e.preventDefault()}>
-        <h2>Log in into your account</h2>
+    <div className="loginComponent">
+      <div className="loginFormDiv">
+        <form onSubmit={(e) => e.preventDefault()}>
+          <a
+            href="javascript:;"
+            onClick={(e) => props.action(e)}
+            className="closeBtn"
+          >
+            Close
+          </a>
+          <h2>Log in into your account</h2>
 
-        <input
-          placeholder="Email"
-          type="text"
-          name="email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+          <input
+            placeholder="Email"
+            type="text"
+            name="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <input
-          placeholder="Password"
-          type="text"
-          name="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <input type="submit" value="Submit" onClick={handleLogin} />
-        {fail && <FailMessage action="log in" />}
-      </form>
+          <input
+            placeholder="Password"
+            type="text"
+            name="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <input type="submit" value="Submit" onClick={handleLogin} />
+          {fail && <FailMessage action="log in" />}
+        </form>
+      </div>
     </div>
   );
 }

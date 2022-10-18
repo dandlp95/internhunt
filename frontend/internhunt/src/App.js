@@ -6,7 +6,7 @@ import "./App.css";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import FailMessage from "./components/failMessage";
 import { isAuth } from "../src/utils/isLoggedIn";
-import Login from "./pages/login";
+import Login from "./components/login";
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -65,6 +65,10 @@ const App = () => {
       setFail(true);
     }
   };
+
+  const handleCloseLogin = () => {
+    setOpenPopup(false)
+  }
 
   return (
     <div className="registrationPage">
@@ -148,7 +152,7 @@ const App = () => {
             {fail && <FailMessage action="register" />}
           </form>
         </div>
-        {openPopup && <Login />}
+        {openPopup && <Login action={handleCloseLogin}/>}
       </div>
     </div>
   );
