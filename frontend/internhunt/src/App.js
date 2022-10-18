@@ -6,6 +6,7 @@ import "./App.css";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import FailMessage from "./components/failMessage";
 import { isAuth } from "../src/utils/isLoggedIn";
+import Login from "./components/login";
 
 const App = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ const App = () => {
   const [major, setMajor] = useState("");
   const [majorsList, setMajorsList] = useState([]);
   const [fail, setFail] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,6 +66,10 @@ const App = () => {
     }
   };
 
+  const handleCloseLogin = () => {
+    setOpenPopup(false)
+  }
+
   return (
     <div className="registrationPage">
       <div className="registration-container">
@@ -72,7 +78,7 @@ const App = () => {
             <h2>Internhunt</h2>
             <ul>
               <li>Network with thousands of students</li>
-              <li>Find and internship</li>
+              <li>Find an internship</li>
               <li>Share your experience</li>
               <li>Help others along the way!</li>
             </ul>
@@ -138,11 +144,15 @@ const App = () => {
             </datalist>
             <input type="submit" value="Register" onClick={handleRegister} />
             <p>
-              Already have an account? <Link to={`/login`}>Click here.</Link>
+              Already have an account?
+              <a href="javascript:;" onClick={(e) => setOpenPopup(true)}>
+                Click here.
+              </a>
             </p>
-            {fail ? <FailMessage action="register" /> : <p></p>}
+            {fail && <FailMessage action="register" />}
           </form>
         </div>
+        {openPopup && <Login action={handleCloseLogin}/>}
       </div>
     </div>
   );

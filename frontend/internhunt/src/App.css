@@ -22,10 +22,6 @@
   margin: auto;
 }
 
-/* .pageInfoSection {
-  font-family: Consolas;
-} */
-
 .pageInfoSection h2 {
   font-size: 6rem;
   margin: 0;
@@ -57,12 +53,6 @@
   font-size: 2rem;
   font-family: Consolas;
 }
-/* 
-.inputText {
-  font-size: 14px;
-  width: 200px;
-  height: 35px;
-} */
 
 .formDiv form:first-child {
   margin-top: 0;
@@ -135,5 +125,8 @@
 
 .formDiv input::-ms-value{
   font-family: Consolas;
+}
 
+.loginFormDiv h2{
+  margin-left: -17rem;
 }

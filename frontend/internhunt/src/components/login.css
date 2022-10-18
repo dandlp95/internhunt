@@ -1,18 +1,27 @@
 .loginComponent {
-  background-size: cover;
-  background-position: top;
-  min-height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  /* position:absolute */
-  font-family: Consolas;
-  column-gap: 10rem;
+  background-color:  rgba(255, 255, 255, 0.5);;
 }
 
 .loginFormDiv {
-  background-color: #7eb09b;
+  background-color: #f8f8f8;
+  border-radius: 80px;
+  position: absolute;
+  width: 800px;
+  height: 400px;
+  aspect-ratio: 1.5/1;
+  background-color: white;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 40px;
+  box-shadow: 0 5px 10px grey;
+  text-align: center;
+  padding: 20px;
 }
 
 .loginComponent {
@@ -20,18 +29,13 @@
 }
 
 .loginComponent form {
-  width: 70%;
+  width: 100%;
   align-items: center;
   justify-content: center;
-  /* position: absolute; */
   top: 0;
   bottom: 0;
-  /* left: 0;
-    right: 0; */
-  margin-top: 10rem;
-  margin-left: 6rem;
   font-size: 1.5rem;
-  margin-right: 0rem;
+  margin-left:4rem;
 }
 
 .loginComponent input {
@@ -39,12 +43,7 @@
 }
 
 .loginComponent input[type="text"] {
-  /* width: 85%;
-    font-size: 1.5rem;
-    font-family: Consolas;
-    height: 2rem; */
   margin-top: 1rem;
-  background-color: #7eb09b;
   width: 80%;
   height: 2rem;
   outline: 0;
@@ -86,4 +85,14 @@
 
 .register-here {
   margin-top: 5rem;
+}
+
+.closeBtn{
+  text-decoration: none;
+  color: black;
+  margin-left:-45rem;
+}
+
+.loginFormDiv h2{
+  margin-left: -20rem;
 }
