@@ -80,7 +80,7 @@ const deleteComment = async (req, res, next) => {
           const apiError = new ApiError400(err.message);
           next(apiError);
         } else if (!doc) {
-          const apiError = new Api404Error("No document found");
+          const apiError = new ApiError404("No document found");
           next(apiError);
         } else {
           res.status(200).send(doc);
