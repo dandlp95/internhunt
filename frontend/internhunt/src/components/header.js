@@ -30,7 +30,6 @@ const Header = (props) => {
       <header>
         <div className="logo">
           <Link to={`/posts?major=${encodeURI(userDataJson.major)}`}>
-            <img />
             <p>Img placehodler</p>
           </Link>
         </div>

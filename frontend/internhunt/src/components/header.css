@@ -16,32 +16,7 @@
     border: 0;
 }
 
-.searchBar input:focus {
-    border-color: red;
-  }
-
 .searchBar{
     justify-content: center;
 }
 
-.create-post{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.create-post input{
-    height: 2rem;
-}
-
-.posts-query{
-    display:grid;
-    grid-template-columns: 1fr 5fr;
-    width: 55%;
-}
-
-.create-post .buttonComponent{
-    align-items: center;
-    margin: 0 1rem;
-    max-height: 7%;
-}

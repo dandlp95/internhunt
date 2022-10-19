@@ -7,7 +7,7 @@
   font-family: Consolas;
 }
 
-.registration-container {
+.registrationPage .registration-container {
   width: 80%;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -22,16 +22,16 @@
   margin: auto;
 }
 
-.pageInfoSection h2 {
+.registrationPage .pageInfoSection h2 {
   font-size: 6rem;
   margin: 0;
 }
 
-.pageInfoSection li {
+.registrationPage .pageInfoSection li {
   font-size: 3rem;
 }
 
-.formDiv form {
+.registrationPage .formDiv form {
   background-color: #f8f8f8;
   padding: 0rem;
   font-size: 2rem;
@@ -39,10 +39,9 @@
   width: 70%;
   text-align: center;
   font-family: Consolas;
-
 }
 
-.formDiv input[type="text"] {
+.registrationPage .formDiv input[type="text"] {
   margin-top: 5rem;
   width: 60%;
   height: 2rem;
@@ -54,26 +53,26 @@
   font-family: Consolas;
 }
 
-.formDiv form:first-child {
+.registrationPage .formDiv form:first-child {
   margin-top: 0;
 }
 
-.formDiv input[type="text"]:focus {
+.registrationPage .formDiv input[type="text"]:focus {
   border-color: green;
 }
 
-.formDiv label {
+.registrationPage .formDiv label {
   padding-top: 2rem;
   display: block;
   width: 100%;
   margin-right: 0;
 }
 
-.formDiv p {
+.registrationPage .formDiv p {
   font-size: 1rem;
 }
 
-.formDiv input[type="submit"] {
+.registrationPage .formDiv input[type="submit"] {
   display: block;
   background-color: #002400;
   border: 1px solid rgba(27, 31, 35, 0.15);
@@ -95,20 +94,20 @@
   margin-top: 5rem;
 }
 
-.formDiv input[type="submit"]:hover {
+.registrationPage .formDiv input[type="submit"]:hover {
   background-color: #7eb09b;
 }
 
-.formDiv input[type="submit"]:active {
+.registrationPage .formDiv input[type="submit"]:active {
   background-color: #002400;
   box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
 }
 
-.formDiv p {
+.registrationPage .formDiv p {
   padding-bottom: 1rem;
 }
 
-.pageInfoSection li {
+.registrationPage .pageInfoSection li {
   margin: 0;
   padding: 26px 0 26px 64px;
   list-style: none;
@@ -118,15 +117,15 @@
   background-size: 40px;
 }
 
-.formDiv input::placeholder { 
+.registrationPage .formDiv input::placeholder {
   font-family: Consolas;
   /* opacity: 1;  */
 }
 
-.formDiv input::-ms-value{
+.registrationPage .formDiv input::-ms-value {
   font-family: Consolas;
 }
 
-.loginFormDiv h2{
+.registrationPage .loginFormDiv h2 {
   margin-left: -17rem;
 }

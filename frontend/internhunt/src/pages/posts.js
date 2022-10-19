@@ -72,37 +72,47 @@ const Posts = () => {
 
   useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
 
-
   return (
     <div>
       <Header accountId={user} />
       <div className="main">
-        <div className="create-post">
-          <Link to={`/create-post`}>
-            <div>
-              <input placeholder="Create post" />
-            </div>
-          </Link>
-            <Button className="buttonComponent" text="Filter" action="filter function here"/>
-        </div>
+        <div className="posts-main">
+          <div className="create-post">
+            <div></div>
 
-        <div className="posts-query">
-          <div className="query">
-            <div>
-              <button>Users</button>
+            <div className="create-post-input">
+              <Link to={`/create-post`}>
+                <input placeholder="Create post" />
+              </Link>
             </div>
-            <div>
-              <button>Majors</button>
-            </div>
+
+            <Button text="Filter" action="filter function here" />
           </div>
 
-          <div className="posts-div">
-            <div className="posts-container">
-              {posts.map((post) => (
-                <PostPreview post={post} />
-              ))}
+          <div className="posts-query">
+            <div>
+              <div className="query">
+                <div>
+                  <button>Questions</button>
+                </div>
+                <div>
+                  <button>Users</button>
+                </div>
+                <div>
+                  <button>Majors</button>
+                </div>
+              </div>
             </div>
-            <div className="pagination"></div>
+            <div className="posts-div">
+              <div className="posts-container">
+                {posts.map((post) => (
+                  <PostPreview post={post} />
+                ))}
+              </div>
+              <div className="pagination"></div>
+            </div>
+
+            <div></div>
           </div>
         </div>
 

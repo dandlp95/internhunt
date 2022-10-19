@@ -1,3 +1,37 @@
-.main{
-    margin-top: 5rem;
+.main {
+  margin-top: 5rem;
+}
+
+.posts-main .create-post {
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  width: 70%;
+  align-items: center;
+  margin: auto;
+}
+
+.posts-main .create-post-input input {
+  width: 60%;
+  height: 2rem;
+}
+
+.posts-main .posts-query {
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  width: 70%;
+  margin: auto;
+}
+
+.posts-query{
+    position:relative;
+}
+
+.query{
+    position:fixed;
+    height: 100%;
+    width: 130px;
+}
+
+.posts-div{
+    width: 60%;
 }
