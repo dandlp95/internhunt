@@ -1,15 +1,18 @@
 import React from "react";
-import "./posts.css";
-import { useState, useEffect } from "react";
-import { getApiRoot } from "../utils/getApiRoot";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import PostPreview from "../components/postPreview";
 import InputInterface from "../components/inputInterface";
 import Header from "../components/header";
-import { isAuth } from "../utils/isLoggedIn";
-import { useLocation } from "react-router-dom";
 import Footer from "../components/footer";
 import Button from "../components/button";
+import VotingInterface from "../components/votingInterface";
+import { useState, useEffect } from "react";
+import { getApiRoot } from "../utils/getApiRoot";
+import { Link, useNavigate } from "react-router-dom";
+import { isAuth } from "../utils/isLoggedIn";
+import { useLocation } from "react-router-dom";
+import "./posts.css";
+import FetchCalls from "../utils/fetchCalls";
+import getLocalStorage from "../utils/getLocalStorage";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -106,7 +109,9 @@ const Posts = () => {
             <div className="posts-div">
               <div className="posts-container">
                 {posts.map((post) => (
-                  <PostPreview post={post} />
+                  <div>
+                    <PostPreview post={post} />
+                  </div>
                 ))}
               </div>
               <div className="pagination"></div>
@@ -115,7 +120,6 @@ const Posts = () => {
             <div></div>
           </div>
         </div>
-
         <Footer />
       </div>
     </div>

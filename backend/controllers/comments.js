@@ -10,6 +10,8 @@ const getAllComments = controllers.getAll(CommentModel);
 
 const getCommentById = controllers.getById(CommentModel);
 
+const voteComment = controllers.voteModel(CommentModel);
+
 const getCommentByUser = (req, res, next) => {
   CommentModel.find({ owner: req.params.id }, (err, docs) => {
     if (err) {
@@ -46,6 +48,7 @@ const editComment = async (req, res, next) => {
     }
     const edit = {
       content: req.body.content,
+      rating: req.body.rating,
     };
     CommentModel.findOneAndUpdate(
       { _id: req.params.id, owner: req.accountId },
@@ -124,4 +127,5 @@ module.exports = {
   editComment,
   deleteComment,
   addComment,
+  voteComment
 };

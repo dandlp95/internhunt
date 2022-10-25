@@ -6,10 +6,13 @@ const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
 const Api404Error = require("../middleware/error-handling/apiError404");
+const { default: mongoose } = require("mongoose");
 
 const apiAuthError = new ApiError401("Unathorized.");
 
 const getPostById = controllers.getById(PostModel);
+
+const votePost = controllers.voteModel(PostModel);
 
 const editPost = async (req, res, next) => {
   try {
@@ -23,9 +26,10 @@ const editPost = async (req, res, next) => {
       company: req.body.company,
       type: req.body.type,
     };
+    const userId = mongoose.Types.ObjectId(req.accountId);
 
     PostModel.findOneAndUpdate(
-      { _id: req.params.id, owner: req.accountId },
+      { _id: req.params.id, owner: userId },
       edit,
       { new: true },
       (err, doc) => {
@@ -63,7 +67,7 @@ const deletePost = async (req, res, next) => {
           res.status(200).send(doc);
         }
       }
-    ); 
+    );
   } catch (err) {
     next(err);
   }
@@ -198,6 +202,8 @@ const getPosts = async (req, res, next) => {
   }
 };
 
+
+
 module.exports = {
   getPostById,
   editPost,
@@ -206,4 +212,5 @@ module.exports = {
   getPostByUser,
   getPostsByDepartment,
   getPosts,
+  votePost
 };
