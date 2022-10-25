@@ -34,8 +34,13 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  // The user will not add the department manually, the backend will do when they get the majors parameters. It will get the department for a major and add
   departments: [String],
+  votingHistory: [
+    {
+      voter: { type: Schema.Types.ObjectId, required: true },
+      lastVote: Number,
+    },
+  ],
 });
 
 const Post = mongoose.model("Post", PostSchema);
