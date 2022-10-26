@@ -2,6 +2,7 @@ const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const ApiError401 = require("../middleware/error-handling/apiError401");
+const VotingHistory = require("../models/votingHistory");
 
 const apiAuthError = new ApiError401();
 
@@ -38,25 +39,56 @@ const getById = (Schema) => {
 };
 
 const voteModel = (Schema) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     try {
       if (!req.accountId) {
         throw apiAuthError;
       }
-      Schema.findByIdAndUpdate(
-        req.params.id,
-        { rating: req.body.rating },
-        { new: true },
-        (err, doc) => {
-          if (err) {
-            throw new ApiError400(err.message);
-          } else if (!doc) {
-            res.status(200).send("No docs found.");
-          } else {
-            res.status(200).send(doc);
+      var addVote = false;
+      var vote;
+
+      var userVotingHistory = await VotingHistory.findOne({
+        voter: req.accountId,
+        post: req.params.id,
+      });
+
+      if (!userVotingHistory) {
+        userVotingHistory = new VotingHistory({
+          voter: req.accountId,
+          post: req.params.id,
+          lastVote: 0,
+        });
+      }
+
+      const lastVote = userVotingHistory.lastVote;
+      const userVote = req.params.vote;
+
+      if (lastVote < 1 && userVote == "upvote") {
+        addVote = true;
+        vote = 1;
+      } else if (lastVote < 2 && lastVote > -1 && userVote == "downvote") {
+        addVote = true;
+        vote = -1;
+      }
+
+      if (addVote) {
+        Schema.findByIdAndUpdate(
+          req.params.id,
+          { $inc: { rating: vote } },
+          { new: true },
+          (err, doc) => {
+            if (err) {
+              throw new ApiError400(err.message);
+            } else {
+              userVotingHistory.lastVote = lastVote + vote;
+              userVotingHistory.save();
+              res.status(200).send(doc);
+            }
           }
-        }
-      );
+        );
+      } else {
+        throw new ApiError400("Invalid vote.");
+      }
     } catch (err) {
       next(err);
     }

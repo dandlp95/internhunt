@@ -35,12 +35,6 @@ const PostSchema = new Schema({
     required: true,
   },
   departments: [String],
-  votingHistory: [
-    {
-      voter: { type: Schema.Types.ObjectId, required: true },
-      lastVote: Number,
-    },
-  ],
 });
 
 const Post = mongoose.model("Post", PostSchema);

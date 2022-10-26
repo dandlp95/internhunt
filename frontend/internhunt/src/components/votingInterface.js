@@ -3,10 +3,8 @@ import { useState, useEffect } from "react";
 import { BiDownArrow, BiUpArrow } from "react-icons/bi";
 
 const VotingInterface = (props) => {
-  //const [vote, setVote] = useState(0);
 
   const handleVote = (userVote) => {
-    //setVote(vote + userVote);
     props.addVoteHandler(userVote);
   };
   return (

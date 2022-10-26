@@ -12,7 +12,7 @@ router.get("/getByUser/:id", commentController.getCommentByUser);
 
 router.patch("/edit/:id", getAuthToken, commentController.editComment);
 
-router.patch("/vote/:id", getAuthToken, commentController.voteComment);
+router.patch("/vote/:vote/:id", getAuthToken, commentController.voteComment);
 
 router.delete("/delete/:id", getAuthToken, commentController.deleteComment);
 

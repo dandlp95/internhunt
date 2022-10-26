@@ -43,7 +43,7 @@ const UserSchema = new Schema({
       },
       warningText: String,
       issued: Date,
-      expiration: Date
+      expiration: Date,
     },
   ],
   active: {
@@ -55,6 +55,12 @@ const UserSchema = new Schema({
     ref: "Major",
     required: true,
   },
+  votingHistory: [
+    {
+      Post: { type: Schema.Types.ObjectId, required: true, ref: "Post" },
+      lastVote: Number,
+    },
+  ],
 });
 
 const User = mongoose.model("User", UserSchema);

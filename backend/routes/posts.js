@@ -8,7 +8,7 @@ router.get("/getPostByUser/:id", postController.getPostByUser);
 
 router.patch("/edit/:id", getAuthToken, postController.editPost);
 
-router.patch("/vote/:id", getAuthToken, postController.votePost);
+router.patch("/vote/:vote/:id", getAuthToken, postController.votePost);
 
 router.delete("/delete/:id", getAuthToken, postController.deletePost);
 
