@@ -1,24 +1,31 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import VotingInterface from "./votingInterface";
 import getLocalStorage from "../utils/getLocalStorage";
 import FetchCalls from "../utils/fetchCalls";
 
 const PostPreview = (props) => {
   const [voteCount, setVoteCount] = useState(props.post.rating);
-
+  const [rerenderChild, setRerenderChild] = useState(true);
 
   const addVotePost = async (userVote) => {
+    var voteReq;
+    if (userVote == 1) {
+      voteReq = "upvote";
+    } else if (userVote == -1) {
+      voteReq = "downvote";
+    }
+
     const data = getLocalStorage("userData");
     if (!data) {
       console.log("no local storage data :(");
     } else {
       const caller = new FetchCalls(
-        `/posts/vote/${props.post._id}`,
+        `/posts/vote/${voteReq}/${props.post._id}`,
         "PATCH",
         data.jwt,
-        { rating: voteCount + userVote }
+        { rating: userVote }
       );
       const response = await caller.protectedBody();
       if (response.ok) {
@@ -27,6 +34,7 @@ const PostPreview = (props) => {
         console.log();
       }
     }
+    setRerenderChild(!rerenderChild);
   };
 
   return (
@@ -40,7 +48,12 @@ const PostPreview = (props) => {
           <p>{props.post.content}</p>
         </section>
       </Link>
-      <VotingInterface voteCount={voteCount} addVoteHandler={addVotePost} />
+      <VotingInterface
+        voteCount={voteCount}
+        addVoteHandler={addVotePost}
+        postInfo={props.post}
+        key={rerenderChild}
+      />
     </div>
   );
 };

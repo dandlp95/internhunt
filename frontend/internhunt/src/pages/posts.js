@@ -4,7 +4,6 @@ import InputInterface from "../components/inputInterface";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Button from "../components/button";
-import VotingInterface from "../components/votingInterface";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import { Link, useNavigate } from "react-router-dom";
@@ -36,8 +35,6 @@ const Posts = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Location changed");
-
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const major = urlParams.get("major");
