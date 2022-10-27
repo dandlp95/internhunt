@@ -8,4 +8,6 @@ router.use("/comments", require("./comments"))
 
 router.use("/majors", require("./majors"))
 
+router.use("/votingHistory", require("./votingHistory"))
+
 module.exports = router;

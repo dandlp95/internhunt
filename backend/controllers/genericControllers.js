@@ -41,6 +41,7 @@ const getById = (Schema) => {
 const voteModel = (Schema) => {
   return async (req, res, next) => {
     try {
+      console.log("entered here")
       if (!req.accountId) {
         throw apiAuthError;
       }
