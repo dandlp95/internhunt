@@ -1,13 +1,17 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import { isAuth } from "../utils/isLoggedIn";
+import VotingInterface from "./votingInterface";
+import getLocalStorage from "../utils/getLocalStorage";
+import FetchCalls from "../utils/fetchCalls";
 import Button from "./button";
 
 const Post = (props) => {
   const [isPostCreator, setIsPostCreator] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [postEdit, setPostEdit] = useState("");
+  const [voteCount, setVoteCount] = useState(props.post.rating);
+  const [rerenderChild, setRerenderChild] = useState(true);
   const route = "posts";
 
   useEffect(() => {
@@ -38,6 +42,34 @@ const Post = (props) => {
     props.deleteAction(route, props.post._id, true);
   };
 
+  const addVotePost = async (userVote) => {
+    var voteReq;
+    if (userVote == 1) {
+      voteReq = "upvote";
+    } else if (userVote == -1) {
+      voteReq = "downvote";
+    }
+
+    const data = getLocalStorage("userData");
+    if (!data) {
+      console.log("no local storage data :(");
+    } else {
+      const caller = new FetchCalls(
+        `/posts/vote/${voteReq}/${props.post._id}`,
+        "PATCH",
+        data.jwt,
+        { rating: userVote }
+      );
+      const response = await caller.protectedBody();
+      if (response.ok) {
+        setVoteCount(voteCount + userVote);
+      } else {
+        console.log();
+      }
+    }
+    setRerenderChild(!rerenderChild);
+  };
+
   if (!editMode) {
     return (
       <div>
@@ -56,6 +88,12 @@ const Post = (props) => {
             <div></div>
           )}
         </div>
+        <VotingInterface
+          voteCount={voteCount}
+          addVoteHandler={addVotePost}
+          postInfo={props.post}
+          key={rerenderChild}
+        />
       </div>
     );
   } else {
@@ -77,6 +115,12 @@ const Post = (props) => {
             <div></div>
           )}
         </div>
+        <VotingInterface
+          voteCount={voteCount}
+          addVoteHandler={addVotePost}
+          postInfo={props.post}
+          key={rerenderChild}
+        />
       </div>
     );
   }
