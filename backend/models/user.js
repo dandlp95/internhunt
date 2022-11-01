@@ -15,9 +15,6 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  // img: {
-  //   // We will see how I will implement this...
-  // },
   password: {
     type: String,
     required: true,
@@ -55,12 +52,6 @@ const UserSchema = new Schema({
     ref: "Major",
     required: true,
   },
-  votingHistory: [
-    {
-      Post: { type: Schema.Types.ObjectId, required: true, ref: "Post" },
-      lastVote: Number,
-    },
-  ],
 });
 
 const User = mongoose.model("User", UserSchema);

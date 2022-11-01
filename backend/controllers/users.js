@@ -79,8 +79,8 @@ const getUserByIdPrivate = async (req, res, next) => {
     }
     UserModel.findById(
       req.params.id,
-      "firstName lastName email accessLevel suspension warnings",
-      (err, doc) => {
+      "major firstName lastName email accessLevel suspension warnings",
+      async (err, doc) => {
         if (err) {
           const apiError = new ApiError400(err.message);
           next(apiError);
@@ -88,7 +88,7 @@ const getUserByIdPrivate = async (req, res, next) => {
           const apiError = new ApiError404(err.message);
           next(apiError);
         } else {
-          res.status(200).send(doc);
+          res.status(200).send(await doc.populate("major"));
         }
       }
     );

@@ -5,12 +5,15 @@ import { useState, useEffect } from "react";
 import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import PostPreview from "../components/postPreview";
 import FetchCalls from "../utils/fetchCalls";
+import Button from "../components/button";
+import VotingInterface from "../components/votingInterface";
 
 const AccountPortal = () => {
   const { id } = useParams();
   const [user, setUser] = useState();
-  const [isSuspended, setIsSuspended] = useState(false);
   const [posts, setPosts] = useState([]);
+  const [voteCount, setVoteCount] = useState(props.post.rating);
+  const [rerenderChild, setRerenderChild] = useState(true);
 
   let userData = localStorage.getItem("userData");
   userData = JSON.parse(userData);
@@ -40,7 +43,7 @@ const AccountPortal = () => {
         const usersResponse = await response.json();
         setUser(usersResponse);
       } else {
-        alert("error fetching users.");
+        alert("error fetching user.");
       }
     };
     getUserInfo();
@@ -60,54 +63,45 @@ const AccountPortal = () => {
     getUserPosts();
   }, []);
 
-  useEffect(() => {
-    const userStatus = () => {
-      if (user.suspension.isSuspended) {
-        setIsSuspended(true);
-      }
-    };
-    if (user) {
-      userStatus();
-    }
-  }, [user]);
+  const editPassword = async () => {};
+
+  const addVoteComment = async () => {};
 
   if (user) {
     return (
       <div>
         <Header accountId={user._id} />
         <div>
-          {isSuspended ? (
-            <div>
-              <p>
-                Account status: Suspended until{" "}
-                {formatDate(user.suspension.expire)}
-              </p>
-            </div>
-          ) : (
-            <div>Account status: Active</div>
-          )}
-          <div>
-            {user.warnings.map((warning) => (
-              // This will need to be formated better...
-              <div>
-                <p>Violation: {warning.userViolation}</p>
-                <p>Information: {warning.warningText}</p>
-                <p>Issued: {formatDate(warning.expiration)}</p>
-              </div>
-            ))}
-          </div>
           <div>
             <section>
-              <h3>Your Posts</h3>
+              <h2>Personal Information</h2>
+              <p>
+                {user.firstName} {user.lastName}
+              </p>
+              <p>{user.major.name}</p>
+              <Button text="Change Password" action={editPassword} />
+            </section>
+            <section>
+              <h2>Your Posts</h2>
               {posts.map((post) => (
-                <section>
-                  <h2>{post.title}</h2>
-                  <p>{post.content}</p>
-                </section>
+                <div>
+                  <section>
+                    <h2>{post.title}</h2>
+                    <p>{post.content}</p>
+                  </section>
+                  <div>
+                    <VotingInterface
+                      voteCount={voteCount}
+                      addVoteHandler={addVoteComment}
+                      postInfo={post}
+                      key={rerenderChild}
+                    />
+                  </div>
+                </div>
               ))}
             </section>
             <section>
-            {/* Add something here for the comments (model it after reddit.) */}
+              {/* Add something here for the comments (model it after reddit.) */}
             </section>
           </div>
         </div>
