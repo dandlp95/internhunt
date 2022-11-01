@@ -38,7 +38,7 @@ const getById = (Schema) => {
   };
 };
 
-const voteModel = (Schema) => {
+const voteModel = (Schema, Schema2) => {
   return async (req, res, next) => {
     try {
       console.log("entered here")
@@ -48,13 +48,13 @@ const voteModel = (Schema) => {
       var addVote = false;
       var vote;
 
-      var userVotingHistory = await VotingHistory.findOne({
+      var userVotingHistory = await Schema2.findOne({
         voter: req.accountId,
         post: req.params.id,
       });
 
       if (!userVotingHistory) {
-        userVotingHistory = new VotingHistory({
+        userVotingHistory = new Schema2({
           voter: req.accountId,
           post: req.params.id,
           lastVote: 0,

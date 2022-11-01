@@ -1,21 +1,25 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
 import { getApiRoot } from "../utils/getApiRoot";
 import { isAuth } from "../utils/isLoggedIn";
 import Button from "./button";
 import FetchCalls from "../utils/fetchCalls";
+import getLocalStorage from "../utils/getLocalStorage";
+import VotingInterface from "./votingInterface";
 
 const Comment = (props) => {
   const [commentUser, setCommentUser] = useState("");
   const [isCommentCreator, setIsCommentCreator] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [commentEdit, setCommentEdit] = useState("");
-  const [comment, setComment] = useState(props.comment)
+  const [comment, setComment] = useState(props.comment);
+  const [voteCount, setVoteCount] = useState(props.comment.rating);
+  const [rerenderChild, setRerenderChild] = useState(true);
 
   const route = "comments";
 
   useEffect(() => {
+    
     const isCommentCreator = async () => {
       const response = await isAuth();
       if (response.ok) {
@@ -77,6 +81,34 @@ const Comment = (props) => {
     }
   };
 
+  const addVotePost = async (userVote) => {
+    var voteReq;
+    if (userVote == 1) {
+      voteReq = "upvote";
+    } else if (userVote == -1) {
+      voteReq = "downvote";
+    }
+
+    const data = getLocalStorage("userData");
+    if (!data) {
+      console.log("no local storage data :(");
+    } else {
+      const caller = new FetchCalls(
+        `/posts/vote/${voteReq}/${props.comment._id}`,
+        "PATCH",
+        data.jwt,
+        { rating: userVote }
+      );
+      const response = await caller.protectedBody();
+      if (response.ok) {
+        setVoteCount(voteCount + userVote);
+      } else {
+        console.log();
+      }
+    }
+    setRerenderChild(!rerenderChild);
+  };
+
   const handleDeleteClick = () => {
     props.deleteAction(route, comment._id, false);
   };
@@ -100,6 +132,12 @@ const Comment = (props) => {
             <div></div>
           )}
         </div>
+        <VotingInterface
+          voteCount={voteCount}
+          addVoteHandler={addVotePost}
+          postInfo={props.comment}
+          key={rerenderChild}
+        />
       </div>
     );
   } else {
@@ -122,6 +160,12 @@ const Comment = (props) => {
             <div></div>
           )}
         </div>
+        <VotingInterface
+          voteCount={voteCount}
+          addVoteHandler={addVotePost}
+          postInfo={props.comment}
+          key={rerenderChild}
+        />
       </div>
     );
   }

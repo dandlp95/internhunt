@@ -98,7 +98,7 @@ const PostPage = () => {
       }
     };
     getComments();
-  }, [comments]);
+  }, [postId]);
 
   const postComment = async (comment) => {
     const userData = localStorage.getItem("userData");
@@ -120,7 +120,7 @@ const PostPage = () => {
       alert("Error");
     }
   };
-/****    ****/
+
   const editContent = async (route, id, bodyContent) => {
     const body = {
       content: bodyContent,

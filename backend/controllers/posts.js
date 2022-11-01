@@ -7,12 +7,13 @@ const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
 const Api404Error = require("../middleware/error-handling/apiError404");
 const { default: mongoose } = require("mongoose");
+const VotingHistoryCommentModel = require("../models/votingHistoryComment")
 
 const apiAuthError = new ApiError401("Unathorized.");
 
 const getPostById = controllers.getById(PostModel);
 
-const votePost = controllers.voteModel(PostModel);
+const votePost = controllers.voteModel(PostModel, VotingHistoryCommentModel);
 
 const editPost = async (req, res, next) => {
   try {
