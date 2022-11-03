@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, navigate } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import { isAuth } from "../utils/isLoggedIn";
 import Button from "./button";
@@ -19,12 +19,11 @@ const Comment = (props) => {
   const route = "comments";
 
   useEffect(() => {
-    
     const isCommentCreator = async () => {
       const response = await isAuth();
       if (response.ok) {
         const userId = await response.json();
-        if (userId === comment.owner) {
+        if (userId === comment.owner._id) {
           setIsCommentCreator(true);
         } else {
           setIsCommentCreator(false);
@@ -32,29 +31,12 @@ const Comment = (props) => {
       }
     };
     isCommentCreator();
-  }, []);
 
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const commentUserId = comment.owner;
-      const options = {
-        method: "GET",
-        headers: { "Content-type": "application/json" },
-      };
-      const response = await fetch(
-        getApiRoot() + "/users/getById/" + commentUserId,
-        options
-      );
-      if (response.ok) {
-        const responseJson = await response.json();
-        setCommentUser(responseJson);
-      } else {
-        const noResponse = {};
-        noResponse.firstName = "[Deleted user]";
-        setCommentUser(noResponse);
-      }
-    };
-    getUserInfo();
+    if (comment.owner) {
+      setCommentUser(`${comment.owner.firstName} ${comment.owner.lastName}`);
+    }else{
+      setCommentUser("[Deleted user]")
+    }
   }, []);
 
   const activateEdit = () => {
@@ -94,7 +76,7 @@ const Comment = (props) => {
       console.log("no local storage data :(");
     } else {
       const caller = new FetchCalls(
-        `/posts/vote/${voteReq}/${props.comment._id}`,
+        `/posts/vote/${voteReq}/${comment._id}`,
         "PATCH",
         data.jwt,
         { rating: userVote }
@@ -109,65 +91,82 @@ const Comment = (props) => {
     setRerenderChild(!rerenderChild);
   };
 
-  const handleDeleteClick = () => {
-    props.deleteAction(route, comment._id, false);
+  const deleteContent = async () => {
+    let userData = localStorage.getItem("userData");
+    userData = JSON.parse(userData);
+    const fetchCall = new FetchCalls(
+      `/${route}/delete/${comment._id}`,
+      "DELETE",
+      userData.jwt
+    );
+    const response = await fetchCall.protectedNoBody();
+    if (!response.ok) {
+      alert("error deleting the post");
+    } else {
+      setComment();
+    }
   };
 
-  if (!editMode) {
-    return (
-      <div>
+  if (comment) {
+    if (!editMode) {
+      return (
         <div>
-          <p>{commentUser.firstName}</p>
-        </div>
-        <div>
-          <p>{comment.content}</p>
-        </div>
-        <div>
-          {isCommentCreator ? (
+          <div>
             <div>
-              <Button text="Edit" action={activateEdit} />
-              <Button text="Delete" action={handleDeleteClick} />
+              <p>{commentUser}</p>
             </div>
-          ) : (
-            <div></div>
-          )}
-        </div>
-        <VotingInterface
-          voteCount={voteCount}
-          addVoteHandler={addVotePost}
-          postInfo={props.comment}
-          key={rerenderChild}
-        />
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <div>
-          <p>{commentUser.firstName}</p>
-        </div>
-        <div>
-          <input
-            type="text"
-            value={commentEdit}
-            onChange={(e) => setCommentEdit(e.target.value)}
+            <div>
+              <p>{comment.content}</p>
+            </div>
+          </div>
+
+          <div>
+            {isCommentCreator ? (
+              <div>
+                <Button text="Edit" action={activateEdit} />
+                <Button text="Delete" action={deleteContent} />
+              </div>
+            ) : (
+              <div></div>
+            )}
+          </div>
+          <VotingInterface
+            voteCount={voteCount}
+            addVoteHandler={addVotePost}
+            postInfo={comment}
+            key={rerenderChild}
           />
         </div>
+      );
+    } else {
+      return (
         <div>
-          {isCommentCreator ? (
-            <Button text="Save" action={handleEditClick} />
-          ) : (
-            <div></div>
-          )}
+          <div>
+            <p>{commentUser.firstName}</p>
+          </div>
+          <div>
+            <input
+              type="text"
+              value={commentEdit}
+              onChange={(e) => setCommentEdit(e.target.value)}
+            />
+          </div>
+          <div>
+            {isCommentCreator ? (
+              <Button text="Save" action={handleEditClick} />
+            ) : (
+              <div></div>
+            )}
+          </div>
+          <VotingInterface
+            voteCount={voteCount}
+            addVoteHandler={addVotePost}
+            postInfo={comment}
+            key={rerenderChild}
+          />
         </div>
-        <VotingInterface
-          voteCount={voteCount}
-          addVoteHandler={addVotePost}
-          postInfo={props.comment}
-          key={rerenderChild}
-        />
-      </div>
-    );
+      );
+    }
   }
 };
 
