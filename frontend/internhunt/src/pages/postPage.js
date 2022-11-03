@@ -20,6 +20,7 @@ const PostPage = () => {
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState();
   const [sort, setSort] = useState(); // This will be used to add functionality to sort comments later.
+  const [fetchComments, setFetchComments] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,7 +99,7 @@ const PostPage = () => {
       }
     };
     getComments();
-  }, [postId]);
+  }, [postId, fetchComments]);
 
   const postComment = async (comment) => {
     const userData = localStorage.getItem("userData");
@@ -115,7 +116,7 @@ const PostPage = () => {
     const response = await ReqClass.protectedBody();
 
     if (response.ok) {
-      setComments(comments);
+      setFetchComments(!fetchComments) // Makes useEffect fetch comments again
     } else {
       alert("Error");
     }
@@ -174,11 +175,7 @@ const PostPage = () => {
           buttonText="Comment"
         />
         {comments.map((comment) => (
-          <Comment
-            comment={comment}
-            editAction={editContent}
-            deleteAction={deleteContent}
-          />
+          <Comment comment={comment} />
         ))}
       </div>
     );

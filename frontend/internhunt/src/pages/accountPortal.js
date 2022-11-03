@@ -1,71 +1,67 @@
-import React from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { useState, useEffect } from "react";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import PostPreview from "../components/postPreview";
 import FetchCalls from "../utils/fetchCalls";
 import Button from "../components/button";
-import VotingInterface from "../components/votingInterface";
-
+import CommentPreview from "../components/commentPreview";
 const AccountPortal = () => {
   const { id } = useParams();
   const [user, setUser] = useState();
   const [posts, setPosts] = useState([]);
-  const [voteCount, setVoteCount] = useState(props.post.rating);
-  const [rerenderChild, setRerenderChild] = useState(true);
+  const [comments, setComments] = useState([]);
+  const navigate = useNavigate();
 
   let userData = localStorage.getItem("userData");
   userData = JSON.parse(userData);
 
-  function padTo2Digits(num) {
-    return num.toString().padStart(2, "0");
-  }
+  const getUserInfo = async () => {
+    const backendApi = new FetchCalls(
+      `/users/getByIdPrivate/${id}`,
+      "GET",
+      userData.jwt
+    );
+    const response = await backendApi.protectedNoBody();
+    if (response.ok) {
+      const usersResponse = await response.json();
+      setUser(usersResponse);
+    } else {
+      alert("error fetching user.");
+    }
+  };
 
-  function formatDate(date) {
-    return [
-      padTo2Digits(date.getDate()),
-      padTo2Digits(date.getMonth() + 1),
-      date.getFullYear(),
-    ].join("/");
-  }
+  const getCommentsByUser = async () => {
+    const backendApi = new FetchCalls(
+      `/comments/getByUser/${id}`,
+      "GET",
+      userData.jwt
+    );
+    const response = await backendApi.protectedNoBody();
+    if (response.ok) {
+      const comments = await response.json();
+      setComments(comments);
+    }
+  };
 
-  useEffect(() => {
-    const getUserInfo = async () => {
-      const backendApi = new FetchCalls(
-        `/users/getByIdPrivate/${id}`,
-        "GET",
-        userData.jwt
-      );
-      const response = await backendApi.protectedNoBody();
-      if (response.ok) {
-        console.log("users were fetched.");
-        const usersResponse = await response.json();
-        setUser(usersResponse);
-      } else {
-        alert("error fetching user.");
-      }
-    };
-    getUserInfo();
-  }, []);
-
-  useEffect(() => {
+  const getUserPosts = async () => {
     const backendApi = new FetchCalls(
       `/posts/getPostByUser/${userData.userId}`,
       "GET"
     );
-    const getUserPosts = async () => {
-      const response = await backendApi.publicGet();
-      if (response.ok) {
-        setPosts(await response.json());
-      }
-    };
+    const response = await backendApi.publicGet();
+    if (response.ok) {
+      setPosts(await response.json());
+    }
+  };
+
+  useEffect(() => {
+    getUserInfo();
     getUserPosts();
+    getCommentsByUser();
   }, []);
 
   const editPassword = async () => {};
-
-  const addVoteComment = async () => {};
 
   if (user) {
     return (
@@ -84,24 +80,17 @@ const AccountPortal = () => {
             <section>
               <h2>Your Posts</h2>
               {posts.map((post) => (
-                <div>
-                  <section>
-                    <h2>{post.title}</h2>
-                    <p>{post.content}</p>
-                  </section>
-                  <div>
-                    <VotingInterface
-                      voteCount={voteCount}
-                      addVoteHandler={addVoteComment}
-                      postInfo={post}
-                      key={rerenderChild}
-                    />
-                  </div>
-                </div>
+                <PostPreview post={post} />
               ))}
             </section>
             <section>
-              {/* Add something here for the comments (model it after reddit.) */}
+              <h2>Your Comments</h2>
+              {comments.map((comment) => (
+                <div>
+                  {console.log(comment)}
+                  <CommentPreview comment={comment} />
+                </div>
+              ))}
             </section>
           </div>
         </div>

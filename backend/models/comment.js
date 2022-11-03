@@ -20,7 +20,6 @@ const CommentSchema = new Schema({
     required: true,
     default: new Date()
   },
-  // Refers to what post this comment is under...
   post: {
     type: Schema.Types.ObjectId,
     ref: "Post",

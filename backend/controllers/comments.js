@@ -13,7 +13,7 @@ const getCommentById = controllers.getById(CommentModel);
 const voteComment = controllers.voteModel(CommentModel);
 
 const getCommentByUser = (req, res, next) => {
-  CommentModel.find({ owner: req.params.id }, (err, docs) => {
+  CommentModel.find({ owner: req.params.id }, async (err, docs) => {
     if (err) {
       const apiError = new ApiError400(err.message);
       next(apiError);
@@ -21,6 +21,8 @@ const getCommentByUser = (req, res, next) => {
       const apiError = new ApiError404(err.message);
       next(apiError);
     } else {
+      await CommentModel.populate(docs, "post");
+      await CommentModel.populate(docs, "owner");
       res.status(200).send(docs);
     }
   });
@@ -28,7 +30,7 @@ const getCommentByUser = (req, res, next) => {
 
 const getCommentByPost = (req, res, next) => {
   const postId = req.params.id;
-  CommentModel.find({ post: postId }, (err, docs) => {
+  CommentModel.find({ post: postId }, async (err, docs) => {
     if (err) {
       const apiError = new ApiError400(err.message);
       next(apiError);
@@ -36,6 +38,8 @@ const getCommentByPost = (req, res, next) => {
       const apiError = new ApiError404(err.message);
       next(apiError);
     } else {
+      await CommentModel.populate(docs, "post");
+      await CommentModel.populate(docs, "owner");
       res.status(200).send(docs);
     }
   });
@@ -127,5 +131,5 @@ module.exports = {
   editComment,
   deleteComment,
   addComment,
-  voteComment
+  voteComment,
 };
