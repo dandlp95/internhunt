@@ -40,6 +40,7 @@ const Posts = () => {
     const major = urlParams.get("major");
     const search = urlParams.get("search");
     const type = urlParams.get("type");
+    console.log(type);
 
     const getPosts = async () => {
       const options = {
@@ -65,7 +66,15 @@ const Posts = () => {
   }, [location]);
 
   const getPostByType = async (postType) => {
-    navigate(``);
+    const userData = localStorage.getItem("userData");
+    const userDataJson = JSON.parse(userData);
+    if (postType !== "all") {
+      navigate(
+        `/posts?major=${encodeURI(userDataJson.major)}&type=${postType}`
+      );
+    } else {
+      navigate(`/posts?major=${encodeURI(userDataJson.major)}`);
+    }
   };
 
   useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
@@ -96,13 +105,13 @@ const Posts = () => {
                   </button>
                 </div>
                 <div>
-                  <button onClick={(e) => getPostByType("Internship Reviews")}>
+                  <button onClick={(e) => getPostByType("Review")}>
                     Internship Reviews
                   </button>
                 </div>
                 <div>
                   <button
-                    onClick={(e) => getPostByType("Internship  opportunities")}
+                    onClick={(e) => getPostByType("Internship opportunities")}
                   >
                     Internship Opportunities
                   </button>
@@ -113,7 +122,7 @@ const Posts = () => {
                   </button>
                 </div>
                 <div>
-                  <button onClick={(e) => getPostByType("Questions")}>
+                  <button onClick={(e) => getPostByType("Question")}>
                     Questions
                   </button>
                 </div>

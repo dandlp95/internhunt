@@ -156,10 +156,10 @@ const getPosts = async (req, res, next) => {
 
   let PTypeString;
   if (postType != "null") {
-    PTypeString = search.split(" ").map((string) => new RegExp(string, "i"));
+    PTypeString = postType.split(" ").map((string) => new RegExp(string, "i"));
   } else {
     postType = "";
-    PTypeString = search.split(" ").map((string) => new RegExp(string));
+    PTypeString = postType.split(" ").map((string) => new RegExp(string));
   }
 
   const major = req.query.major;
@@ -174,7 +174,7 @@ const getPosts = async (req, res, next) => {
         $and: [
           { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
           { departments: department },
-          { type: { $in: PTypeString } },
+          { type: {$in: PTypeString} },
         ],
       },
       (err, docs) => {
@@ -194,7 +194,7 @@ const getPosts = async (req, res, next) => {
       {
         $and: [
           { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
-          { type: { $in: PTypeString } },
+          { type: {$in: PTypeString} },
         ],
       },
       (err, docs) => {

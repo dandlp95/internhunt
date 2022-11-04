@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { getApiRoot } from "../utils/getApiRoot";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./header.css";
 
 const Header = (props) => {
