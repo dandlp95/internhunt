@@ -7,6 +7,7 @@ import AboutPage from "./pages/aboutPage";
 import Guidelines from "./pages/guidelines";
 import PostPage from "./pages/postPage";
 import CreatePost from "./pages/createPost";
+import MajorsPage from "./pages/majorsPage";
 
 const router = () => {
   return (
@@ -19,6 +20,7 @@ const router = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/guidelines" element={<Guidelines />} />
         <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/majors" elemen={<MajorsPage />} />
       </Routes>
     </Router>
   );

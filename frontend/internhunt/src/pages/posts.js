@@ -46,14 +46,7 @@ const Posts = () => {
         headers: { "Content-type": "application/json" },
       };
 
-      let URIQuery;
-      if (major && search) {
-        URIQuery = `search=${search}&major=${major}`;
-      } else if (major && !search) {
-        URIQuery = `major=${major}`;
-      } else if (!major && search) {
-        URIQuery = `search=${search}`;
-      }
+      const URIQuery = `search=${search}&major=${major}`;
 
       const response = await fetch(
         getApiRoot() + "/posts/getPosts?" + encodeURI(URIQuery),
@@ -69,6 +62,10 @@ const Posts = () => {
     };
     getPosts();
   }, [location]);
+
+  const getPostByType = async (postType) => {
+    navigate(``);
+  };
 
   useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
 
@@ -93,13 +90,34 @@ const Posts = () => {
             <div>
               <div className="query">
                 <div>
-                  <button>Questions</button>
+                  <button onClick={(e) => getPostByType("all")}>
+                    All Posts
+                  </button>
                 </div>
                 <div>
-                  <button>Users</button>
+                  <button onClick={(e) => getPostByType("Internship Reviews")}>
+                    Internship Reviews
+                  </button>
                 </div>
                 <div>
-                  <button>Majors</button>
+                  <button onClick={(e) => getPostByType("Internship  opportunities")}>
+                    Internship Opportunities
+                  </button>
+                </div>
+                <div>
+                  <button onClick={(e) => getPostByType("Advise")}>
+                    Advise
+                  </button>
+                </div>
+                <div>
+                  <button onClick={(e) => getPostByType("Questions")}>
+                    Questions
+                  </button>
+                </div>
+                <div>
+                  <Link to={"/majors"}>
+                    <button>Majors</button>
+                  </Link>
                 </div>
               </div>
             </div>
