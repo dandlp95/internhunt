@@ -39,6 +39,7 @@ const Posts = () => {
     const urlParams = new URLSearchParams(queryString);
     const major = urlParams.get("major");
     const search = urlParams.get("search");
+    const type = urlParams.get("type");
 
     const getPosts = async () => {
       const options = {
@@ -46,7 +47,7 @@ const Posts = () => {
         headers: { "Content-type": "application/json" },
       };
 
-      const URIQuery = `search=${search}&major=${major}`;
+      const URIQuery = `search=${search}&major=${major}&type=${type}`;
 
       const response = await fetch(
         getApiRoot() + "/posts/getPosts?" + encodeURI(URIQuery),
@@ -100,7 +101,9 @@ const Posts = () => {
                   </button>
                 </div>
                 <div>
-                  <button onClick={(e) => getPostByType("Internship  opportunities")}>
+                  <button
+                    onClick={(e) => getPostByType("Internship  opportunities")}
+                  >
                     Internship Opportunities
                   </button>
                 </div>

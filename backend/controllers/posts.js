@@ -7,7 +7,7 @@ const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
 const Api404Error = require("../middleware/error-handling/apiError404");
 const { default: mongoose } = require("mongoose");
-const VotingHistoryCommentModel = require("../models/votingHistoryComment")
+const VotingHistoryCommentModel = require("../models/votingHistoryComment");
 
 const apiAuthError = new ApiError401("Unathorized.");
 
@@ -147,16 +147,23 @@ const getPosts = async (req, res, next) => {
   let search = req.query.search;
 
   let QString;
-  if (search) {
+  if (search != "null") {
     QString = search.split(" ").map((string) => new RegExp(string, "i"));
   } else {
     search = "";
     QString = search.split(" ").map((string) => new RegExp(string));
   }
 
+  let PTypeString;
+  if (postType != "null") {
+    PTypeString = search.split(" ").map((string) => new RegExp(string, "i"));
+  } else {
+    postType = "";
+    PTypeString = search.split(" ").map((string) => new RegExp(string));
+  }
 
-  let major = req.query.major;
-  if (major) {
+  const major = req.query.major;
+  if (major != "null") {
     const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
     let department;
     if (foundMajor) {
@@ -167,6 +174,7 @@ const getPosts = async (req, res, next) => {
         $and: [
           { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
           { departments: department },
+          { type: { $in: PTypeString } },
         ],
       },
       (err, docs) => {
@@ -186,6 +194,7 @@ const getPosts = async (req, res, next) => {
       {
         $and: [
           { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
+          { type: { $in: PTypeString } },
         ],
       },
       (err, docs) => {
@@ -203,8 +212,6 @@ const getPosts = async (req, res, next) => {
   }
 };
 
-
-
 module.exports = {
   getPostById,
   editPost,
@@ -213,5 +220,5 @@ module.exports = {
   getPostByUser,
   getPostsByDepartment,
   getPosts,
-  votePost
+  votePost,
 };
