@@ -34,7 +34,10 @@ const PostSchema = new Schema({
     type: String,
     required: true,
   },
-  departments: [String],
+  departments: {
+    type: [Schema.Types.ObjectId],
+    required: true,
+  },
 });
 
 const Post = mongoose.model("Post", PostSchema);

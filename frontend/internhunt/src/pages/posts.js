@@ -1,6 +1,5 @@
 import React from "react";
 import PostPreview from "../components/postPreview";
-import InputInterface from "../components/inputInterface";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import Button from "../components/button";
@@ -10,8 +9,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { isAuth } from "../utils/isLoggedIn";
 import { useLocation } from "react-router-dom";
 import "./posts.css";
-import FetchCalls from "../utils/fetchCalls";
-import getLocalStorage from "../utils/getLocalStorage";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);

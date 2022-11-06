@@ -7,6 +7,11 @@ const MajorSchema = new Schema({
     required: true,
   },
   department: {
+    type: Schema.Types.ObjectId,
+    ref: "Department",
+    required: true,
+  },
+  description: {
     type: String,
     required: true,
   },

@@ -4,7 +4,7 @@ const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
 const controllers = require("./genericControllers");
-const Api400Error = require("../middleware/error-handling/apiError400");
+
 
 const getAllComments = controllers.getAll(CommentModel);
 

@@ -10,7 +10,18 @@ const getMajors = controllers.getAll(MajorModel);
 
 const getMajor = controllers.getById(MajorModel);
 
-const addMajor = async () => {
+const getMajorByDepartment = async () => {
+  MajorModel.find({ department: req.params.department }, (err, docs) => {
+    if (err) {
+      const apiError400 = new ApiError400(err.message);
+      next(apiError400);
+    } else {
+      res.status(200).send(docs);
+    }
+  });
+};
+
+const addMajor = async (req, res, next) => {
   try {
     const apiAuthError = new ApiError401("Unauthorized");
     if (!req.accountId) {
@@ -40,5 +51,6 @@ const addMajor = async () => {
 module.exports = {
   getMajors,
   getMajor,
+  getMajorByDepartment,
   addMajor,
 };

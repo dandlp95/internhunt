@@ -10,4 +10,6 @@ router.use("/majors", require("./majors"))
 
 router.use("/votingHistory", require("./votingHistory"))
 
+router.use("/departments", require("./departments"))
+
 module.exports = router;
