@@ -10,7 +10,7 @@ const getMajors = controllers.getAll(MajorModel);
 
 const getMajor = controllers.getById(MajorModel);
 
-const getMajorByDepartment = async () => {
+const getMajorByDepartment = async (req, res, next) => {
   MajorModel.find({ department: req.params.department }, (err, docs) => {
     if (err) {
       const apiError400 = new ApiError400(err.message);

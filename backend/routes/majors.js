@@ -8,6 +8,6 @@ router.get("/:id", controller.getMajor);
 
 router.post("/add", getAuthToken, controller.addMajor);
 
-router.get("/getByDepartment", controller.getMajorByDepartment);
+router.get("/getByDepartment/:department", controller.getMajorByDepartment);
 
 module.exports = router;

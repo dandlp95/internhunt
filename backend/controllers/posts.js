@@ -143,6 +143,7 @@ const getPostsByDepartment = (req, res, next) => {
 };
 
 const getPosts = async (req, res, next) => {
+  // add query by department... remember it's either query by major or department
   let postType = req.query.type;
   let search = req.query.search;
 
@@ -174,7 +175,7 @@ const getPosts = async (req, res, next) => {
         $and: [
           { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
           { departments: department },
-          { type: {$in: PTypeString} },
+          { type: { $in: PTypeString } },
         ],
       },
       (err, docs) => {
@@ -194,7 +195,7 @@ const getPosts = async (req, res, next) => {
       {
         $and: [
           { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
-          { type: {$in: PTypeString} },
+          { type: { $in: PTypeString } },
         ],
       },
       (err, docs) => {

@@ -17,7 +17,7 @@ const getAllUsers = (req, res, next) => {
       const apiError = new ApiError400(err.message);
       next(apiError);
     } else if (!docs) {
-      const apiError = new ApiError404(err.message);
+      const apiError = new ApiError404("No doc found");
       next(apiError);
     } else {
       res.status(200).send(docs);
@@ -31,7 +31,7 @@ const getUserById = (req, res, next) => {
       const apiError = new ApiError400(err.message);
       next(apiError);
     } else if (!doc) {
-      const apiError = new ApiError404(err.message);
+      const apiError = new ApiError404("No doc found");
       next(apiError);
     } else {
       res.status(200).send(doc);
@@ -56,7 +56,7 @@ const getAllUsersPrivate = async (req, res, next) => {
           const apiError = new ApiError400(err.message);
           next(apiError);
         } else if (!doc) {
-          const apiError = new ApiError404(err.message);
+          const apiError = new ApiError404("No doc found");
           next(apiError);
         } else {
           res.status(200).send(doc);
@@ -85,7 +85,7 @@ const getUserByIdPrivate = async (req, res, next) => {
           const apiError = new ApiError400(err.message);
           next(apiError);
         } else if (!doc) {
-          const apiError = new ApiError404(err.message);
+          const apiError = new ApiError404("No doc found");
           next(apiError);
         } else {
           res.status(200).send(await doc.populate("major"));
@@ -113,7 +113,7 @@ const editUser = (req, res, next) => {
         const apiError = new ApiError400(err.message);
         next(apiError);
       } else if (!doc) {
-        const apiError = new ApiError404(err.message);
+        const apiError = new ApiError404("No doc found");
         next(apiError);
       } else {
         res.status(200).send("success");
@@ -134,7 +134,7 @@ const deleteUser = (req, res, next) => {
         const apiError = new ApiError400(err.message);
         next(apiError);
       } else if (!doc) {
-        const apiError = new ApiError404(err.message);
+        const apiError = new ApiError404("No doc found");
         next(apiError);
       } else {
         res.status(200).send("user deleted.");
@@ -168,7 +168,7 @@ const addUser = async (req, res, next) => {
         const apiError = new ApiError400(err.message);
         next(apiError);
       } else if (!doc) {
-        const apiError = new ApiError404(err.message);
+        const apiError = new ApiError404("No doc found");
         next(apiError);
       } else {
         const token = jwt.sign(
@@ -294,7 +294,7 @@ const editPassword = async (req, res, next) => {
           const apiError400 = new ApiError400(err.message);
           next(err);
         } else if (!doc) {
-          const apiError404 = new Api404Error("Account not found.");
+          const apiError404 = new ApiError404("Account not found.");
           next(apiError404);
         } else {
           res.status(200).send("password changed.");
