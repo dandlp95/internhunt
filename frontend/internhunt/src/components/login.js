@@ -3,9 +3,12 @@ import "./login.css";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import Background from "./background";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 import FailMessage from "./failMessage";
+//import { GoogleLogin } from "react-google-login";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import jwtDecode from "jwt-decode";
 
 function Login(props) {
   const [userToken, setUserToken] = useState("");
@@ -13,6 +16,8 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const [fail, setFail] = useState(false);
   const navigate = useNavigate();
+  const clientId =
+    "774704710261-0486u3ih7ergh0t8iasbbsrmnphbsir2.apps.googleusercontent.com";
 
   useEffect(() => {
     const isLoggedIn = async () => {
@@ -74,6 +79,15 @@ function Login(props) {
       setFail(true);
     }
   };
+
+  const onSuccess = (res) => {
+    console.log(jwtDecode(res.credential));
+  };
+
+  const onFailure = (res) => {
+    console.log(jwtDecode(res.credential));
+  };
+
   return (
     <div className="loginComponent">
       <div className="loginFormDiv">
@@ -101,6 +115,16 @@ function Login(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
           <input type="submit" value="Submit" onClick={handleLogin} />
+          <div>
+            <div>
+              <GoogleOAuthProvider clientId="774704710261-0486u3ih7ergh0t8iasbbsrmnphbsir2.apps.googleusercontent.com">
+                <GoogleLogin
+                  onSuccess={onSuccess}
+                  onFailure={onFailure}
+                ></GoogleLogin>
+              </GoogleOAuthProvider>
+            </div>
+          </div>
           {fail && <FailMessage action="log in" />}
         </form>
       </div>

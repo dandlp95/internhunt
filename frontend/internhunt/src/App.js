@@ -2,8 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "./utils/getApiRoot";
 import "./App.css";
-//import Background from "./components/background";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FailMessage from "./components/failMessage";
 import { isAuth } from "../src/utils/isLoggedIn";
 import Login from "./components/login";
@@ -67,8 +66,8 @@ const App = () => {
   };
 
   const handleCloseLogin = () => {
-    setOpenPopup(false)
-  }
+    setOpenPopup(false);
+  };
 
   return (
     <div className="registrationPage">
@@ -144,7 +143,7 @@ const App = () => {
             </datalist>
             <input type="submit" value="Register" onClick={handleRegister} />
             <p>
-              Already have an account?
+              Already have an account?{" "}
               <a href="javascript:;" onClick={(e) => setOpenPopup(true)}>
                 Click here.
               </a>
@@ -152,7 +151,7 @@ const App = () => {
             {fail && <FailMessage action="register" />}
           </form>
         </div>
-        {openPopup && <Login action={handleCloseLogin}/>}
+        {openPopup && <Login action={handleCloseLogin} />}
       </div>
     </div>
   );
