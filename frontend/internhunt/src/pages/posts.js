@@ -37,7 +37,6 @@ const Posts = () => {
     const major = urlParams.get("major");
     const search = urlParams.get("search");
     const type = urlParams.get("type");
-    console.log(type);
 
     const getPosts = async () => {
       const options = {

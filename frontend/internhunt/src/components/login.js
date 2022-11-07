@@ -80,8 +80,41 @@ function Login(props) {
     }
   };
 
-  const onSuccess = (res) => {
+  const onSuccess = async (res) => {
     console.log(jwtDecode(res.credential));
+    const credentials = jwtDecode(res.credential);
+    const options = {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        email: credentials.email,
+        firstName: credentials.given_name,
+        lastName: credentials.family_name,
+      }),
+    };
+    const response = await fetch(getApiRoot() + "/users/handleGoogleAuth", options);
+    if (response.ok) {
+      const userData = await response.json();
+      localStorage.setItem(
+        "userData",
+        JSON.stringify({
+          userId: userData.userId,
+          jwt: userData.token,
+          major: userData.major,
+        })
+      );
+      var URLQuery;
+      if (userData.major) {
+        console.log(typeof userData.major)
+        const userMajor = userData.major;
+        URLQuery = `?major=${encodeURI(userMajor)}`;
+      } else {
+        URLQuery = "";
+      }
+      navigate(`/posts${URLQuery}`);
+    } else {
+      setFail(true);
+    }
   };
 
   const onFailure = (res) => {

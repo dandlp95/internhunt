@@ -50,7 +50,6 @@ const UserSchema = new Schema({
   major: {
     type: Schema.Types.ObjectId,
     ref: "Major",
-    required: true,
   },
 });
 

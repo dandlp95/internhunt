@@ -382,6 +382,7 @@ const handleGoogleLogin = async (req, res, next) => {
         email: req.body.email,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
+        password: " ",
       };
 
       UserModel.create(newUser, (err, doc) => {
