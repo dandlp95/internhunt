@@ -22,6 +22,8 @@ router.post("/add", userController.addUser);
 
 router.post("/login", userController.login);
 
+router.post("/handleGoogleAuth", userController.handleGoogleLogin);
+
 router.patch("/warn/:id", isAuth.getAuthToken, userController.warnUser);
 
 router.patch("/suspend/:id", isAuth.getAuthToken, userController.suspendUser);
@@ -37,5 +39,6 @@ router.patch(
   isAuth.getAuthToken,
   userController.editPassword
 );
+
 
 module.exports = router;

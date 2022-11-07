@@ -316,8 +316,7 @@ const login = (req, res, next) => {
     .then((account) => {
       if (account.currStatus == "inactive") {
         // If account doc doesn't exist will default to false too.
-        const apiError = new ApiError404("Account not found.");
-        throw apiError;
+        throw new ApiError404("Account not found.");
       }
       accountInfo = account;
       return bcrypt.compare(password, account.password);
@@ -365,6 +364,40 @@ const isLoggedIn = async (req, res, next) => {
   }
 };
 
+const handleGoogleLogin = async (req, res, next) => {
+  try {
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (user) {
+      if (user.currStatus == "inactive") {
+        throw new ApiError404("Account not found.");
+      }
+      const token = jwt.sign(
+        { email: req.body.email, id: user._id },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1h" }
+      );
+      res.status(200).send({ token: token, userId: user._id, major: null });
+    } else {
+      const newUser = {
+        email: req.body.email,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+      };
+
+      UserModel.create(newUser, (err, doc) => {
+        if (err || !doc) {
+          const apiError400 = new ApiError400(err.message);
+          next(apiError400);
+        } else {
+          res.status(200).send(doc);
+        }
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getAllUsers,
   isLoggedIn,
@@ -379,4 +412,5 @@ module.exports = {
   editPassword,
   getAllUsersPrivate,
   getUserByIdPrivate,
+  handleGoogleLogin,
 };
