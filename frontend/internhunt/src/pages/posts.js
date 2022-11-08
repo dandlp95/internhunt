@@ -13,6 +13,8 @@ import "./posts.css";
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
+  const [rerenderChild, setRerenderChild] = useState(true);
+  const [sortBy, setSortBy] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,6 +34,7 @@ const Posts = () => {
   }, []);
 
   useEffect(() => {
+    console.log("location rerendered");
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const major = urlParams.get("major");
@@ -73,15 +76,37 @@ const Posts = () => {
     }
   };
 
-  const sortByPopularity = (e) => {
-    console.log("sortByPopularity");
-  };
+  useEffect(() => {
+    var sortedPosts = [...posts];
+    if (sortBy == "date") {
+      console.log("date");
+      sortedPosts.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+    } else if (sortBy == "popularity") {
+      console.log("popularity");
+      sortedPosts.sort((a, b) => a.rating - b.rating);
+    }
+    console.log(sortedPosts === posts);
+    setPosts(sortedPosts);
+  }, [sortBy]);
 
-  const sortByVotes = (e) => {
-    console.log("sortByVotes");
-  };
-  
-  useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
+  // const sortByPopularity = () => {
+  //   const sortedPosts = [...posts];
+  //   // console.log(sortedPosts === posts);
+
+  //   sortedPosts.sort((a, b) => a.rating - b.rating);
+  //   setPosts(sortedPosts);
+  //   console.log(posts);
+  //   //setPosts(["una", "dos", "tres"]);
+  // };
+
+  // const sortByDate = () => {
+  //   // console.log("sortByVotes");
+
+  //   const sortedPosts = [...posts];
+  //   sortedPosts.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+  //   setPosts(sortedPosts);
+  //   //setPosts(["una", "dos"]);
+  // };
 
   return (
     <div>
@@ -99,10 +124,10 @@ const Posts = () => {
           </div>
           <div className="sortPostsDiv">
             <div>
-              <button onClick={(e) => sortByPopularity()}>Popular</button>
+              <button onClick={(e) => setSortBy("popularity")}>Popular</button>
             </div>
             <div>
-              <button onClick={(e) => sortByVotes()}>New</button>
+              <button onClick={(e) => setSortBy("date")}>New</button>
             </div>
             <div></div>
           </div>
@@ -147,7 +172,8 @@ const Posts = () => {
               <div className="posts-container">
                 {posts.map((post) => (
                   <div>
-                    <PostPreview post={post} />
+                    {console.log("POST: ", post)}
+                    <PostPreview post={post}/>
                   </div>
                 ))}
               </div>

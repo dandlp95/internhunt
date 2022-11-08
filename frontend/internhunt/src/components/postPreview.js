@@ -1,11 +1,12 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import VotingInterface from "./votingInterface";
 import getLocalStorage from "../utils/getLocalStorage";
 import FetchCalls from "../utils/fetchCalls";
 
 const PostPreview = (props) => {
+  const [post, setPost] = useState(props.post);
   const [voteCount, setVoteCount] = useState(props.post.rating);
   const [rerenderChild, setRerenderChild] = useState(true);
 
@@ -22,7 +23,7 @@ const PostPreview = (props) => {
       console.log("no local storage data :(");
     } else {
       const caller = new FetchCalls(
-        `/posts/vote/${voteReq}/${props.post._id}`,
+        `/posts/vote/${voteReq}/${post._id}`,
         "PATCH",
         data.jwt,
         { rating: userVote }
@@ -34,25 +35,26 @@ const PostPreview = (props) => {
         console.log();
       }
     }
-    setRerenderChild(!rerenderChild);
+    //setRerenderChild(!rerenderChild);
   };
 
   return (
     <div>
-      <Link to={`/post?postId=${props.post._id}`}>
+      <Link to={`/post?postId=${post._id}`}>
         <section>
           <div>
-            <h3>{props.post.title}</h3>
+            <h3>{post.title}</h3>
           </div>
           {/* I am not sure if I want to show content in the preview */}
-          <p>{props.post.content}</p>
+          <p>{post.content}</p>
         </section>
       </Link>
       <VotingInterface
         voteCount={voteCount}
         addVoteHandler={addVotePost}
-        postInfo={props.post}
-        key={rerenderChild}
+        postInfo={post}
+        key={voteCount}
+        // reRenderPost={post}
       />
     </div>
   );
