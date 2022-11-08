@@ -88,10 +88,12 @@ const Posts = () => {
                 <input placeholder="Create post" />
               </Link>
             </div>
-
-            <Button text="Filter" action="filter function here" />
           </div>
-
+          <div className="sortPostsDiv">
+              <div>Popular</div>
+              <div>New</div>
+              <div>Most upvoted</div>
+          </div>
           <div className="posts-query">
             <div>
               <div className="query">

@@ -24,6 +24,12 @@ const Header = (props) => {
     }
   };
 
+  const handleSignout = (e) => {
+    console.log("clicked");
+    localStorage.removeItem("userData");
+    navigate("/");
+  };
+
   return (
     <div className="header-component">
       <header>
@@ -45,7 +51,6 @@ const Header = (props) => {
         <div className="searchBar">
           <input
             type="search"
-            
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => isKeyEntered(e)}
             placeholder="  Search..."
@@ -55,6 +60,9 @@ const Header = (props) => {
           <Link to={`/account-portal/${props.accountId}`}>
             <p>Account</p>
           </Link>
+        </div>
+        <div>
+          <button onClick={(e) => handleSignout(e)}>Sign out</button>
         </div>
       </header>
     </div>

@@ -150,6 +150,7 @@ function Login(props) {
           <input type="submit" value="Submit" onClick={handleLogin} />
           <div>
             <div>
+              <div>Or sign in with Google</div>
               <GoogleOAuthProvider clientId="774704710261-0486u3ih7ergh0t8iasbbsrmnphbsir2.apps.googleusercontent.com">
                 <GoogleLogin
                   onSuccess={onSuccess}

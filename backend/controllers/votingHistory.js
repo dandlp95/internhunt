@@ -1,7 +1,6 @@
 const VotingHistory = require("../models/votingHistory");
 const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
-const ApiError404 = require("../middleware/error-handling/apiError404");
 
 const getVotingHistoryByIds = (req, res, next) => {
   try {

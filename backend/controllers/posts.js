@@ -148,15 +148,17 @@ const getPosts = async (req, res, next) => {
   let search = req.query.search;
 
   let QString;
-  if (search != "null") {
+  if (search != "null" && search != null) {
+    console.log("not null")
     QString = search.split(" ").map((string) => new RegExp(string, "i"));
   } else {
+    console.log("null")
     search = "";
     QString = search.split(" ").map((string) => new RegExp(string));
   }
 
   let PTypeString;
-  if (postType != "null") {
+  if (postType != "null" && postType != null) {
     PTypeString = postType.split(" ").map((string) => new RegExp(string, "i"));
   } else {
     postType = "";
@@ -164,7 +166,7 @@ const getPosts = async (req, res, next) => {
   }
 
   const major = req.query.major;
-  if (major != "null") {
+  if (major != "null" && major != null) {
     const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
     let department;
     if (foundMajor) {

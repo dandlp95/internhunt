@@ -74,7 +74,9 @@ const AccountPortal = () => {
               <p>
                 {user.firstName} {user.lastName}
               </p>
-              <p>{user.major.name}</p>
+              <p>
+                {user.major ? user.major.name : <div>No major found</div>}
+              </p>
               <Button text="Change Password" action={editPassword} />
             </section>
             <section>

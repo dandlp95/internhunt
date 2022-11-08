@@ -1,6 +1,6 @@
 .header-component header{
     display:grid;
-    grid-template-columns: 1fr 1fr 1fr 8fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 8fr 1fr 1fr;
     font-family: Consolas;
     background-color: #D9D9D9;
 }

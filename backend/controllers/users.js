@@ -292,7 +292,7 @@ const editPassword = async (req, res, next) => {
       (err, doc) => {
         if (err) {
           const apiError400 = new ApiError400(err.message);
-          next(err);
+          next(apiError400);
         } else if (!doc) {
           const apiError404 = new ApiError404("Account not found.");
           next(apiError404);
