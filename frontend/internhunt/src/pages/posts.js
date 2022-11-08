@@ -73,6 +73,14 @@ const Posts = () => {
     }
   };
 
+  const sortByPopularity = (e) => {
+    console.log("sortByPopularity");
+  };
+
+  const sortByVotes = (e) => {
+    console.log("sortByVotes");
+  };
+  
   useEffect(() => {}, []); // There will be a third use effect to sort data from new to old, etc...
 
   return (
@@ -90,9 +98,13 @@ const Posts = () => {
             </div>
           </div>
           <div className="sortPostsDiv">
-              <div>Popular</div>
-              <div>New</div>
-              <div>Most upvoted</div>
+            <div>
+              <button onClick={(e) => sortByPopularity()}>Popular</button>
+            </div>
+            <div>
+              <button onClick={(e) => sortByVotes()}>New</button>
+            </div>
+            <div></div>
           </div>
           <div className="posts-query">
             <div>
