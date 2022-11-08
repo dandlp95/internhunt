@@ -171,9 +171,8 @@ const Posts = () => {
             <div className="posts-div">
               <div className="posts-container">
                 {posts.map((post) => (
-                  <div>
-                    {console.log("POST: ", post)}
-                    <PostPreview post={post}/>
+                  <div >
+                    <PostPreview post={post} key={post._id}/>
                   </div>
                 ))}
               </div>
