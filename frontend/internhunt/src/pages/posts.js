@@ -89,25 +89,6 @@ const Posts = () => {
     setPosts(sortedPosts);
   }, [sortBy]);
 
-  // const sortByPopularity = () => {
-  //   const sortedPosts = [...posts];
-  //   // console.log(sortedPosts === posts);
-
-  //   sortedPosts.sort((a, b) => a.rating - b.rating);
-  //   setPosts(sortedPosts);
-  //   console.log(posts);
-  //   //setPosts(["una", "dos", "tres"]);
-  // };
-
-  // const sortByDate = () => {
-  //   // console.log("sortByVotes");
-
-  //   const sortedPosts = [...posts];
-  //   sortedPosts.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-  //   setPosts(sortedPosts);
-  //   //setPosts(["una", "dos"]);
-  // };
-
   return (
     <div>
       <Header accountId={user} />

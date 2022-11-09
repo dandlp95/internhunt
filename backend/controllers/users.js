@@ -282,22 +282,44 @@ const removeSuspension = async (req, res, next) => {
 const editPassword = async (req, res, next) => {
   try {
     if (!req.accountId || req.accountId != req.params.id) {
+      console.log("you have no access to request changes to this account...");
       throw authError;
     }
+    const user = await UserModel.findById(req.params.id);
 
-    const encryptedPassword = await encryptPassword(req.body.password);
-    UserModel.findByIdAndUpdate(
-      req.params.id,
-      encryptedPassword,
-      (err, doc) => {
+    if (!user) {
+      throw new ApiError404("No user found.");
+    }
+
+    bcrypt.compare(
+      req.body.currPassword,
+      user.password,
+      async (err, result) => {
         if (err) {
-          const apiError400 = new ApiError400(err.message);
-          next(apiError400);
-        } else if (!doc) {
-          const apiError404 = new ApiError404("Account not found.");
-          next(apiError404);
+          const bcryptError = new ApiError400(err.message);
+          next(bcryptError);
         } else {
-          res.status(200).send("password changed.");
+          if (!result) {
+            next(authError);
+          } else if (result) {
+            const encryptedPassword = await encryptPassword(
+              req.body.newPassword
+            );
+
+            user.password = encryptedPassword;
+            user.save((err) => {
+              if (err) {
+                next(new ApiError400(err.message));
+              } else {
+                const returnedUser = {
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  email: user.email,
+                };
+                res.status(200).send(returnedUser);
+              }
+            });
+          }
         }
       }
     );
@@ -305,6 +327,8 @@ const editPassword = async (req, res, next) => {
     next(err);
   }
 };
+
+const requestPasswordReset = async () => {};
 
 const login = (req, res, next) => {
   const email = req.body.email;
