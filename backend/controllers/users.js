@@ -9,8 +9,7 @@ const { encryptPassword } = require("../utils/encrypt");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authError = new ApiError401("Not authorized.");
-var nodemailer = require("nodemailer");
-require("dotenv").config();
+const { emailClient } = require("../utils/emailClient");
 
 const getAllUsers = (req, res, next) => {
   // Double checks Ids arent sent...
@@ -332,30 +331,9 @@ const editPassword = async (req, res, next) => {
 
 const requestPasswordReset = async (req, res, next) => {
   try {
-    var transporter = nodemailer.createTransport({
-      service: process.env.EMAIL_SERVICE,
-      auth: {
-        user: process.env.EMAIL_ADDRESS,
-        pass: process.env.APP_EMAIL_PASSWORD,
-      },
-    });
-
-    var mailOptions = {
-      from: process.env.EMAIL_ADDRESS,
-      to: req.body.email,
-      subject: "Sending Email using Node.js",
-      text: "That was easy!",
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-        next(error);
-      } else {
-        console.log("Email sent: " + info.response);
-        res.status(200).send(info);
-      }
-    });
+    const something = await emailClient("test subject", "This was easy", req.body.email);
+    console.log(something)
+    res.status(200).send(something);
   } catch (err) {
     next(err);
   }
