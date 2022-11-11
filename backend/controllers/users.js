@@ -334,7 +334,10 @@ const editPassword = async (req, res, next) => {
 const requestPasswordReset = async (req, res, next) => {
   try {
     const code = Math.floor(Math.random() * 99999) + 1;
-    const user = await UserModel.findById(req.params.id);
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (!user) {
+      throw new ApiError404("No user associated with this email");
+    }
     await user.updateOne({ verificationCode: code });
     const userName = user.firstName;
 
@@ -353,9 +356,11 @@ const requestPasswordReset = async (req, res, next) => {
 
 const approvePasswordReset = async (req, res, next) => {
   try {
-    const user = await UserModel.findById(req.params.id);
-    if (user.verificationCode != req.body.verificationCode) {
-      throw new ApiError403("Wrong verification code");
+    const user = await UserModel.findOne({
+      verificationCode: req.body.verificationCode,
+    });
+    if (!user) {
+      throw new ApiError400("Verification code is not correct");
     }
     user.verificationCode = null;
     const encryptedPassword = await encryptPassword(req.body.password);
@@ -476,5 +481,5 @@ module.exports = {
   getUserByIdPrivate,
   handleGoogleLogin,
   requestPasswordReset,
-  approvePasswordReset
+  approvePasswordReset,
 };

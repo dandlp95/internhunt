@@ -8,6 +8,7 @@ import Guidelines from "./pages/guidelines";
 import PostPage from "./pages/postPage";
 import CreatePost from "./pages/createPost";
 import MajorsPage from "./pages/majorsPage";
+import ResetPasswordPage from "./pages/resetPasswordPage";
 
 const router = () => {
   return (
@@ -21,6 +22,7 @@ const router = () => {
         <Route path="/guidelines" element={<Guidelines />} />
         <Route path="/create-post" element={<CreatePost />} />
         <Route path="/majors" element={<MajorsPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
     </Router>
   );

@@ -40,6 +40,8 @@ router.patch(
   userController.editPassword
 );
 
-router.patch("/request-password-reset/:id", userController.requestPasswordReset);
+router.patch("/request-password-reset", userController.requestPasswordReset);
+
+router.patch("/approve-password-reset", userController.approvePasswordReset);
 
 module.exports = router;

@@ -1,45 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Button from "../components/button";
 import FetchCalls from "../utils/fetchCalls";
+import Header from "../components/header";
+import Footer from "../components/footer";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [renderErrorMessage, setRenderErrorMessage] = useState(false);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleResetPassword = async () => {
-      if (password && confirmPassword) {
-        const apiCaller = new FetchCalls(``);
-      } else {
-        setRenderErrorMessage(true);
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const verificationCode = urlParams.get("code");
+
+  const handleResetPassword = async () => {
+    if (password && confirmPassword && password == confirmPassword) {
+      const userJwt = localStorage.getItem("userData").jwt;
+      const body = { verificationCode, password };
+
+      const apiCaller = new FetchCalls(
+        "/request-password-reset",
+        "PATCH",
+        userJwt,
+        body
+      );
+
+      const response = await apiCaller.protectedBody();
+      if (response.ok) {
+        navigate("/");
       }
-    };
-  }, []);
+    } else {
+      setRenderErrorMessage(true);
+    }
+  };
 
   return (
     <div>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <div>
-          <input
-            required
-            placeholder="Enter new password"
-            type="text"
-            name="newPassword"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <div>
-          <input
-            required
-            placeholder="Enter password again"
-            type="text"
-            name="confirmPassword"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
-        <Button text="Reset password" action={handleResetPassword} />
-      </form>
+      <div>
+        <form onSubmit={(e) => e.preventDefault()}>
+          <div>
+            <input
+              required
+              placeholder="Enter new password"
+              type="text"
+              name="newPassword"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <div>
+            <input
+              required
+              placeholder="Enter password again"
+              type="text"
+              name="confirmPassword"
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </div>
+          <Button text="Reset password" action={handleResetPassword} />
+        </form>
+        {renderErrorMessage && <div>Error in your request</div>}
+      </div>
     </div>
   );
 };
