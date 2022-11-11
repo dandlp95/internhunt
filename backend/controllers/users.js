@@ -4,12 +4,14 @@ const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
+const ApiError403 = require("../middleware/error-handling/apiError403");
 const controllers = require("./genericControllers");
 const { encryptPassword } = require("../utils/encrypt");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authError = new ApiError401("Not authorized.");
 const { emailClient } = require("../utils/emailClient");
+const User = require("../models/user");
 
 const getAllUsers = (req, res, next) => {
   // Double checks Ids arent sent...
@@ -331,9 +333,35 @@ const editPassword = async (req, res, next) => {
 
 const requestPasswordReset = async (req, res, next) => {
   try {
-    const something = await emailClient("test subject", "This was easy", req.body.email);
-    console.log(something)
-    res.status(200).send(something);
+    const code = Math.floor(Math.random() * 99999) + 1;
+    const user = await UserModel.findById(req.params.id);
+    await user.updateOne({ verificationCode: code });
+    const userName = user.firstName;
+
+    const message = `
+    ${userName}, use the following link to reset your password: 
+    <a href="${process.env.FRONTEND_URI}/reset-password?code=${code}">
+    ${process.env.FRONTEND_URI}/reset-password?code=${code}
+    </a>`;
+
+    await emailClient("Verification code", message, req.body.email);
+    res.status(200).send("Success.");
+  } catch (err) {
+    next(err);
+  }
+};
+
+const approvePasswordReset = async (req, res, next) => {
+  try {
+    const user = await UserModel.findById(req.params.id);
+    if (user.verificationCode != req.body.verificationCode) {
+      throw new ApiError403("Wrong verification code");
+    }
+    user.verificationCode = null;
+    const encryptedPassword = await encryptPassword(req.body.password);
+    user.password = encryptedPassword;
+    user.save();
+    res.status(200).send("Success.");
   } catch (err) {
     next(err);
   }
@@ -448,4 +476,5 @@ module.exports = {
   getUserByIdPrivate,
   handleGoogleLogin,
   requestPasswordReset,
+  approvePasswordReset
 };

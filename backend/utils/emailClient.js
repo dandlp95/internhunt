@@ -15,7 +15,7 @@ exports.emailClient = (subject, content, recipient) => {
       from: process.env.EMAIL_ADDRESS,
       to: recipient,
       subject: subject,
-      text: content,
+      html: content,
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
