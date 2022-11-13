@@ -19,11 +19,12 @@ const Comment = (props) => {
   const route = "comments";
 
   useEffect(() => {
+    console.log(props.comment)
     const isCommentCreator = async () => {
       const response = await isAuth();
       if (response.ok) {
         const userId = await response.json();
-        if (userId === comment.owner._id) {
+        if (!comment.owner || userId === comment.owner._id) {
           setIsCommentCreator(true);
         } else {
           setIsCommentCreator(false);

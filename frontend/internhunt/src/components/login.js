@@ -3,10 +3,9 @@ import "./login.css";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import Background from "./background";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import FailMessage from "./failMessage";
-//import { GoogleLogin } from "react-google-login";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import jwtDecode from "jwt-decode";
 
@@ -92,7 +91,10 @@ function Login(props) {
         lastName: credentials.family_name,
       }),
     };
-    const response = await fetch(getApiRoot() + "/users/handleGoogleAuth", options);
+    const response = await fetch(
+      getApiRoot() + "/users/handleGoogleAuth",
+      options
+    );
     if (response.ok) {
       const userData = await response.json();
       localStorage.setItem(
@@ -105,7 +107,7 @@ function Login(props) {
       );
       var URLQuery;
       if (userData.major) {
-        console.log(typeof userData.major)
+        console.log(typeof userData.major);
         const userMajor = userData.major;
         URLQuery = `?major=${encodeURI(userMajor)}`;
       } else {
@@ -148,6 +150,9 @@ function Login(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
           <input type="submit" value="Submit" onClick={handleLogin} />
+          <div>
+            <Link to="/forgot-password">Forgot your password?</Link>
+          </div>
           <div>
             <div>
               <div>Or sign in with Google</div>

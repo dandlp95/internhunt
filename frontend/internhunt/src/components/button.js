@@ -5,7 +5,7 @@ import "./background.css";
 const Button = (props) => {
   return (
     <div className="buttonComponent">
-      <input type="submit" value={props.text} onClick={(e) => props.action} />
+      <input type="submit" value={props.text} onClick={(e) => props.action()} />
     </div>
   );
 };
