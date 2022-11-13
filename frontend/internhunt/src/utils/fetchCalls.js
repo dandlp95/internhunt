@@ -16,7 +16,7 @@ class FetchCalls {
       },
     };
     const response = await fetch(getApiRoot() + this.endpoint, options);
-
+    console.log(response);
     return response;
   }
   async protectedNoBody() {
@@ -24,7 +24,7 @@ class FetchCalls {
       method: this.method,
       headers: {
         "Content-type": "application/json",
-        "Authorization": `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.token}`,
       },
     };
     const response = await fetch(getApiRoot() + this.endpoint, options);
@@ -37,7 +37,19 @@ class FetchCalls {
       method: this.method,
       headers: {
         "Content-type": "application/json",
-        "Authorization": `Bearer ${this.token}`
+        Authorization: `Bearer ${this.token}`,
+      },
+      body: JSON.stringify(this.body),
+    };
+    const response = await fetch(getApiRoot() + this.endpoint, options);
+    return response;
+  }
+
+  async publicBody() {
+    const options = {
+      method: this.method,
+      headers: {
+        "Content-type": "application/json",
       },
       body: JSON.stringify(this.body),
     };

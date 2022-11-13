@@ -335,6 +335,8 @@ const requestPasswordReset = async (req, res, next) => {
   try {
     const code = Math.floor(Math.random() * 99999) + 1;
     const user = await UserModel.findOne({ email: req.body.email });
+    console.log("req.body.email ", req.body.email);
+    console.log("user ", user);
     if (!user) {
       throw new ApiError404("No user associated with this email");
     }
