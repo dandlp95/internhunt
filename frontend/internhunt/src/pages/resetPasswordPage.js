@@ -16,23 +16,24 @@ const ResetPasswordPage = () => {
   const verificationCode = urlParams.get("code");
 
   const handleResetPassword = async () => {
-    if (password && confirmPassword && password == confirmPassword) {
-      const userJwt = localStorage.getItem("userData").jwt;
-      const body = { verificationCode, password };
+    if (password && confirmPassword) {
+      if (password === confirmPassword) {
+        const body = { verificationCode, password };
 
-      const apiCaller = new FetchCalls(
-        "/request-password-reset",
-        "PATCH",
-        userJwt,
-        body
-      );
+        const apiCaller = new FetchCalls(
+          "/users/approve-password-reset",
+          "PATCH",
+          null,
+          body
+        );
 
-      const response = await apiCaller.protectedBody();
-      if (response.ok) {
-        navigate("/");
+        const response = await apiCaller.protectedBody();
+        if (response.ok) {
+          navigate("/");
+        }
+      } else {
+        setRenderErrorMessage(true);
       }
-    } else {
-      setRenderErrorMessage(true);
     }
   };
 

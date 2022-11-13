@@ -9,7 +9,7 @@ import PostPage from "./pages/postPage";
 import CreatePost from "./pages/createPost";
 import MajorsPage from "./pages/majorsPage";
 import ResetPasswordPage from "./pages/resetPasswordPage";
-import ForgotPassword from "./components/forgotPassword";
+import ForgotPassword from "./pages/forgotPassword";
 
 const router = () => {
   return (

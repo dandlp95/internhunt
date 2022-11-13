@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import FetchCalls from "../utils/fetchCalls";
-import Button from "./button";
+import Button from "../components/button";
 
 const InstructionsSuccess = (props) => {
   return <div className="resetPasswordInstructions">{props.message}</div>;

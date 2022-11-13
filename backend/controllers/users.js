@@ -361,6 +361,7 @@ const approvePasswordReset = async (req, res, next) => {
     const user = await UserModel.findOne({
       verificationCode: req.body.verificationCode,
     });
+    console.log(req.body.verificationCode);
     if (!user) {
       throw new ApiError400("Verification code is not correct");
     }
@@ -402,7 +403,10 @@ const login = (req, res, next) => {
         process.env.JWT_SECRET_KEY,
         { expiresIn: "1h" }
       );
-      const major = await MajorModel.findById(accountInfo.major);
+      var major = await MajorModel.findById(accountInfo.major);
+      if (!major) {
+        major = { name: null };
+      }
       res.status(200).send({
         token: token,
         userId: accountInfo._id.toString(),
