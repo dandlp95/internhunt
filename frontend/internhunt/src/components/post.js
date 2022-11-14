@@ -1,5 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { isAuth } from "../utils/isLoggedIn";
 import VotingInterface from "./votingInterface";
 import getLocalStorage from "../utils/getLocalStorage";
@@ -73,7 +73,12 @@ const Post = (props) => {
   if (!editMode) {
     return (
       <div>
-        <p>Posted by {props.user.firstName}</p>
+        <p>
+          Posted by{" "}
+          <Link to={`/account-portal/${props.user._id}`}>
+            {props.user.firstName}
+          </Link>
+        </p>
         <section>
           <h2>{props.post.title}</h2>
           <p>{props.post.content}</p>
