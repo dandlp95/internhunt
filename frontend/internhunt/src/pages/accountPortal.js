@@ -88,7 +88,7 @@ const AccountPortal = () => {
             <section>
               <h2>{pronoun} Posts</h2>
               {posts.map((post) => (
-                <PostPreview post={post} />
+                <PostPreview post={post} key={post._id}/>
               ))}
             </section>
             <section>
@@ -96,7 +96,7 @@ const AccountPortal = () => {
               {comments.map((comment) => (
                 <div>
                   {console.log(comment)}
-                  <CommentPreview comment={comment} />
+                  <CommentPreview comment={comment} key={comment._id}/>
                 </div>
               ))}
             </section>

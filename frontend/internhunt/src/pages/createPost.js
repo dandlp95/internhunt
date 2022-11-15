@@ -36,7 +36,7 @@ const MajorInput = (props) => {
       <input type="text" list="majors" ref={inputMajor} />
       <datalist id="majors">
         {majorsList.map((major) => (
-          <option data-value={major._id} value={major.name} />
+          <option data-value={major._id} value={major.name} key={major._id}/>
         ))}
       </datalist>
       <button onClick={submitMajorInput}>Add Major</button>

@@ -56,7 +56,7 @@ const MajorsPage = () => {
       <Header accountId={user} />
       <div>
         {departments.map((department) => (
-          <div>
+          <div key={department._id}>
             <button onClick={() => handleDepartmentClick(department._id)}>
               {department.name}
             </button>
@@ -65,7 +65,7 @@ const MajorsPage = () => {
       </div>
       <div>
         {majors.map((major) => (
-          <Link to={`/posts?major=${encodeURI(major.name)}`}>
+          <Link to={`/posts?major=${encodeURI(major.name)}`} key={major._id}>
             <section>
               <h2>{major.name}</h2>
               <p>{major.description}</p>

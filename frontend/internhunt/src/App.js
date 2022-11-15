@@ -138,7 +138,7 @@ const App = () => {
             </div>
             <datalist id="majors">
               {majorsList.map((major) => (
-                <option data-value={major._id} value={major.name} />
+                <option data-value={major._id} value={major.name} key={major._id}/>
               ))}
             </datalist>
             <input type="submit" value="Register" onClick={handleRegister} />
