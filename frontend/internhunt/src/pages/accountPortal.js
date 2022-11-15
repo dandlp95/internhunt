@@ -16,12 +16,18 @@ const AccountPortal = () => {
   let userData = localStorage.getItem("userData");
   userData = JSON.parse(userData);
 
+  var url;
+  var pronoun;
+  if (id == userData.userId) {
+    url = `/users/getByIdPrivate/${id}`;
+    pronoun = "Your";
+  } else {
+    url = `/users/getById/${id}`;
+    pronoun = "";
+  }
+
   const getUserInfo = async () => {
-    const backendApi = new FetchCalls(
-      `/users/getByIdPrivate/${id}`,
-      "GET",
-      userData.jwt
-    );
+    const backendApi = new FetchCalls(url, "GET", userData.jwt);
     const response = await backendApi.protectedNoBody();
     if (response.ok) {
       const usersResponse = await response.json();
@@ -45,13 +51,12 @@ const AccountPortal = () => {
   };
 
   const getUserPosts = async () => {
-    const backendApi = new FetchCalls(
-      `/posts/getPostByUser/${userData.userId}`,
-      "GET"
-    );
+    const backendApi = new FetchCalls(`/posts/getPostByUser/${id}`, "GET");
     const response = await backendApi.publicGet();
+    console.log(response);
     if (response.ok) {
-      setPosts(await response.json());
+      const posts = await response.json();
+      setPosts(posts);
     }
   };
 
@@ -74,19 +79,17 @@ const AccountPortal = () => {
               <p>
                 {user.firstName} {user.lastName}
               </p>
-              <p>
-                {user.major ? user.major.name : <div>No major found</div>}
-              </p>
+              <p>{user.major ? user.major.name : <div>No major found</div>}</p>
               <Button text="Change Password" action={editPassword} />
             </section>
             <section>
-              <h2>Your Posts</h2>
+              <h2>{pronoun} Posts</h2>
               {posts.map((post) => (
                 <PostPreview post={post} />
               ))}
             </section>
             <section>
-              <h2>Your Comments</h2>
+              <h2>{pronoun} Comments</h2>
               {comments.map((comment) => (
                 <div>
                   {console.log(comment)}

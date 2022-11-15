@@ -29,7 +29,7 @@ const getAllUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  UserModel.findById(req.params.id, "firstName lastName", (err, doc) => {
+  UserModel.findById(req.params.id, "firstName lastName major", (err, doc) => {
     if (err) {
       const apiError = new ApiError400(err.message);
       next(apiError);
@@ -73,7 +73,7 @@ const getAllUsersPrivate = async (req, res, next) => {
 
 const getUserByIdPrivate = async (req, res, next) => {
   try {
-    if (!req.accountId) {
+    if (!req.accountId || req.accountId != req.params.id) {
       throw authError;
     }
     const user = await UserModel.findById(req.accountId);
@@ -460,7 +460,7 @@ const handleGoogleLogin = async (req, res, next) => {
 
       UserModel.create(newUser, (err, doc) => {
         if (err || !doc) {
-          const apiError400 = new ApiError400(err.message);
+          const apiError400 = new ApiError400(err.message); // if !doc, this will cause a crash
           next(apiError400);
         } else {
           res.status(200).send(doc);
