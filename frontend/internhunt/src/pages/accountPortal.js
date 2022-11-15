@@ -18,9 +18,11 @@ const AccountPortal = () => {
 
   var url;
   var pronoun;
+  var owner = false;
   if (id == userData.userId) {
     url = `/users/getByIdPrivate/${id}`;
     pronoun = "Your";
+    owner = true;
   } else {
     url = `/users/getById/${id}`;
     pronoun = "";
@@ -71,6 +73,7 @@ const AccountPortal = () => {
   if (user) {
     return (
       <div>
+        {console.log(user)}
         <Header accountId={user._id} />
         <div>
           <div>
@@ -80,7 +83,7 @@ const AccountPortal = () => {
                 {user.firstName} {user.lastName}
               </p>
               <p>{user.major ? user.major.name : <div>No major found</div>}</p>
-              <Button text="Change Password" action={editPassword} />
+              {owner && <Button text="Change Password" action={editPassword} />}
             </section>
             <section>
               <h2>{pronoun} Posts</h2>

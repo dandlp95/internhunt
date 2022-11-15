@@ -29,17 +29,21 @@ const getAllUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  UserModel.findById(req.params.id, "firstName lastName major", (err, doc) => {
-    if (err) {
-      const apiError = new ApiError400(err.message);
-      next(apiError);
-    } else if (!doc) {
-      const apiError = new ApiError404("No doc found");
-      next(apiError);
-    } else {
-      res.status(200).send(doc);
+  UserModel.findById(
+    req.params.id,
+    "firstName lastName major",
+    async (err, doc) => {
+      if (err) {
+        const apiError = new ApiError400(err.message);
+        next(apiError);
+      } else if (!doc) {
+        const apiError = new ApiError404("No doc found");
+        next(apiError);
+      } else {
+        res.status(200).send(await doc.populate("major"));
+      }
     }
-  });
+  );
 };
 
 const getAllUsersPrivate = async (req, res, next) => {
