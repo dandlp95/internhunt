@@ -1,6 +1,5 @@
-import React from "react";
-import { useState, useEffect, navigate } from "react";
-import { getApiRoot } from "../utils/getApiRoot";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { isAuth } from "../utils/isLoggedIn";
 import Button from "./button";
 import FetchCalls from "../utils/fetchCalls";
@@ -19,13 +18,16 @@ const Comment = (props) => {
   const route = "comments";
 
   useEffect(() => {
-    console.log(props.comment)
     const isCommentCreator = async () => {
       const response = await isAuth();
       if (response.ok) {
         const userId = await response.json();
-        if (!comment.owner || userId === comment.owner._id) {
-          setIsCommentCreator(true);
+        if (comment.owner) {
+          if (userId === comment.owner._id) {
+            setIsCommentCreator(true);
+          } else {
+            setIsCommentCreator(false);
+          }
         } else {
           setIsCommentCreator(false);
         }
@@ -35,8 +37,8 @@ const Comment = (props) => {
 
     if (comment.owner) {
       setCommentUser(`${comment.owner.firstName} ${comment.owner.lastName}`);
-    }else{
-      setCommentUser("[Deleted user]")
+    } else {
+      setCommentUser("[Deleted user]");
     }
   }, []);
 
@@ -66,9 +68,9 @@ const Comment = (props) => {
 
   const addVotePost = async (userVote) => {
     var voteReq;
-    if (userVote == 1) {
+    if (userVote === 1) {
       voteReq = "upvote";
-    } else if (userVote == -1) {
+    } else if (userVote === -1) {
       voteReq = "downvote";
     }
 
@@ -114,7 +116,13 @@ const Comment = (props) => {
         <div>
           <div>
             <div>
-              <p>{commentUser}</p>
+              {comment.owner ? (
+                <Link to={`/account-portal/${comment.owner._id}`}>
+                  {commentUser}
+                </Link>
+              ) : (
+                <div>{commentUser}</div>
+              )}
             </div>
             <div>
               <p>{comment.content}</p>
