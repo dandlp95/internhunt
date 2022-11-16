@@ -1,12 +1,38 @@
-import React from "react"
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Header from "../components/header";
+import Footer from "../components/footer";
+import { isAuth } from "../utils/isLoggedIn";
+import about from "../utils/about.json";
 
 const AboutPage = () => {
+  const [user, setUser] = useState([]);
+  const navigate = useNavigate();
 
-    return(
-        <div>
-            About Page
-        </div>
-    )
-}
+  useEffect(() => {
+    const isLoggedIn = async () => {
+      const res = await isAuth();
+      if (!res.ok) {
+        alert("Please log in");
+        navigate("/");
+      } else {
+        const userData = localStorage.getItem("userData");
+        const userDataJson = JSON.parse(userData);
+        setUser(userDataJson.userId);
+      }
+    };
+    isLoggedIn();
+  }, []);
 
-export default AboutPage
+  return (
+    <div>
+      <Header accountId={user} />
+      <div className="aboutPage">
+        
+      </div>
+      <Footer />
+    </div>
+  );
+};
+
+export default AboutPage;
