@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./header.css";
-import logo4 from "../assets/Internhunt-4.png"
+import logo5 from "../assets/Internhunt-7.png"
 
 const Header = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,7 +36,7 @@ const Header = (props) => {
       <header>
         <div className="headerflex logo">
           <Link to={`/posts?major=${encodeURI(userDataJson.major)}`}>
-            <img src={logo4} alt="transparent-logo" width="200px"/>
+            <img src={logo5} alt="transparent-logo" width="200px"/>
           </Link>
         </div>
         <div className="headerflex header-about">
