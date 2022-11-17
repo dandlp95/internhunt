@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./header.css";
+import logo4 from "../assets/Internhunt-4.png"
 
 const Header = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,35 +34,34 @@ const Header = (props) => {
   return (
     <div className="header-component">
       <header>
-        <div className="logo">
+        <div className="headerflex logo">
           <Link to={`/posts?major=${encodeURI(userDataJson.major)}`}>
-            <p>Img placehodler</p>
+            <img src={logo4} alt="transparent-logo" width="200px"/>
           </Link>
         </div>
-        <div className="header-about">
+        <div className="headerflex header-about">
           <Link to={`/about`}>
             <p>About</p>
           </Link>
         </div>
-        <div className="header-guidelines">
+        <div className="headerflex header-guidelines">
           <Link to={`/guidelines`}>
             <p>Community Guidelines</p>
           </Link>
         </div>
-        <div className="searchBar">
+        <div className="headerflex searchBar">
           <input
-            type="search"
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => isKeyEntered(e)}
             placeholder="  Search..."
           />
         </div>
-        <div className="header-account">
+        <div className="headerflex header-account">
           <Link to={`/account-portal/${props.accountId}`}>
             <p>Account</p>
           </Link>
         </div>
-        <div>
+        <div className="sign-out-div">
           <button onClick={(e) => handleSignout(e)}>Sign out</button>
         </div>
       </header>

@@ -28,7 +28,10 @@ const AboutPage = () => {
     <div>
       <Header accountId={user} />
       <div className="aboutPage">
-        
+        <h2>{about.title}</h2>
+        <p>{about.paragraph}</p>
+        <p>{about.paragraph2}</p>
+        <p>{about.paragraph3}</p>
       </div>
       <Footer />
     </div>
