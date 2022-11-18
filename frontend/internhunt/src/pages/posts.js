@@ -152,7 +152,7 @@ const Posts = () => {
             <div className="posts-div">
               <div className="posts-container">
                 {posts.map((post) => (
-                  <div >
+                  <div className="post-preview-container">
                     <PostPreview post={post} key={post._id}/>
                   </div>
                 ))}

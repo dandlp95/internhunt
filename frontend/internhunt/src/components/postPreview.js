@@ -8,13 +8,12 @@ import FetchCalls from "../utils/fetchCalls";
 const PostPreview = (props) => {
   const [post, setPost] = useState(props.post);
   const [voteCount, setVoteCount] = useState(props.post.rating);
-  const [rerenderChild, setRerenderChild] = useState(true);
 
   const addVotePost = async (userVote) => {
     var voteReq;
-    if (userVote == 1) {
+    if (userVote === 1) {
       voteReq = "upvote";
-    } else if (userVote == -1) {
+    } else if (userVote === -1) {
       voteReq = "downvote";
     }
 
@@ -35,17 +34,15 @@ const PostPreview = (props) => {
         console.log();
       }
     }
-    //setRerenderChild(!rerenderChild);
   };
 
   return (
-    <div>
+    <div className="postpreview">
       <Link to={`/post?postId=${post._id}`}>
         <section>
           <div>
             <h3>{post.title}</h3>
           </div>
-          {/* I am not sure if I want to show content in the preview */}
           <p>{post.content}</p>
         </section>
       </Link>
@@ -54,7 +51,6 @@ const PostPreview = (props) => {
         addVoteHandler={addVotePost}
         postInfo={post}
         key={voteCount}
-        // reRenderPost={post}
       />
     </div>
   );
