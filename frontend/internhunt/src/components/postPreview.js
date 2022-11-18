@@ -8,7 +8,7 @@ import FetchCalls from "../utils/fetchCalls";
 const PostPreview = (props) => {
   const [post, setPost] = useState(props.post);
   const [voteCount, setVoteCount] = useState(props.post.rating);
-
+  console.log(props.user)
   const addVotePost = async (userVote) => {
     var voteReq;
     if (userVote === 1) {
@@ -38,20 +38,25 @@ const PostPreview = (props) => {
 
   return (
     <div className="postpreview">
-      <Link to={`/post?postId=${post._id}`}>
-        <section>
-          <div>
-            <h3>{post.title}</h3>
-          </div>
-          <p>{post.content}</p>
-        </section>
-      </Link>
       <VotingInterface
         voteCount={voteCount}
         addVoteHandler={addVotePost}
         postInfo={post}
         key={voteCount}
       />
+      <div>
+        <div className="post-metadata">
+          Posted by 
+        </div>
+        <Link to={`/post?postId=${post._id}`}>
+          <section>
+            <div>
+              <h3>{post.title}</h3>
+            </div>
+            <p>{post.content}</p>
+          </section>
+        </Link>
+      </div>
     </div>
   );
 };

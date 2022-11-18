@@ -428,11 +428,11 @@ const isLoggedIn = async (req, res, next) => {
     if (!accountId) {
       throw new ApiError401("Not authenticated.");
     } else {
-      const account = await UserModel.findById(accountId);
+      const account = await UserModel.findById(accountId, "firstName lastName");
       if (!account || !account.active) {
         throw new ApiError404("Account not found");
       } else {
-        res.status(200).send(account._id);
+        res.status(200).send(account);
       }
     }
   } catch (err) {

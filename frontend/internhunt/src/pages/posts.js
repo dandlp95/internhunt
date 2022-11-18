@@ -12,8 +12,7 @@ import "./posts.css";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
-  const [user, setUser] = useState([]);
-  const [rerenderChild, setRerenderChild] = useState(true);
+  const [user, setUser] = useState();
   const [sortBy, setSortBy] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,7 +26,9 @@ const Posts = () => {
       } else {
         const userData = localStorage.getItem("userData");
         const userDataJson = JSON.parse(userData);
-        setUser(userDataJson.userId);
+        const info = await res.json();
+        console.log("info ", info);
+        setUser(info);
       }
     };
     isLoggedIn();
@@ -89,84 +90,87 @@ const Posts = () => {
     setPosts(sortedPosts);
   }, [sortBy]);
 
-  return (
-    <div>
-      <Header accountId={user} />
-      <div className="main">
-        <div className="posts-main">
-          <div className="create-post">
-            <div></div>
-
-            <div className="create-post-input">
-              <Link to={`/create-post`}>
-                <input placeholder="Create post" />
-              </Link>
-            </div>
-          </div>
-          <div className="sortPostsDiv">
-            <div>
-              <button onClick={(e) => setSortBy("popularity")}>Popular</button>
-            </div>
-            <div>
-              <button onClick={(e) => setSortBy("date")}>New</button>
-            </div>
-            <div></div>
-          </div>
-          <div className="posts-query">
-            <div>
-              <div className="query">
-                <div>
-                  <button onClick={(e) => getPostByType("all")}>
-                    All Posts
-                  </button>
-                </div>
-                <div>
-                  <button onClick={(e) => getPostByType("Review")}>
-                    Internship Reviews
-                  </button>
-                </div>
-                <div>
-                  <button
-                    onClick={(e) => getPostByType("Internship opportunities")}
-                  >
-                    Internship Opportunities
-                  </button>
-                </div>
-                <div>
-                  <button onClick={(e) => getPostByType("Advise")}>
-                    Advise
-                  </button>
-                </div>
-                <div>
-                  <button onClick={(e) => getPostByType("Question")}>
-                    Questions
-                  </button>
-                </div>
-                <div>
-                  <Link to={"/majors"}>
-                    <button>Majors</button>
-                  </Link>
-                </div>
+  if (user) {
+    return (
+      <div>
+        <Header accountId={user._id} />
+        <div className="main">
+          <div className="posts-main">
+            <div className="create-post">
+              <div></div>
+              <div className="create-post-input">
+                <Link to={`/create-post`}>
+                  <input placeholder="Create post" />
+                </Link>
               </div>
             </div>
-            <div className="posts-div">
-              <div className="posts-container">
-                {posts.map((post) => (
-                  <div className="post-preview-container">
-                    <PostPreview post={post} key={post._id}/>
+            <div className="sortPostsDiv">
+              <div>
+                <button onClick={(e) => setSortBy("popularity")}>
+                  Popular
+                </button>
+              </div>
+              <div>
+                <button onClick={(e) => setSortBy("date")}>New</button>
+              </div>
+              <div></div>
+            </div>
+            <div className="posts-query">
+              <div>
+                <div className="query">
+                  <div>
+                    <button onClick={(e) => getPostByType("all")}>
+                      All Posts
+                    </button>
                   </div>
-                ))}
+                  <div>
+                    <button onClick={(e) => getPostByType("Review")}>
+                      Internship Reviews
+                    </button>
+                  </div>
+                  <div>
+                    <button
+                      onClick={(e) => getPostByType("Internship opportunities")}
+                    >
+                      Internship Opportunities
+                    </button>
+                  </div>
+                  <div>
+                    <button onClick={(e) => getPostByType("Advise")}>
+                      Advise
+                    </button>
+                  </div>
+                  <div>
+                    <button onClick={(e) => getPostByType("Question")}>
+                      Questions
+                    </button>
+                  </div>
+                  <div>
+                    <Link to={"/majors"}>
+                      <button>Majors</button>
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <div className="pagination"></div>
-            </div>
+              <div className="posts-div">
+                <div className="posts-container">
+                  {posts.map((post) => (
+                    <div className="post-preview-container">
+                      <PostPreview post={post} user={user} key={post._id} />
+                    </div>
+                  ))}
+                </div>
+                <div className="pagination"></div>
+              </div>
 
-            <div></div>
+              <div></div>
+            </div>
           </div>
+          <Footer />
         </div>
-        <Footer />
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default Posts;

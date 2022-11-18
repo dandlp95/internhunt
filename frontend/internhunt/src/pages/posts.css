@@ -35,12 +35,15 @@
 .posts-div {
   width: 60%;
 }
-.post-preview-container{
+.posts-div{
   width: 50rem;
 }
+
 .postpreview {
+  display:grid;
+  grid-template-columns: 1fr 16fr;
   background-color: white;
-  padding: 2rem;
+  padding: 1rem;
   margin: 20px;
   border: 1px solid lightgrey;
   border-radius: 5px;
@@ -64,7 +67,7 @@
 }
 
 .vote-number{
-  margin-left:0.5rem;
+  margin-left:0.75rem;
   font-weight: bold;
 }
 
