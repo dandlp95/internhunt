@@ -69,7 +69,7 @@ const PostPreview = (props) => {
             )}{" "}
             {timeDiff}
           </div>
-          <Link to={`/post?postId=${post._id}`}>
+          <Link to={`/post?postId=${post._id}`} className="post-link">
             <section>
               <div>
                 <h3>{post.title}</h3>

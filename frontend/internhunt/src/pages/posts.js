@@ -9,6 +9,11 @@ import { isAuth } from "../utils/isLoggedIn";
 import { useLocation } from "react-router-dom";
 import "./posts.css";
 import i from "../assets/i.png";
+import { MdWorkOff } from "react-icons/md"; // Internship opportunities icon
+import { FaHandsHelping } from "react-icons/fa"; // advise
+import { GiHelp } from "react-icons/gi"; // questions
+import { VscOpenPreview } from "react-icons/vsc"; // all posts
+import { MdRateReview } from "react-icons/md"; // review
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -66,6 +71,7 @@ const Posts = () => {
   }, [location]);
 
   const getPostByType = async (postType) => {
+    console.log("all was clicked");
     const userData = localStorage.getItem("userData");
     const userDataJson = JSON.parse(userData);
     if (postType !== "all") {
@@ -108,33 +114,6 @@ const Posts = () => {
               <div>
                 <div className="query">
                   <div>
-                    <button onClick={(e) => getPostByType("all")}>
-                      All Posts
-                    </button>
-                  </div>
-                  <div>
-                    <button onClick={(e) => getPostByType("Review")}>
-                      Internship Reviews
-                    </button>
-                  </div>
-                  <div>
-                    <button
-                      onClick={(e) => getPostByType("Internship opportunities")}
-                    >
-                      Internship Opportunities
-                    </button>
-                  </div>
-                  <div>
-                    <button onClick={(e) => getPostByType("Advise")}>
-                      Advise
-                    </button>
-                  </div>
-                  <div>
-                    <button onClick={(e) => getPostByType("Question")}>
-                      Questions
-                    </button>
-                  </div>
-                  <div>
                     <Link to={"/majors"}>
                       <button>Majors</button>
                     </Link>
@@ -151,6 +130,38 @@ const Posts = () => {
                           <input placeholder="Create post" />
                         </Link>
                       </div>
+                    </div>
+                  </div>
+                  <div className="posts-queries">
+                    <div>
+                      
+                      <button onClick={(e) => getPostByType("all")}>
+                        All Posts
+                      </button>
+                    </div>
+                    <div>
+                      <button onClick={(e) => getPostByType("Review")}>
+                        Internship Reviews
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        onClick={(e) =>
+                          getPostByType("Internship opportunities")
+                        }
+                      >
+                        Internship Opportunities
+                      </button>
+                    </div>
+                    <div>
+                      <button onClick={(e) => getPostByType("Advise")}>
+                        Advise
+                      </button>
+                    </div>
+                    <div>
+                      <button onClick={(e) => getPostByType("Question")}>
+                        Questions
+                      </button>
                     </div>
                   </div>
                   {posts.map((post) => (
