@@ -5,13 +5,12 @@ const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const ApiError403 = require("../middleware/error-handling/apiError403");
-const controllers = require("./genericControllers");
 const { encryptPassword } = require("../utils/encrypt");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authError = new ApiError401("Not authorized.");
 const { emailClient } = require("../utils/emailClient");
-const User = require("../models/user");
+const mongoose = require("mongoose");
 
 const getAllUsers = (req, res, next) => {
   // Double checks Ids arent sent...
@@ -424,16 +423,21 @@ const login = (req, res, next) => {
 
 const isLoggedIn = async (req, res, next) => {
   try {
-    const accountId = req.accountId;
+    console.log("accountid ", req.accountId);
+    var accountId = mongoose.Types.ObjectId(req.accountId);
     if (!accountId) {
       throw new ApiError401("Not authenticated.");
     } else {
-      const account = await UserModel.findById(accountId, "firstName lastName");
-      if (!account || !account.active) {
-        throw new ApiError404("Account not found");
-      } else {
-        res.status(200).send(account);
-      }
+      UserModel.findById(req.accountId, "firstName lastName active email", (err, doc) => {
+        if (err) {
+          next(new ApiError400(err.message));
+        } else if (!doc || !doc.active) {
+          console.log("doc ", doc)
+          next(new ApiError404("Account not found"));
+        } else {
+          res.status(200).send(doc);
+        }
+      });
     }
   } catch (err) {
     next(err);
