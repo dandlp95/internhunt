@@ -7,7 +7,6 @@ const ApiError422 = require("../middleware/error-handling/apiError422");
 const controllers = require("./genericControllers");
 const Api404Error = require("../middleware/error-handling/apiError404");
 const { default: mongoose } = require("mongoose");
-const VotingHistoryCommentModel = require("../models/votingHistoryComment");
 const VotingHistory = require("../models/votingHistory");
 
 const apiAuthError = new ApiError401("Unathorized.");
@@ -150,10 +149,10 @@ const getPosts = async (req, res, next) => {
 
   let QString;
   if (search != "null" && search != null) {
-    console.log("not null")
+    console.log("not null");
     QString = search.split(" ").map((string) => new RegExp(string, "i"));
   } else {
-    console.log("null")
+    console.log("null");
     search = "";
     QString = search.split(" ").map((string) => new RegExp(string));
   }
@@ -181,7 +180,7 @@ const getPosts = async (req, res, next) => {
           { type: { $in: PTypeString } },
         ],
       },
-      (err, docs) => {
+      async (err, docs) => {
         if (err) {
           const apiError = new ApiError400(err.message);
           next(apiError);
@@ -189,6 +188,10 @@ const getPosts = async (req, res, next) => {
           const apiError404 = new ApiError404("No documents found");
           next(apiError404);
         } else {
+          await PostModel.populate(docs, {
+            path: "owner",
+            select: { firstName: 1, lastName: 1 },
+          });
           res.status(200).send(docs);
         }
       }
@@ -201,7 +204,7 @@ const getPosts = async (req, res, next) => {
           { type: { $in: PTypeString } },
         ],
       },
-      (err, docs) => {
+      async (err, docs) => {
         if (err) {
           const apiError = new ApiError400(err.message);
           next(apiError);
@@ -209,6 +212,10 @@ const getPosts = async (req, res, next) => {
           const apiError404 = new ApiError404("No documents found");
           next(apiError404);
         } else {
+          await PostModel.populate(docs, {
+            path: "owner",
+            select: { firstName: 1, lastName: 1 },
+          });
           res.status(200).send(docs);
         }
       }

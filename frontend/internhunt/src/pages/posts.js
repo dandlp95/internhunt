@@ -79,14 +79,11 @@ const Posts = () => {
 
   useEffect(() => {
     var sortedPosts = [...posts];
-    if (sortBy == "date") {
-      console.log("date");
+    if (sortBy === "date") {
       sortedPosts.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-    } else if (sortBy == "popularity") {
-      console.log("popularity");
+    } else if (sortBy === "popularity") {
       sortedPosts.sort((a, b) => a.rating - b.rating);
     }
-    console.log(sortedPosts === posts);
     setPosts(sortedPosts);
   }, [sortBy]);
 
@@ -155,8 +152,8 @@ const Posts = () => {
               <div className="posts-div">
                 <div className="posts-container">
                   {posts.map((post) => (
-                    <div className="post-preview-container">
-                      <PostPreview post={post} user={user} key={post._id} />
+                    <div className="post-preview-container" key={post._id}>
+                      <PostPreview post={post} />
                     </div>
                   ))}
                 </div>

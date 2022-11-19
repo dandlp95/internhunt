@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import VotingInterface from "./votingInterface";
@@ -7,8 +7,9 @@ import FetchCalls from "../utils/fetchCalls";
 
 const PostPreview = (props) => {
   const [post, setPost] = useState(props.post);
+  const [postOwner, setPostOwner] = useState(props.post.owner);
   const [voteCount, setVoteCount] = useState(props.post.rating);
-  console.log(props.user)
+  console.log("post with owner ", post);
   const addVotePost = async (userVote) => {
     var voteReq;
     if (userVote === 1) {
@@ -36,29 +37,37 @@ const PostPreview = (props) => {
     }
   };
 
-  return (
-    <div className="postpreview">
-      <VotingInterface
-        voteCount={voteCount}
-        addVoteHandler={addVotePost}
-        postInfo={post}
-        key={voteCount}
-      />
-      <div>
-        <div className="post-metadata">
-          Posted by 
+  useEffect(() => {
+    if (!postOwner) {
+      setPostOwner({ firstName: "[Deleted ", lastName: "User]" });
+    }
+  }, []);
+
+  if (postOwner) {
+    return (
+      <div className="postpreview">
+        <VotingInterface
+          voteCount={voteCount}
+          addVoteHandler={addVotePost}
+          postInfo={post}
+          key={voteCount}
+        />
+        <div>
+          <div className="post-metadata">
+            Posted by {postOwner.firstName} {postOwner.lastName}
+          </div>
+          <Link to={`/post?postId=${post._id}`}>
+            <section>
+              <div>
+                <h3>{post.title}</h3>
+              </div>
+              <p>{post.content}</p>
+            </section>
+          </Link>
         </div>
-        <Link to={`/post?postId=${post._id}`}>
-          <section>
-            <div>
-              <h3>{post.title}</h3>
-            </div>
-            <p>{post.content}</p>
-          </section>
-        </Link>
       </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default PostPreview;

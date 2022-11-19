@@ -423,21 +423,23 @@ const login = (req, res, next) => {
 
 const isLoggedIn = async (req, res, next) => {
   try {
-    console.log("accountid ", req.accountId);
-    var accountId = mongoose.Types.ObjectId(req.accountId);
-    if (!accountId) {
+    if (!req.accountId) {
       throw new ApiError401("Not authenticated.");
     } else {
-      UserModel.findById(req.accountId, "firstName lastName active email", (err, doc) => {
-        if (err) {
-          next(new ApiError400(err.message));
-        } else if (!doc || !doc.active) {
-          console.log("doc ", doc)
-          next(new ApiError404("Account not found"));
-        } else {
-          res.status(200).send(doc);
+      UserModel.findById(
+        req.accountId,
+        "firstName lastName active email",
+        (err, doc) => {
+          if (err) {
+            next(new ApiError400(err.message));
+          } else if (!doc || !doc.active) {
+            console.log("doc ", doc);
+            next(new ApiError404("Account not found"));
+          } else {
+            res.status(200).send(doc);
+          }
         }
-      });
+      );
     }
   } catch (err) {
     next(err);
