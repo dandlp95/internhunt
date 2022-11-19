@@ -4,12 +4,15 @@ import { Link } from "react-router-dom";
 import VotingInterface from "./votingInterface";
 import getLocalStorage from "../utils/getLocalStorage";
 import FetchCalls from "../utils/fetchCalls";
+import { timeDifference } from "../utils/timeDifference";
 
 const PostPreview = (props) => {
   const [post, setPost] = useState(props.post);
   const [postOwner, setPostOwner] = useState(props.post.owner);
   const [voteCount, setVoteCount] = useState(props.post.rating);
-  console.log("post with owner ", post);
+
+  const timeDiff = timeDifference(new Date(), new Date(post.date));
+
   const addVotePost = async (userVote) => {
     var voteReq;
     if (userVote === 1) {
@@ -54,7 +57,17 @@ const PostPreview = (props) => {
         />
         <div>
           <div className="post-metadata">
-            Posted by {postOwner.firstName} {postOwner.lastName}
+            Posted by{" "}
+            {postOwner._id ? (
+              <Link to={`/account-portal/${postOwner._id}`}>
+                {postOwner.firstName} {postOwner.lastName}
+              </Link>
+            ) : (
+              <span>
+                {postOwner.firstName} {postOwner.lastName}
+              </span>
+            )}{" "}
+            {timeDiff}
           </div>
           <Link to={`/post?postId=${post._id}`}>
             <section>

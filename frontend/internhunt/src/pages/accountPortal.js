@@ -6,6 +6,7 @@ import PostPreview from "../components/postPreview";
 import FetchCalls from "../utils/fetchCalls";
 import Button from "../components/button";
 import CommentPreview from "../components/commentPreview";
+
 const AccountPortal = () => {
   const { id } = useParams();
   const [user, setUser] = useState();
@@ -19,7 +20,7 @@ const AccountPortal = () => {
   var url;
   var pronoun;
   var owner = false;
-  if (id == userData.userId) {
+  if (id === userData.userId) {
     url = `/users/getByIdPrivate/${id}`;
     pronoun = "Your";
     owner = true;

@@ -89,7 +89,7 @@ const Posts = () => {
 
   if (user) {
     return (
-      <div>
+      <div className="posts-page">
         <Header accountId={user._id} />
         <div className="main">
           <div className="posts-main">

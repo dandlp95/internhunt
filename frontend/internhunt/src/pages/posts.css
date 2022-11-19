@@ -39,7 +39,7 @@
   width: 50rem;
 }
 
-.postpreview {
+.posts-page .postpreview {
   display:grid;
   grid-template-columns: 1fr 16fr;
   background-color: white;
@@ -49,24 +49,24 @@
   border-radius: 5px;
 }
 
-.postpreview a {
+.posts-page  .postpreview a {
   color: black;
   text-decoration: none;
 }
 
-.postpreview p {
+.posts-page .postpreview p {
   -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
 
-.voting-interface button{
+.posts-page .voting-interface button{
   display: block;
   background-color: white;
   border: none;
   font-size:1.5rem
 }
 
-.vote-number{
+.posts-page  .vote-number{
   margin-left:0.75rem;
   font-weight: bold;
 }
