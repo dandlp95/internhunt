@@ -214,7 +214,7 @@ const getPosts = async (req, res, next) => {
         } else {
           await PostModel.populate(docs, {
             path: "owner",
-            select: { firstName: 1, lastName: 1 },
+            select: { firstName: 1, lastName: 1, _id: 1 },
           });
           res.status(200).send(docs);
         }

@@ -1,13 +1,5 @@
 .main {
-  margin-top: 5rem;
-}
-
-.posts-main .create-post {
-  display: grid;
-  grid-template-columns: 1fr 5fr 1fr;
-  width: 70%;
-  align-items: center;
-  margin: auto;
+  margin-top: 1rem;
 }
 
 .posts-main .create-post-input input {
@@ -35,12 +27,13 @@
 .posts-div {
   width: 60%;
 }
-.posts-div{
+.posts-div {
   width: 50rem;
 }
 
-.posts-page .postpreview {
-  display:grid;
+.posts-page .postpreview,
+.posts-page .create-post {
+  display: grid;
   grid-template-columns: 1fr 16fr;
   background-color: white;
   padding: 1rem;
@@ -49,7 +42,7 @@
   border-radius: 5px;
 }
 
-.posts-page  .postpreview a {
+.posts-page .postpreview a {
   color: black;
   text-decoration: none;
 }
@@ -59,15 +52,25 @@
   mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
 
-.posts-page .voting-interface button{
+.posts-page .voting-interface button {
   display: block;
   background-color: white;
   border: none;
-  font-size:1.5rem
+  font-size: 1.5rem;
 }
 
-.posts-page  .vote-number{
-  margin-left:0.75rem;
+.posts-page .vote-number {
+  margin-left: 0.75rem;
   font-weight: bold;
+}
+
+.create-post div{
+  display: flex;
+  align-items: center       ;
+}
+
+.create-post input{
+  width: 40rem;
+  height: 2rem;
 }
 

@@ -2,13 +2,13 @@ import React from "react";
 import PostPreview from "../components/postPreview";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import Button from "../components/button";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import { Link, useNavigate } from "react-router-dom";
 import { isAuth } from "../utils/isLoggedIn";
 import { useLocation } from "react-router-dom";
 import "./posts.css";
+import i from "../assets/i.png";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -93,14 +93,6 @@ const Posts = () => {
         <Header accountId={user._id} />
         <div className="main">
           <div className="posts-main">
-            <div className="create-post">
-              <div></div>
-              <div className="create-post-input">
-                <Link to={`/create-post`}>
-                  <input placeholder="Create post" />
-                </Link>
-              </div>
-            </div>
             <div className="sortPostsDiv">
               <div>
                 <button onClick={(e) => setSortBy("popularity")}>
@@ -151,6 +143,16 @@ const Posts = () => {
               </div>
               <div className="posts-div">
                 <div className="posts-container">
+                  <div className="create-post-container">
+                    <div className="create-post">
+                      <div>
+                        <img src={i} width="55px" />
+                        <Link to={`/create-post`}>
+                          <input placeholder="Create post" />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                   {posts.map((post) => (
                     <div className="post-preview-container" key={post._id}>
                       <PostPreview post={post} />
@@ -159,7 +161,6 @@ const Posts = () => {
                 </div>
                 <div className="pagination"></div>
               </div>
-
               <div></div>
             </div>
           </div>

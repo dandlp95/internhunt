@@ -28,6 +28,7 @@ const getAllUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
+  console.log(req.params.id)
   UserModel.findById(
     req.params.id,
     "firstName lastName major",
