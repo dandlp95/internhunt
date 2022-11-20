@@ -109,14 +109,46 @@
   border: 1px solid lightgrey;
   width: 50%;
   padding: 0.5rem 1.3rem;
-  margin-top: 1.3rem; 
+  margin-top: 1.3rem;   
+  height: 25rem;
 }
 
 .majors-options ul{
   list-style: none;
+  padding:0;
+  margin-top: 2rem;
 }
 
 .majors-options a{
   text-decoration: none;
   color: black;
+}
+
+.majors-button-div{
+  text-align: center;
+}
+
+.majors-button{
+  background-color: black;
+  color:#CFC7D2;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+  padding: 0.25rem 0.75rem;
+  cursor:pointer;
+  margin-top:1rem;
+}
+
+.majors-list{
+  line-height: 37px;
+  margin-left:1rem;
+}
+
+.majors-options-container{
+  margin-top: 4rem;
+}
+
+.majors-options-container img{
+  position: absolute;
+  width: 0.1rem;
+
 }

@@ -7,20 +7,20 @@ import { getApiRoot } from "../utils/getApiRoot";
 import { Link, useNavigate } from "react-router-dom";
 import { isAuth } from "../utils/isLoggedIn";
 import { useLocation } from "react-router-dom";
-import "./posts.css";
-import i from "../assets/i.png";
-import { MdWorkOff } from "react-icons/md"; // Internship opportunities icon
-import { FaHandsHelping } from "react-icons/fa"; // advise
-import { GiHelp } from "react-icons/gi"; // questions
-import { VscOpenPreview } from "react-icons/vsc"; // all posts
-import { MdRateReview } from "react-icons/md"; // review
+import { MdWorkOff, MdRateReview } from "react-icons/md";
+import { FaHandsHelping } from "react-icons/fa";
+import { GiHelp, GiShinyEntrance } from "react-icons/gi";
+import { VscOpenPreview } from "react-icons/vsc";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
-import { GiShinyEntrance } from "react-icons/gi";
 import { AiFillFire } from "react-icons/ai";
 import FetchCalls from "../utils/fetchCalls";
+import "./posts.css";
+import i from "../assets/i.png";
+import workImg from "../assets/work-meeting2.jpg"
 
 const MajorsContainer = () => {
   const [majors, setMajors] = useState();
+  const navigate = useNavigate();
 
   const getMajors = async () => {
     const userData = localStorage.getItem("userData");
@@ -43,17 +43,25 @@ const MajorsContainer = () => {
   if (majors) {
     return (
       <div className="majors-options">
-        <h3>Explore other majors</h3>
-        <ul>
-          {majors.slice(0, 5).map((major) => (
-            <li>
-              <Link to={`/posts?major=${major.name}`} key={major._id}>
-                {major.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <Link to="/majors">View All Majors</Link>
+          <img src={workImg}/>
+          <h3>Explore other majors</h3>
+          <ul className="majors-list">
+            {majors.slice(0, 5).map((major) => (
+              <li>
+                <Link to={`/posts?major=${major.name}`} key={major._id}>
+                  {major.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <div className="majors-button-div">
+            <button
+              onClick={(e) => navigate("/majors")}
+              className="majors-button"
+            >
+              View All Majors
+            </button>
+          </div>
       </div>
     );
   }
