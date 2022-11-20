@@ -15,6 +15,8 @@ import { GiHelp } from "react-icons/gi"; // questions
 import { VscOpenPreview } from "react-icons/vsc"; // all posts
 import { MdRateReview } from "react-icons/md"; // review
 import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { GiShinyEntrance } from "react-icons/gi";
+import { AiFillFire } from "react-icons/ai";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -25,6 +27,7 @@ const Posts = () => {
   const [isButton3Active, setIsButton3Active] = useState(false);
   const [isButton4Active, setIsButton4Active] = useState(false);
   const [isButton5Active, setIsButton5Active] = useState(false);
+  const [isdropdownActive, setIsdropdownActive] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -193,7 +196,30 @@ const Posts = () => {
                 </button>
               </div>
               <div className="sort-dropdown">
-                <BiDotsHorizontalRounded className="dots-icon"/>
+                <BiDotsHorizontalRounded
+                  className="dots-icon"
+                  onClick={(e) => setIsdropdownActive(!isdropdownActive)}
+                />
+                {isdropdownActive && (
+                  <div className="sort-dropdownOptions">
+                    <div>
+                      <button
+                        onClick={(e) => {
+                          setSortBy("popularity");
+                        }}
+                      >
+                        <GiShinyEntrance />
+                        Popular
+                      </button>
+                    </div>
+                    <div>
+                      <button onClick={(e) => setSortBy("date")}>
+                        <AiFillFire />
+                        New
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             {posts.map((post) => (
@@ -202,27 +228,10 @@ const Posts = () => {
               </div>
             ))}
           </div>
-          <div className="sort-major-divs">
-            <div className="sort-divs">
-              <div>
-                <button
-                  onClick={(e) => {
-                    setSortBy("popularity");
-                    styleActiveButtons(1);
-                  }}
-                >
-                  Popular
-                </button>
-              </div>
-              <div>
-                <button onClick={(e) => setSortBy("date")}>New</button>
-              </div>
-            </div>
-            <div className="majors-div">
-              <Link to={"/majors"}>
-                <button>Majors</button>
-              </Link>
-            </div>
+          <div className="majors-div">
+            <Link to={"/majors"}>
+              <button>Majors</button>
+            </Link>
           </div>
         </div>
         <Footer />

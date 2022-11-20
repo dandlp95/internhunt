@@ -1,5 +1,5 @@
 .posts-page .posts-main {
-  display:grid;
+  display: grid;
   grid-template-columns: 1fr 2fr 1fr;
 }
 
@@ -22,7 +22,7 @@
   border: 1px solid lightgrey;
   border-radius: 5px;
   display: flex;
-  align-items: center;   
+  align-items: center;
 }
 
 .posts-page .posts-queries div {
@@ -33,6 +33,7 @@
   border: none;
   background-color: white;
   padding: 1rem;
+  width: 100%;
 }
 
 .posts-page .post-link {
@@ -61,7 +62,7 @@
   align-items: center;
 }
 
-.posts-page .create-post{
+.posts-page .create-post {
   align-items: center;
 }
 
@@ -79,7 +80,7 @@
 }
 
 .posts-page button {
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .posts-page .posts-queries button:hover {
@@ -93,6 +94,12 @@
   color: white !important;
 }
 
-.dots-icon{
+.dots-icon {
   font-size: 2rem;
+}
+
+.sort-dropdownOptions {
+  position: absolute;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
 }
