@@ -104,3 +104,19 @@
   border-radius: 5px;
 }
 
+.majors-options{
+  border-radius: 6px;
+  border: 1px solid lightgrey;
+  width: 50%;
+  padding: 0.5rem 1.3rem;
+  margin-top: 1.3rem; 
+}
+
+.majors-options ul{
+  list-style: none;
+}
+
+.majors-options a{
+  text-decoration: none;
+  color: black;
+}
