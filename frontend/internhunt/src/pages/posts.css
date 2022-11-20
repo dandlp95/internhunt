@@ -1,6 +1,4 @@
 .posts-page .posts-main {
-  /* width: 60%;
-  margin: auto; */
   display:grid;
   grid-template-columns: 1fr 2fr 1fr;
 }
@@ -24,6 +22,7 @@
   border: 1px solid lightgrey;
   border-radius: 5px;
   display: flex;
+  align-items: center;   
 }
 
 .posts-page .posts-queries div {
@@ -80,7 +79,7 @@
 }
 
 .posts-page button {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .posts-page .posts-queries button:hover {
@@ -89,12 +88,11 @@
   transition: 0.5s;
 }
 
-/* .posts-page button:active {
-  background-color: white;
-  color: black;
-} */
-
 .posts-page .active-button {
   background-color: black !important;
   color: white !important;
+}
+
+.dots-icon{
+  font-size: 2rem;
 }

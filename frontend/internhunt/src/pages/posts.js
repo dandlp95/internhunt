@@ -14,6 +14,7 @@ import { FaHandsHelping } from "react-icons/fa"; // advise
 import { GiHelp } from "react-icons/gi"; // questions
 import { VscOpenPreview } from "react-icons/vsc"; // all posts
 import { MdRateReview } from "react-icons/md"; // review
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -152,7 +153,7 @@ const Posts = () => {
                   }}
                 >
                   <MdRateReview className="icon" />
-                  Internship Reviews
+                  Reviews
                 </button>
               </div>
               <div>
@@ -164,7 +165,7 @@ const Posts = () => {
                   }}
                 >
                   <MdWorkOff className="icon" />
-                  Internship Opportunities
+                  Opportunities
                 </button>
               </div>
               <div>
@@ -190,6 +191,9 @@ const Posts = () => {
                   <GiHelp className="icon" />
                   Questions
                 </button>
+              </div>
+              <div className="sort-dropdown">
+                <BiDotsHorizontalRounded className="dots-icon"/>
               </div>
             </div>
             {posts.map((post) => (
