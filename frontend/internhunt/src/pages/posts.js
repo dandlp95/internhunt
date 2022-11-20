@@ -19,6 +19,12 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState();
   const [sortBy, setSortBy] = useState("");
+  const [isButton1Active, setIsButton1Active] = useState(false);
+  const [isButton2Active, setIsButton2Active] = useState(false);
+  const [isButton3Active, setIsButton3Active] = useState(false);
+  const [isButton4Active, setIsButton4Active] = useState(false);
+  const [isButton5Active, setIsButton5Active] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -83,6 +89,25 @@ const Posts = () => {
     }
   };
 
+  const styleActiveButtons = (buttonNumber) => {
+    const buttonNumbers = [false, false, false, false, false];
+    buttonNumbers[buttonNumber] = true;
+
+    for (let i = 0; i < buttonNumbers.length; i++) {
+      if (i === 0) {
+        setIsButton1Active(buttonNumbers[i]);
+      } else if (i === 1) {
+        setIsButton2Active(buttonNumbers[i]);
+      } else if (i === 2) {
+        setIsButton3Active(buttonNumbers[i]);
+      } else if (i === 3) {
+        setIsButton4Active(buttonNumbers[i]);
+      } else if (i === 4) {
+        setIsButton5Active(buttonNumbers[i]);
+      }
+    }
+  };
+
   useEffect(() => {
     var sortedPosts = [...posts];
     if (sortBy === "date") {
@@ -101,7 +126,12 @@ const Posts = () => {
           <div className="posts-main">
             <div className="sortPostsDiv">
               <div>
-                <button onClick={(e) => setSortBy("popularity")}>
+                <button
+                  onClick={(e) => {
+                    setSortBy("popularity");
+                    styleActiveButtons(1);
+                  }}
+                >
                   Popular
                 </button>
               </div>
@@ -134,32 +164,61 @@ const Posts = () => {
                   </div>
                   <div className="posts-queries">
                     <div>
-                      
-                      <button onClick={(e) => getPostByType("all")}>
-                        All Posts
+                      <button
+                        className={isButton1Active ? "active-button" : ""}
+                        onClick={(e) => {
+                          getPostByType("all");
+                          styleActiveButtons(0);
+                        }}
+                      >
+                        <VscOpenPreview className="icon" /> All Posts
                       </button>
                     </div>
                     <div>
-                      <button onClick={(e) => getPostByType("Review")}>
+                      <button
+                        className={isButton2Active ? "active-button" : ""}
+                        onClick={(e) => {
+                          getPostByType("Review");
+                          styleActiveButtons(1);
+                        }}
+                      >
+                        <MdRateReview className="icon" />
                         Internship Reviews
                       </button>
                     </div>
                     <div>
                       <button
-                        onClick={(e) =>
-                          getPostByType("Internship opportunities")
-                        }
+                        className={isButton3Active ? "active-button" : ""}
+                        onClick={(e) => {
+                          getPostByType("Internship opportunities");
+                          styleActiveButtons(2);
+                        }}
                       >
+                        <MdWorkOff className="icon" />
                         Internship Opportunities
                       </button>
                     </div>
                     <div>
-                      <button onClick={(e) => getPostByType("Advise")}>
+                      <button
+                        className={isButton4Active ? "active-button" : ""}
+                        onClick={(e) => {
+                          getPostByType("Advise");
+                          styleActiveButtons(3);
+                        }}
+                      >
+                        <FaHandsHelping className="icon" />
                         Advise
                       </button>
                     </div>
                     <div>
-                      <button onClick={(e) => getPostByType("Question")}>
+                      <button
+                        className={isButton5Active ? "active-button" : ""}
+                        onClick={(e) => {
+                          getPostByType("Question");
+                          styleActiveButtons(4);
+                        }}
+                      >
+                        <GiHelp className="icon" />
                         Questions
                       </button>
                     </div>

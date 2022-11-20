@@ -11,10 +11,6 @@
   margin: auto;
 }
 
-/* .posts-page .posts-query {
-  position: relative;
-} */
-
 .posts-page .posts-div {
   width: 60%;
 }
@@ -34,7 +30,6 @@
 }
 .posts-page .posts-queries {
   background-color: white;
-  padding: 1rem;
   margin: 20px;
   border: 1px solid lightgrey;
   border-radius: 5px;
@@ -48,6 +43,7 @@
 .posts-page .posts-queries button {
   border: none;
   background-color: white;
+  padding: 1rem;
 }
 
 .posts-page .post-link {
@@ -80,4 +76,25 @@
 .posts-page .post-metadata {
   font-size: 0.75rem;
   color: grey;
+}
+
+.posts-page button {
+  font-size: 1.2rem;
+}
+
+.posts-page button:hover {
+  background-color: black;
+  color: white;
+  transition: 0.3s;
+}
+
+/* .posts-page button:active {
+  background-color: white;
+  color: black;
+} */
+
+.posts-page .active-button{
+  background-color: black !important; 
+  color: white !important; 
+
 }
