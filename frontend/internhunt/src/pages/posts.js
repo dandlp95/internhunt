@@ -17,6 +17,47 @@ import { MdRateReview } from "react-icons/md"; // review
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { GiShinyEntrance } from "react-icons/gi";
 import { AiFillFire } from "react-icons/ai";
+import FetchCalls from "../utils/fetchCalls";
+
+const MajorsContainer = () => {
+  const [majors, setMajors] = useState();
+
+  const getMajors = async () => {
+    const userData = localStorage.getItem("userData");
+    const jwt = JSON.parse(userData).jwt;
+    const apiCaller = new FetchCalls("/majors", "GET", jwt);
+    const response = await apiCaller.publicGet();
+    if (response.ok) {
+      const fetchedMajors = await response.json();
+      console.log(fetchedMajors);
+      setMajors(fetchedMajors);
+    } else {
+      console.log(response);
+    }
+  };
+
+  useEffect(() => {
+    getMajors();
+  }, []);
+
+  if (majors) {
+    return (
+      <div className="majors-options">
+        <h3>Explore other majors</h3>
+        <ul>
+          {majors.slice(0, 5).map((major) => (
+            <li>
+              <Link to={`/posts?major=${major.name}`} key={major._id}>
+                {major.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <Link to="/majors">View All Majors</Link>
+      </div>
+    );
+  }
+};
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -32,25 +73,55 @@ const Posts = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    const isLoggedIn = async () => {
-      const res = await isAuth();
-      if (!res.ok) {
-        alert("Please log in");
-        navigate("/");
-      } else {
-        const userData = localStorage.getItem("userData");
-        const userDataJson = JSON.parse(userData);
-        const info = await res.json();
-        console.log("info ", info);
-        setUser(info);
+  const getPostByType = async (postType) => {
+    const userData = localStorage.getItem("userData");
+    const userDataJson = JSON.parse(userData);
+    if (postType !== "all") {
+      navigate(
+        `/posts?major=${encodeURI(userDataJson.major)}&type=${postType}`
+      );
+    } else {
+      navigate(`/posts?major=${encodeURI(userDataJson.major)}`);
+    }
+  };
+
+  const isLoggedIn = async () => {
+    const res = await isAuth();
+    if (!res.ok) {
+      alert("Please log in");
+      navigate("/");
+    } else {
+      const userData = localStorage.getItem("userData");
+      const userDataJson = JSON.parse(userData);
+      const info = await res.json();
+      setUser(info);
+    }
+  };
+
+  const styleActiveButtons = (buttonNumber) => {
+    const buttonNumbers = [false, false, false, false, false];
+    buttonNumbers[buttonNumber] = true;
+
+    for (let i = 0; i < buttonNumbers.length; i++) {
+      if (i === 0) {
+        setIsButton1Active(buttonNumbers[i]);
+      } else if (i === 1) {
+        setIsButton2Active(buttonNumbers[i]);
+      } else if (i === 2) {
+        setIsButton3Active(buttonNumbers[i]);
+      } else if (i === 3) {
+        setIsButton4Active(buttonNumbers[i]);
+      } else if (i === 4) {
+        setIsButton5Active(buttonNumbers[i]);
       }
-    };
+    }
+  };
+
+  useEffect(() => {
     isLoggedIn();
   }, []);
 
   useEffect(() => {
-    console.log("location rerendered");
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const major = urlParams.get("major");
@@ -79,38 +150,6 @@ const Posts = () => {
     };
     getPosts();
   }, [location]);
-
-  const getPostByType = async (postType) => {
-    console.log("all was clicked");
-    const userData = localStorage.getItem("userData");
-    const userDataJson = JSON.parse(userData);
-    if (postType !== "all") {
-      navigate(
-        `/posts?major=${encodeURI(userDataJson.major)}&type=${postType}`
-      );
-    } else {
-      navigate(`/posts?major=${encodeURI(userDataJson.major)}`);
-    }
-  };
-
-  const styleActiveButtons = (buttonNumber) => {
-    const buttonNumbers = [false, false, false, false, false];
-    buttonNumbers[buttonNumber] = true;
-
-    for (let i = 0; i < buttonNumbers.length; i++) {
-      if (i === 0) {
-        setIsButton1Active(buttonNumbers[i]);
-      } else if (i === 1) {
-        setIsButton2Active(buttonNumbers[i]);
-      } else if (i === 2) {
-        setIsButton3Active(buttonNumbers[i]);
-      } else if (i === 3) {
-        setIsButton4Active(buttonNumbers[i]);
-      } else if (i === 4) {
-        setIsButton5Active(buttonNumbers[i]);
-      }
-    }
-  };
 
   useEffect(() => {
     var sortedPosts = [...posts];
@@ -229,9 +268,7 @@ const Posts = () => {
             ))}
           </div>
           <div className="majors-div">
-            <Link to={"/majors"}>
-              <button>Majors</button>
-            </Link>
+            <MajorsContainer />
           </div>
         </div>
         <Footer />
