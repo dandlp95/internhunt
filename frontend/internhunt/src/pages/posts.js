@@ -43,25 +43,25 @@ const MajorsContainer = () => {
   if (majors) {
     return (
       <div className="majors-options">
-          <img src={workImg}/>
-          <h3>Explore other majors</h3>
-          <ul className="majors-list">
-            {majors.slice(0, 5).map((major) => (
-              <li>
-                <Link to={`/posts?major=${major.name}`} key={major._id}>
-                  {major.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
-          <div className="majors-button-div">
-            <button
-              onClick={(e) => navigate("/majors")}
-              className="majors-button"
-            >
-              View All Majors
-            </button>
-          </div>
+        {/* <img src={workImg}/> */}
+        <h3>Explore other majors</h3>
+        <ul className="majors-list">
+          {majors.slice(0, 5).map((major) => (
+            <li key={major._id}>
+              <Link to={`/posts?major=${major.name}`}>
+                {major.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <div className="majors-button-div">
+          <button
+            onClick={(e) => navigate("/majors")}
+            className="majors-button"
+          >
+            View All Majors
+          </button>
+        </div>
       </div>
     );
   }
@@ -69,8 +69,9 @@ const MajorsContainer = () => {
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
+  const [sortedPosts, setSortedPosts] = useState([])
   const [user, setUser] = useState();
-  const [sortBy, setSortBy] = useState("");
+  const [sortBy, setSortBy] = useState();
   const [isButton1Active, setIsButton1Active] = useState(true);
   const [isButton2Active, setIsButton2Active] = useState(false);
   const [isButton3Active, setIsButton3Active] = useState(false);
@@ -152,6 +153,7 @@ const Posts = () => {
       if (response.ok) {
         const foundPosts = await response.json();
         setPosts(foundPosts);
+        setSortBy("date")
       } else {
         console.log("something failed", response);
       }
@@ -160,15 +162,16 @@ const Posts = () => {
   }, [location]);
 
   useEffect(() => {
-    var sortedPosts = [...posts];
+    var postsCopy = [...posts];
     if (sortBy === "date") {
-      sortedPosts.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+      postsCopy.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
     } else if (sortBy === "popularity") {
-      sortedPosts.sort((a, b) => a.rating - b.rating);
+      postsCopy.sort((a, b) => b.rating - a.rating);
     }
-    setPosts(sortedPosts);
-  }, [sortBy]);
+    setSortedPosts(postsCopy);
+  }, [sortBy, posts]);
 
+  console.log("sorted", sortedPosts)
   if (user) {
     return (
       <div className="posts-page">
@@ -269,7 +272,7 @@ const Posts = () => {
                 )}
               </div>
             </div>
-            {posts.map((post) => (
+            {sortedPosts.map((post) => (
               <div className="post-preview-container" key={post._id}>
                 <PostPreview post={post} />
               </div>

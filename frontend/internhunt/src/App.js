@@ -56,10 +56,14 @@ const App = () => {
 
     if (response.ok) {
       const jsonResponse = await response.json();
-      localStorage.setItem("userData", JSON.stringify(jsonResponse));
+      localStorage.setItem("userData", JSON.stringify({
+        userId: jsonResponse.userId,
+        jwt: jsonResponse.token,
+        major: jsonResponse.major
+      }));
       const userMajor = jsonResponse.major;
 
-      navigate(`/posts/${userMajor}`);
+      navigate(`/posts?major=${userMajor}`);
     } else {
       setFail(true);
     }
@@ -138,7 +142,7 @@ const App = () => {
             </div>
             <datalist id="majors">
               {majorsList.map((major) => (
-                <option data-value={major._id} value={major.name} key={major._id}/>
+                <option data-value={major._id} value={major.name} key={major._id} />
               ))}
             </datalist>
             <input type="submit" value="Register" onClick={handleRegister} />
