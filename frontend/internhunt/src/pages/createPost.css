@@ -1,0 +1,11 @@
+.create-post-page {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  margin-top: 2rem;
+}
+
+.grid-column-two {
+  border: 1px solid lightgrey;
+  border-radius: 8px;
+  background-color: #f5f4f3;
+}
