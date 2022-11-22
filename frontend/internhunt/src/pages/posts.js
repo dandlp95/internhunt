@@ -1,7 +1,6 @@
 import React from "react";
 import PostPreview from "../components/postPreview";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import { Link, useNavigate } from "react-router-dom";
@@ -283,7 +282,6 @@ const Posts = () => {
             <MajorsContainer />
           </div>
         </div>
-        <Footer />
       </div>
     );
   }

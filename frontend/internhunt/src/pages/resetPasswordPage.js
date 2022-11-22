@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/button";
 import FetchCalls from "../utils/fetchCalls";
 import Header from "../components/header";
-import Footer from "../components/footer";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState();

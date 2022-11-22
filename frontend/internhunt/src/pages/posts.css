@@ -103,7 +103,7 @@
 
 .majors-options {
   border-radius: 6px;
-  border: 1px solid #E5E5E5;
+  border: 1px solid #e5e5e5;
   background-color: white;
   width: 60%;
   margin-top: 1.3rem;
@@ -120,7 +120,6 @@
   font-size: 0.85rem;
   padding: 0 1rem;
   font-weight: bold;
-
 }
 
 .majors-options a {
@@ -160,6 +159,53 @@ hr {
   display: block;
   border-style: solid;
   border-width: 0.5px;
-  background-color: #E5E5E5;
-  color: #E5E5E5;
+  background-color: #e5e5e5;
+  color: #e5e5e5;
+}
+
+.button-category {
+  border: solid 1px #898989;
+  padding: 0.5rem 2rem;
+  border-radius: 20px;
+  color: #898989;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.arrow {
+  border: solid #898989;
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.create-post-main .select-major-div{
+  margin-top: 2rem;
+}
+
+.select-major-main input{
+  width: 20rem;
+  height: 2rem;
+  border-radius: 7px;
+  border: 2px solid lightgrey;
+  margin-top: 0.75rem;
+}
+
+.select-major-main button{
+  border-radius: 20px;
+  padding: 0.5rem 1.5rem;
+  margin-left: 1rem;
+  border: 2px solid lightgrey;
+  font-weight: bold;
+  background-color: black;
+  color: white;
+}
+
+.company-name-div{
+  margin-top: 4rem;
 }

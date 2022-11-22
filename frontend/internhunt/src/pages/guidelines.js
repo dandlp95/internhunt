@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import { isAuth } from "../utils/isLoggedIn";
 import guidelines from "../utils/guidelines.json";
 import examples from "../utils/examples.json";
@@ -81,7 +80,6 @@ const Guidelines = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

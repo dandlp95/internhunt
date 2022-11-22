@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import FetchCalls from "../utils/fetchCalls";
 import getLocalStorage from "../utils/getLocalStorage";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import { isAuth } from "../utils/isLoggedIn";
 
 const MajorsPage = () => {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
-import Footer from "../components/footer";
 import { isAuth } from "../utils/isLoggedIn";
 import about from "../utils/about.json";
 
@@ -33,7 +32,6 @@ const AboutPage = () => {
         <p>{about.paragraph2}</p>
         <p>{about.paragraph3}</p>
       </div>
-      <Footer />
     </div>
   );
 };
