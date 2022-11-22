@@ -16,7 +16,7 @@ import { AiFillFire } from "react-icons/ai";
 import FetchCalls from "../utils/fetchCalls";
 import "./posts.css";
 import i from "../assets/i.png";
-import workImg from "../assets/work-meeting2.jpg"
+import workImg from "../assets/work-meeting2.jpg";
 
 const MajorsContainer = () => {
   const [majors, setMajors] = useState();
@@ -45,15 +45,16 @@ const MajorsContainer = () => {
       <div className="majors-options">
         {/* <img src={workImg}/> */}
         <h3>Explore other majors</h3>
-        <ul className="majors-list">
-          {majors.slice(0, 5).map((major) => (
-            <li key={major._id}>
-              <Link to={`/posts?major=${major.name}`}>
-                {major.name}
-              </Link>
-            </li>
+        <div className="majors-list-container">
+          {majors.slice(0, 8).map((major) => (
+            <div key={major._id} className="major-option">
+              <Link to={`/posts?major=${major.name}`}>{major.name}</Link>
+              <div className="major-option-line">
+                <hr />
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
         <div className="majors-button-div">
           <button
             onClick={(e) => navigate("/majors")}
@@ -69,7 +70,7 @@ const MajorsContainer = () => {
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
-  const [sortedPosts, setSortedPosts] = useState([])
+  const [sortedPosts, setSortedPosts] = useState([]);
   const [user, setUser] = useState();
   const [sortBy, setSortBy] = useState();
   const [isButton1Active, setIsButton1Active] = useState(true);
@@ -153,7 +154,7 @@ const Posts = () => {
       if (response.ok) {
         const foundPosts = await response.json();
         setPosts(foundPosts);
-        setSortBy("date")
+        setSortBy("date");
       } else {
         console.log("something failed", response);
       }
@@ -171,7 +172,7 @@ const Posts = () => {
     setSortedPosts(postsCopy);
   }, [sortBy, posts]);
 
-  console.log("sorted", sortedPosts)
+  console.log("sorted", sortedPosts);
   if (user) {
     return (
       <div className="posts-page">
