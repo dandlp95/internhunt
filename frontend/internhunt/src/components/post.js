@@ -18,21 +18,6 @@ const Post = (props) => {
   const route = "posts";
   const timeDiff = timeDifference(new Date(), new Date(props.post.date));
 
-  useEffect(() => {
-    const isPostCreator = async () => {
-      const response = await isAuth();
-      if (response.ok) {
-        const user = await response.json();
-        if (user._id === props.user._id) {
-          setIsPostCreator(true);
-        } else {
-          setIsPostCreator(false);
-        }
-      }
-    };
-    isPostCreator();
-  }, []);
-
   const activateEdit = () => {
     setEditMode(true);
   };
@@ -73,6 +58,22 @@ const Post = (props) => {
     setRerenderChild(!rerenderChild);
   };
 
+  const checkIsPostCreator = async () => {
+    const response = await isAuth();
+    if (response.ok) {
+      const user = await response.json();
+      if (user._id === props.user._id) {
+        setIsPostCreator(true);
+      } else {
+        setIsPostCreator(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkIsPostCreator();
+  }, []);
+
   if (!editMode) {
     return (
       <div className="post-main">
@@ -97,11 +98,18 @@ const Post = (props) => {
             <p>{props.post.content}</p>
           </section>
           <div>
+            {props.commentsNumber === 1 ? (
+              <div>{`${props.commentsNumber} comment`}</div>
+            ) : (
+              <div>{`${props.commentsNumber} comments`}</div>
+            )}
             {isPostCreator && (
-              <div>
+              <div className="owner-options-container">
                 <div className="owner-options-dots">
                   <BiDotsHorizontalRounded
-                    onClick={(e) => setDisplayOwnerOptions(!displayOwnerOptions)}
+                    onClick={(e) =>
+                      setDisplayOwnerOptions(!displayOwnerOptions)
+                    }
                   />
                 </div>
                 {displayOwnerOptions && (

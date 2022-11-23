@@ -21,6 +21,7 @@ const PostPage = () => {
   const [user, setUser] = useState();
   const [sort, setSort] = useState(); // This will be used to add functionality to sort comments later.
   const [fetchComments, setFetchComments] = useState(true);
+  const [commentsLenght, setCommentsLength] = useState(10);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -94,6 +95,9 @@ const PostPage = () => {
       if (response.ok) {
         const commentList = await response.json();
         setComments(commentList);
+
+        console.log("comment list len ", commentList.length)
+        setCommentsLength(commentList.length)
       } else {
         setComments([]);
       }
@@ -171,6 +175,8 @@ const PostPage = () => {
               post={post}
               editAction={editContent}
               deleteAction={deleteContent}
+              commentsNumber={commentsLenght}
+              key={commentsLenght}
             />
             <InputInterface
               placeholder="What are your thoughts?"

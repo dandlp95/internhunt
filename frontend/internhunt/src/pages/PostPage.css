@@ -47,6 +47,7 @@
   border-radius: 10px;
   box-shadow: 0 2px 4px 0;
   border: 1px solid #EDEFF1;
+  margin-top: -1.5rem;
 }
 
 .post-page-main .post-main .post-owner-options div {
@@ -58,4 +59,10 @@
 
 .post-page-main .post-main .post-owner-options div:nth-child(2) {
   margin-top: 0.5rem;
+}
+
+.post-page-main .owner-options-container{
+    float: right;
+    margin-right: 3rem;
+
 }
