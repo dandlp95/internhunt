@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "../components/button";
-import { useState, useEffect, useRef } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
 import FetchCalls from "../utils/fetchCalls";
 import { isAuth } from "../utils/isLoggedIn";
@@ -8,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import getUserById from "../utils/getUserId";
 import Header from "../components/header";
 import "./createPost.css";
+import i from "../assets/i.png";
+import { Link } from "react-router-dom";
 
 /* MajorInput component */
 const MajorInput = (props) => {
@@ -47,7 +48,40 @@ const MajorInput = (props) => {
 };
 
 const Rules = () => {
-  return <div></div>;
+  return (
+    <div className="rules">
+      <section>
+        <div className="section-header">
+          <div>
+            <img src={i} alt="logo" width="25px" />
+          </div>
+          <div>
+            <h3>Posting to Internhunt</h3>
+          </div>
+        </div>
+        <p>1. Questions must be clear and open ended</p>
+        <hr className="line" />
+
+        <p>2. Behave like you would in real life</p>
+        <hr className="line" />
+
+        <p>3. Search if your question has already been asked</p>
+        <hr className="line" />
+
+        <p>4. Keep your reviews as objective and specific as possible</p>
+        <hr className="line" />
+
+        <p>5. No sales or self-promotion</p>
+        <hr className="line" />
+      </section>
+      <div className="guidelines-reference">
+        <p>
+          Please be mindful of Internhunt's{" "}
+          <Link to="/guidelines">Community guidelines</Link>
+        </p>
+      </div>
+    </div>
+  );
 };
 
 /* CreatePost component */
@@ -199,7 +233,10 @@ const CreatePost = () => {
                         Advise
                       </label>
                     </div>
-                    <button onClick={(e) => displayCategoriesHandler()} disabled={!type}>
+                    <button
+                      onClick={(e) => displayCategoriesHandler()}
+                      disabled={!type}
+                    >
                       Apply
                     </button>
                   </div>
@@ -280,7 +317,9 @@ const CreatePost = () => {
               </div>
             </div>
           </div>
-          <div className="grid-column-three"></div>
+          <div className="grid-column-three">
+            <Rules />
+          </div>
         </div>
       </div>
     );

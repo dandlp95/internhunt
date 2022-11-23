@@ -254,3 +254,34 @@ hr {
   background-color: #898989;
   color: lightgray;
 }
+
+.create-post-main .rules{
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+  background-color: #f5f4f3;
+  width: 75%;
+  margin: 4rem 2rem;
+  font-size:0.8rem;
+}
+
+.create-post-main .rules section{
+  padding: 1rem;
+}
+
+.create-post-main .rules .section-header{
+  display: flex;
+  align-items: center;
+}
+
+.create-post-main .rules .section-header h3{
+  margin-left: 0.7rem;
+}
+
+.create-post-main .rules p{
+  font-weight:500;
+}
+
+.create-post-main .guidelines-reference{
+  padding: 1rem;
+}
+
