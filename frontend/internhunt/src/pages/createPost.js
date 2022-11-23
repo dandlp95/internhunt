@@ -46,6 +46,10 @@ const MajorInput = (props) => {
   );
 };
 
+const Rules = () => {
+  return <div></div>;
+};
+
 /* CreatePost component */
 const CreatePost = () => {
   /* majorInputList refers to the input boxes to add the major
@@ -57,7 +61,7 @@ const CreatePost = () => {
   const [content, setContent] = useState("");
   const [state, setState] = useState("");
   const [company, setCompany] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState();
   const [user, setUser] = useState();
   const [displayCateories, setDisplayCategories] = useState(false);
   const navigate = useNavigate();
@@ -83,6 +87,10 @@ const CreatePost = () => {
       const info = await res.json();
       setUser(info);
     }
+  };
+
+  const displayCategoriesHandler = (option = false) => {
+    setDisplayCategories(option);
   };
 
   // Maybe instead of using 2 useEffects, create the isLoggedIn function outside and call it inside the next one
@@ -154,35 +162,46 @@ const CreatePost = () => {
                 ></textarea>
               </div>
               <div className="category-div">
-                <button className="button-category">
-                  Category <i class="arrow down"></i>
+                <button
+                  className="button-category"
+                  onClick={(e) => displayCategoriesHandler(true)}
+                >
+                  Category <i className="arrow down"></i>
                 </button>
                 {displayCateories && (
                   <div className="post-categories-div">
-                    <p>What category best describes your post? </p>
                     <div onChange={(e) => setType(e.target.value)}>
-                      <input
-                        type="radio"
-                        value="Question"
-                        name="type "
-                        checked={type === "Question"}
-                      />{" "}
-                      Question
-                      <input
-                        type="radio"
-                        value="Review"
-                        name="type"
-                        checked={type === "Review"}
-                      />
-                      Internship review
-                      <input
-                        type="radio"
-                        value="Advise"
-                        name="type"
-                        checked={type === "Advise"}
-                      />
-                      Advise
+                      <label>
+                        <input
+                          type="radio"
+                          value="Question"
+                          name="type "
+                          checked={type === "Question"}
+                        />
+                        Question
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="Review"
+                          name="type"
+                          checked={type === "Review"}
+                        />
+                        Internship review
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="Advise"
+                          name="type"
+                          checked={type === "Advise"}
+                        />
+                        Advise
+                      </label>
                     </div>
+                    <button onClick={(e) => displayCategoriesHandler()} disabled={!type}>
+                      Apply
+                    </button>
                   </div>
                 )}
               </div>
@@ -200,8 +219,7 @@ const CreatePost = () => {
                       onChange={(e) => setCompany(e.target.value)}
                     />
                   </div>
-                  <div>
-                    <label>State</label>
+                  <div className="select-state">
                     <select onChange={handleChange}>
                       <option value="">--Select a state--</option>
                       <option value="AL">Alabama</option>
