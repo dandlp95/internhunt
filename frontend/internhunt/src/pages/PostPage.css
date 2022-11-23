@@ -1,0 +1,61 @@
+.post-page-main .main-grid-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+}
+
+.post-main {
+  background-color: white;
+  border: rgb(120, 124, 126);
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 8px;
+}
+
+.post-main .posted-by-section {
+  margin-bottom: -1rem;
+  color: rgb(120, 124, 126);
+  font-size: 0.85rem;
+}
+
+.post-main .posted-by-section a {
+  text-decoration: inherit;
+  color: rgb(120, 124, 126);
+}
+
+.post-main .post-section h2 {
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+.grid-column-2 .post-main {
+  display: flex;
+}
+
+.post-page-main .grid-column-2 .flex-box-2 {
+  flex-grow: 1;
+  margin-left: 1rem;
+}
+
+.post-page-main .post-main .owner-options-dots {
+  font-size: 2.5rem;
+}
+
+.post-page-main .post-main .post-owner-options {
+  position: absolute;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px 0;
+  border: 1px solid #EDEFF1;
+}
+
+.post-page-main .post-main .post-owner-options div {
+  display: block;
+  width: 4rem;
+  padding: 0.2rem 1rem;
+  font-weight: 600;
+}
+
+.post-page-main .post-main .post-owner-options div:nth-child(2) {
+  margin-top: 0.5rem;
+}

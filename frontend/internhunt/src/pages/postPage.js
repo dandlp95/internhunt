@@ -7,6 +7,7 @@ import InputInterface from "../components/inputInterface";
 import { isAuth } from "../utils/isLoggedIn";
 import FetchCalls from "../utils/fetchCalls";
 import Header from "../components/header";
+import "./PostPage.css";
 
 // Need to add handling for when I get back a 200 but nothing was found, although map would probably take care of this...
 const PostPage = () => {
@@ -115,7 +116,7 @@ const PostPage = () => {
     const response = await ReqClass.protectedBody();
 
     if (response.ok) {
-      setFetchComments(!fetchComments) // Makes useEffect fetch comments again
+      setFetchComments(!fetchComments); // Makes useEffect fetch comments again
     } else {
       alert("Error");
     }
@@ -160,22 +161,28 @@ const PostPage = () => {
 
   if (postUser && post && comments) {
     return (
-      <div>
+      <div className="post-page-main">
         <Header accountId={user} />
-        <Post
-          user={postUser}
-          post={post}
-          editAction={editContent}
-          deleteAction={deleteContent}
-        />
-        <InputInterface
-          placeholder="What are your thoughts?"
-          action={postComment}
-          buttonText="Comment"
-        />
-        {comments.map((comment) => (
-          <Comment comment={comment} key={comment._id}/>
-        ))}
+        <div className="main-grid-container">
+          <div></div>
+          <div className="grid-column-2">
+            <Post
+              user={postUser}
+              post={post}
+              editAction={editContent}
+              deleteAction={deleteContent}
+            />
+            <InputInterface
+              placeholder="What are your thoughts?"
+              action={postComment}
+              buttonText="Comment"
+            />
+            {comments.map((comment) => (
+              <Comment comment={comment} key={comment._id} />
+            ))}
+          </div>
+          <div></div>
+        </div>
       </div>
     );
   }

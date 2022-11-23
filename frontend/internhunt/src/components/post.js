@@ -5,6 +5,8 @@ import VotingInterface from "./votingInterface";
 import getLocalStorage from "../utils/getLocalStorage";
 import FetchCalls from "../utils/fetchCalls";
 import Button from "./button";
+import { timeDifference } from "../utils/timeDifference";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 
 const Post = (props) => {
   const [isPostCreator, setIsPostCreator] = useState(false);
@@ -12,14 +14,16 @@ const Post = (props) => {
   const [postEdit, setPostEdit] = useState("");
   const [voteCount, setVoteCount] = useState(props.post.rating);
   const [rerenderChild, setRerenderChild] = useState(true);
+  const [displayOwnerOptions, setDisplayOwnerOptions] = useState(false);
   const route = "posts";
+  const timeDiff = timeDifference(new Date(), new Date(props.post.date));
 
   useEffect(() => {
     const isPostCreator = async () => {
       const response = await isAuth();
       if (response.ok) {
-        const userId = await response.json();
-        if (userId === props.user._id) {
+        const user = await response.json();
+        if (user._id === props.user._id) {
           setIsPostCreator(true);
         } else {
           setIsPostCreator(false);
@@ -64,7 +68,6 @@ const Post = (props) => {
       if (response.ok) {
         setVoteCount(voteCount + userVote);
       } else {
-        console.log();
       }
     }
     setRerenderChild(!rerenderChild);
@@ -72,60 +75,78 @@ const Post = (props) => {
 
   if (!editMode) {
     return (
-      <div>
-        <p>
-          Posted by{" "}
-          <Link to={`/account-portal/${props.user._id}`}>
-            {props.user.firstName}
-          </Link>
-        </p>
-        <section>
-          <h2>{props.post.title}</h2>
-          <p>{props.post.content}</p>
-        </section>
-        <div>
-          {isPostCreator ? (
-            <div>
-              <Button text="Edit" action={activateEdit} />
-              <Button text="Delete" action={handleDeleteClick} />
-            </div>
-          ) : (
-            <div></div>
-          )}
+      <div className="post-main">
+        <div className="flex-box-1">
+          <VotingInterface
+            voteCount={voteCount}
+            addVoteHandler={addVotePost}
+            postInfo={props.post}
+            key={rerenderChild}
+          />
         </div>
-        <VotingInterface
-          voteCount={voteCount}
-          addVoteHandler={addVotePost}
-          postInfo={props.post}
-          key={rerenderChild}
-        />
+        <div className="flex-box-2">
+          <p className="posted-by-section">
+            Posted by{" "}
+            <Link to={`/account-portal/${props.user._id}`}>
+              {props.user.firstName}
+            </Link>{" "}
+            {timeDiff}
+          </p>
+          <section className="post-section">
+            <h2>{props.post.title}</h2>
+            <p>{props.post.content}</p>
+          </section>
+          <div>
+            {isPostCreator && (
+              <div>
+                <div className="owner-options-dots">
+                  <BiDotsHorizontalRounded
+                    onClick={(e) => setDisplayOwnerOptions(!displayOwnerOptions)}
+                  />
+                </div>
+                {displayOwnerOptions && (
+                  <div className="post-owner-options">
+                    <div onClick={(e) => activateEdit()}>Edit</div>
+                    <div onClick={(e) => handleDeleteClick()}>Delete</div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     );
   } else {
     return (
-      <div>
-        <p>Posted by {props.user.firstName}</p>
-        <section>
-          <h2>{props.post.title}</h2>
-          <input
-            type="text"
-            value={postEdit}
-            onChange={(e) => setPostEdit(e.target.value)}
+      <div className="post-main">
+        <div className="flex-box-1">
+          <VotingInterface
+            voteCount={voteCount}
+            addVoteHandler={addVotePost}
+            postInfo={props.post}
+            key={rerenderChild}
           />
-        </section>
-        <div>
-          {isPostCreator ? (
-            <Button text="Save" action={handleEditClick} />
-          ) : (
-            <div></div>
-          )}
         </div>
-        <VotingInterface
-          voteCount={voteCount}
-          addVoteHandler={addVotePost}
-          postInfo={props.post}
-          key={rerenderChild}
-        />
+        <div className="flex-box-2">
+          <p className="posted-by-section">
+            Posted by{" "}
+            <Link to={`/account-portal/${props.user._id}`}>
+              {props.user.firstName}
+            </Link>{" "}
+            {timeDiff}
+          </p>
+          <section className="post-section">
+            <h2>{props.post.title}</h2>
+            <input
+              type="text"
+              value={postEdit}
+              onChange={(e) => setPostEdit(e.target.value)}
+            />
+          </section>
+          <div>
+            {isPostCreator && <Button text="Save" action={handleEditClick} />}
+          </div>
+        </div>
       </div>
     );
   }
