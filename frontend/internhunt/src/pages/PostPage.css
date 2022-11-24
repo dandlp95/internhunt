@@ -117,3 +117,30 @@
   font-weight: 700;
 }
 
+.post-page-main .post-section textarea{
+  width: 55rem;
+  height: 10rem;
+  border: 1px solid #EDEFF1;
+  border-radius: 5px;
+  line-height: 1.3rem;
+  padding: 0.5rem;
+}
+.edit-cancel-buttons{
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.edit-cancel-buttons button{
+  padding: 0.4rem 2rem;
+  border: 1px solid #B2B2B2; 
+  border-radius: 17px;
+  cursor: pointer;
+  font-weight: 700;
+  color: white;
+  background-color: #014980;
+  width: 7rem;
+}
+
+.edit-cancel-buttons button:first-child{
+  margin-right: 1rem;
+}

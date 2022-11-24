@@ -12,7 +12,7 @@ import { BsChatRightText } from "react-icons/bs";
 const Post = (props) => {
   const [isPostCreator, setIsPostCreator] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [postEdit, setPostEdit] = useState("");
+  const [postEdit, setPostEdit] = useState(props.post.content);
   const [voteCount, setVoteCount] = useState(props.post.rating);
   const [rerenderChild, setRerenderChild] = useState(true);
   const [displayOwnerOptions, setDisplayOwnerOptions] = useState(false);
@@ -156,14 +156,40 @@ const Post = (props) => {
           </p>
           <section className="post-section">
             <h2>{props.post.title}</h2>
-            <input
+            <textarea
               type="text"
               value={postEdit}
               onChange={(e) => setPostEdit(e.target.value)}
+              className="edit-content-box"
             />
           </section>
           <div>
-            {isPostCreator && <Button text="Save" action={handleEditClick} />}
+            {isPostCreator && (
+              <div className="edit-cancel-buttons">
+                <button
+                  className="save-button"
+                  onClick={(e) => handleEditClick()}
+                >
+                  Save
+                </button>
+                <button
+                  className="cancel-button"
+                  onClick={(e) => setEditMode(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+            <div className="post-lower-section">
+              <div className="comment-info-section">
+                <BsChatRightText />
+                {props.commentsNumber === 1 ? (
+                  <div className="comment-number">{`${props.commentsNumber} Comment`}</div>
+                ) : (
+                  <div className="comment-number">{`${props.commentsNumber} Comments`}</div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
