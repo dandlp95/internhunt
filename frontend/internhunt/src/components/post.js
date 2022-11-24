@@ -7,6 +7,7 @@ import FetchCalls from "../utils/fetchCalls";
 import Button from "./button";
 import { timeDifference } from "../utils/timeDifference";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
+import { BsChatRightText } from "react-icons/bs";
 
 const Post = (props) => {
   const [isPostCreator, setIsPostCreator] = useState(false);
@@ -33,9 +34,9 @@ const Post = (props) => {
 
   const addVotePost = async (userVote) => {
     var voteReq;
-    if (userVote == 1) {
+    if (userVote === 1) {
       voteReq = "upvote";
-    } else if (userVote == -1) {
+    } else if (userVote === -1) {
       voteReq = "downvote";
     }
 
@@ -97,12 +98,15 @@ const Post = (props) => {
             <h2>{props.post.title}</h2>
             <p>{props.post.content}</p>
           </section>
-          <div>
-            {props.commentsNumber === 1 ? (
-              <div>{`${props.commentsNumber} comment`}</div>
-            ) : (
-              <div>{`${props.commentsNumber} comments`}</div>
-            )}
+          <div className="post-lower-section">
+            <div className="comment-info-section">
+              <BsChatRightText />
+              {props.commentsNumber === 1 ? (
+                <div className="comment-number">{`${props.commentsNumber} Comment`}</div>
+              ) : (
+                <div className="comment-number">{`${props.commentsNumber} Comments`}</div>
+              )}
+            </div>
             {isPostCreator && (
               <div className="owner-options-container">
                 <div className="owner-options-dots">
@@ -110,12 +114,19 @@ const Post = (props) => {
                     onClick={(e) =>
                       setDisplayOwnerOptions(!displayOwnerOptions)
                     }
+                    className="dots"
                   />
                 </div>
                 {displayOwnerOptions && (
                   <div className="post-owner-options">
                     <div onClick={(e) => activateEdit()}>Edit</div>
-                    <div onClick={(e) => handleDeleteClick()}>Delete</div>
+                    <hr />
+                    <div
+                      onClick={(e) => handleDeleteClick()}
+                      className="second"
+                    >
+                      Delete
+                    </div>
                   </div>
                 )}
               </div>

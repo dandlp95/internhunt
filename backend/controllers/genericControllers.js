@@ -29,7 +29,7 @@ const getById = (Schema) => {
         const apiError = new ApiError400(err.message);
         next(apiError);
       } else if (!doc) {
-        const apiError = new ApiError404(err.message);
+        const apiError = new ApiError404("no document found");
         next(apiError);
       } else {
         res.status(200).send(doc);
@@ -41,7 +41,7 @@ const getById = (Schema) => {
 const voteModel = (Schema, Schema2) => {
   return async (req, res, next) => {
     try {
-      console.log("entered here")
+      console.log("entered here");
       if (!req.accountId) {
         throw apiAuthError;
       }
