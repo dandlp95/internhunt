@@ -185,7 +185,10 @@ const PostPage = () => {
                 buttonText="Comment"
               />
               {comments.map((comment) => (
-                <Comment comment={comment} key={comment._id} />
+                <div>
+                  <Comment comment={comment} key={comment._id} />
+                  <hr />
+                </div>
               ))}
             </div>
           </div>

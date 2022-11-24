@@ -21,9 +21,9 @@ const Comment = (props) => {
     const isCommentCreator = async () => {
       const response = await isAuth();
       if (response.ok) {
-        const userId = await response.json();
+        const user = await response.json();
         if (comment.owner) {
-          if (userId === comment.owner._id) {
+          if (user._id === comment.owner._id) {
             setIsCommentCreator(true);
           } else {
             setIsCommentCreator(false);
@@ -113,43 +113,45 @@ const Comment = (props) => {
   if (comment) {
     if (!editMode) {
       return (
-        <div>
-          <div>
+        <div className="comment-main">
+          <div className="flexbox-1">
+            <VotingInterface
+              voteCount={voteCount}
+              addVoteHandler={addVotePost}
+              postInfo={comment}
+              key={rerenderChild}
+            />
+          </div>
+          <div className="flexbox-2">
             <div>
-              {comment.owner ? (
-                <Link to={`/account-portal/${comment.owner._id}`}>
-                  {commentUser}
-                </Link>
-              ) : (
-                <div>{commentUser}</div>
+              <div className="comment-owner-data">
+                {comment.owner ? (
+                  <Link to={`/account-portal/${comment.owner._id}`}>
+                    {commentUser}
+                  </Link>
+                ) : (
+                  <div>{commentUser}</div>
+                )}
+              </div>
+              <div className="comment-content-div">
+                <p>{comment.content}</p>
+              </div>
+            </div>
+
+            <div className="comment-edit-delete-div">
+              {isCommentCreator && (
+                <div className="button-flexbox">
+                  <button onClick={(e) => activateEdit()}>Edit</button>
+                  <button onClick={(e) => deleteContent()}>Delete</button>
+                </div>
               )}
             </div>
-            <div>
-              <p>{comment.content}</p>
-            </div>
           </div>
-
-          <div>
-            {isCommentCreator ? (
-              <div>
-                <Button text="Edit" action={activateEdit} />
-                <Button text="Delete" action={deleteContent} />
-              </div>
-            ) : (
-              <div></div>
-            )}
-          </div>
-          <VotingInterface
-            voteCount={voteCount}
-            addVoteHandler={addVotePost}
-            postInfo={comment}
-            key={rerenderChild}
-          />
         </div>
       );
     } else {
       return (
-        <div>
+        <div className="comment-main">
           <div>
             <p>{commentUser.firstName}</p>
           </div>
@@ -161,10 +163,8 @@ const Comment = (props) => {
             />
           </div>
           <div>
-            {isCommentCreator ? (
+            {isCommentCreator && (
               <Button text="Save" action={handleEditClick} />
-            ) : (
-              <div></div>
             )}
           </div>
           <VotingInterface

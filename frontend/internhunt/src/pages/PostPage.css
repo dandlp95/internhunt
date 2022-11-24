@@ -163,3 +163,61 @@
   padding: 0.5rem 0.5rem;
   line-height: 1rem;
 }
+
+.post-page-main .input-interface-main button {
+  padding: 0.4rem 2rem;
+  border: 1px solid #b2b2b2;
+  border-radius: 17px;
+  cursor: pointer;
+  font-weight: 700;
+  color: white;
+  background-color: #014980;
+}
+
+.post-page-main .input-interface-main button[disabled] {
+  background-color: #898989;
+  color: lightgray;
+}
+
+.post-page-main .input-interface-main {
+  margin-bottom: 3rem;
+}
+
+.post-page-main .comment-main .comment-owner-data a {
+  text-decoration: none;
+  color: black;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.post-page-main .comment-main p {
+  margin-top: 0.3rem;
+}
+
+.post-page-main .comment-main {
+  display: flex;
+}
+
+.post-page-main .comment-main .flexbox-1 button {
+  display: block;
+  background-color: white;
+  border: none;
+  font-size: 1.5rem;
+}
+
+.post-page-main .comment-edit-delete-div button{
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  color:#878a8c;
+  background-color: white;
+}
+
+.post-page-main  .comment-edit-delete-div button:hover{
+  background-color: rgba(131,131,131,0.5);
+}
+
+.post-page-main .comment-edit-delete-div .button-flexbox{
+  display: flex;
+
+}

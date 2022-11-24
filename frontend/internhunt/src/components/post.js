@@ -25,6 +25,7 @@ const Post = (props) => {
 
   const handleEditClick = () => {
     setEditMode(false);
+    setDisplayOwnerOptions(false);
     props.editAction(route, props.post._id, postEdit);
   };
 
@@ -174,7 +175,10 @@ const Post = (props) => {
                 </button>
                 <button
                   className="cancel-button"
-                  onClick={(e) => setEditMode(false)}
+                  onClick={(e) => {
+                    setEditMode(false);
+                    setDisplayOwnerOptions(false);
+                  }}
                 >
                   Cancel
                 </button>
@@ -198,6 +202,3 @@ const Post = (props) => {
 };
 
 export default Post;
-
-// Extra functionality
-// Add a cancel button when they are editing something

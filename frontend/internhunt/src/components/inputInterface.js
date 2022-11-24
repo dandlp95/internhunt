@@ -26,7 +26,9 @@ const InputInterface = (props) => {
           onChange={(e) => setInput(e.target.value)}
         />
       </div>
-      <button onClick={(e) => sendData()}>{props.buttonText}</button>
+      <button disabled={!input} onClick={(e) => sendData()}>
+        {props.buttonText}
+      </button>
     </div>
   );
 };
