@@ -52,10 +52,9 @@
   text-align: center;
 }
 
-
-.post-page-main .post-main .post-owner-options div:hover{
+.post-page-main .post-main .post-owner-options div:hover {
   color: black;
-  background-color: rgba(1,73,128,0.2);
+  background-color: rgba(1, 73, 128, 0.2);
 }
 
 .post-page-main .post-main .post-owner-options div {
@@ -66,7 +65,7 @@
   cursor: pointer;
 }
 
-.post-page-main .post-main .post-owner-options div:first-child{
+.post-page-main .post-main .post-owner-options div:first-child {
   border-radius: 10px 10px 0 0;
 }
 
@@ -117,22 +116,22 @@
   font-weight: 700;
 }
 
-.post-page-main .post-section textarea{
+.post-page-main .post-section textarea {
   width: 55rem;
   height: 10rem;
-  border: 1px solid #EDEFF1;
+  border: 1px solid #edeff1;
   border-radius: 5px;
   line-height: 1.3rem;
   padding: 0.5rem;
 }
-.edit-cancel-buttons{
+.edit-cancel-buttons {
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
 
-.edit-cancel-buttons button{
+.edit-cancel-buttons button {
   padding: 0.4rem 2rem;
-  border: 1px solid #B2B2B2; 
+  border: 1px solid #b2b2b2;
   border-radius: 17px;
   cursor: pointer;
   font-weight: 700;
@@ -141,6 +140,26 @@
   width: 7rem;
 }
 
-.edit-cancel-buttons button:first-child{
+.edit-cancel-buttons button:first-child {
   margin-right: 1rem;
+}
+
+.post-page-main .comment-section-container {
+  background-color: white;
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  border: rgb(120, 124, 126);
+}
+
+.post-page-main
+  .comment-section-container
+  .input-interface-main
+  .comment-input
+  textarea {
+  width: 95%;
+  height: 7rem;
+  border-radius: 5px;
+  padding: 0.5rem 0.5rem;
+  line-height: 1rem;
 }

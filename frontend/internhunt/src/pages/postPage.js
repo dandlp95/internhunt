@@ -96,8 +96,8 @@ const PostPage = () => {
         const commentList = await response.json();
         setComments(commentList);
 
-        console.log("comment list len ", commentList.length)
-        setCommentsLength(commentList.length)
+        console.log("comment list len ", commentList.length);
+        setCommentsLength(commentList.length);
       } else {
         setComments([]);
       }
@@ -178,14 +178,16 @@ const PostPage = () => {
               commentsNumber={commentsLenght}
               key={commentsLenght}
             />
-            <InputInterface
-              placeholder="What are your thoughts?"
-              action={postComment}
-              buttonText="Comment"
-            />
-            {comments.map((comment) => (
-              <Comment comment={comment} key={comment._id} />
-            ))}
+            <div className="comment-section-container">
+              <InputInterface
+                placeholder="What are your thoughts?"
+                action={postComment}
+                buttonText="Comment"
+              />
+              {comments.map((comment) => (
+                <Comment comment={comment} key={comment._id} />
+              ))}
+            </div>
           </div>
           <div></div>
         </div>
