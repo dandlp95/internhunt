@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getApiRoot } from "../utils/getApiRoot";
 import Comment from "../components/comment";
 import Post from "../components/post";
@@ -7,6 +7,7 @@ import InputInterface from "../components/inputInterface";
 import { isAuth } from "../utils/isLoggedIn";
 import FetchCalls from "../utils/fetchCalls";
 import Header from "../components/header";
+import Rules from "../components/rules";
 import "./PostPage.css";
 
 // Need to add handling for when I get back a 200 but nothing was found, although map would probably take care of this...
@@ -194,7 +195,9 @@ const PostPage = () => {
               </div>
             </div>
           </div>
-          <div></div>
+          <div>
+            <Rules />
+          </div>
         </div>
       </div>
     );
