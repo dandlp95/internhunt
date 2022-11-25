@@ -56,6 +56,18 @@ const UserSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Major",
   },
+  profilePicture: {
+    type: String,
+    default: null,
+  },
+  accountCreationDate: {
+    type: Date,
+    default: new Date(),
+  },
+  gmailLogin: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const User = mongoose.model("User", UserSchema);

@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken");
 const authError = new ApiError401("Not authorized.");
 const { emailClient } = require("../utils/emailClient");
 const mongoose = require("mongoose");
+const Api401Error = require("../middleware/error-handling/apiError401");
 
 const getAllUsers = (req, res, next) => {
   // Double checks Ids arent sent...
@@ -28,7 +29,7 @@ const getAllUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  console.log(req.params.id)
+  console.log(req.params.id);
   UserModel.findById(
     req.params.id,
     "firstName lastName major",
@@ -392,11 +393,17 @@ const login = (req, res, next) => {
         throw new ApiError404("Account not found.");
       }
       accountInfo = account;
+
+      if (accountInfo.gmailLogin && accountInfo.password === " ") {
+        throw new Api401Error(
+          "No password has been set up through us. Please login with Google"
+        );
+      }
       return bcrypt.compare(password, account.password);
     })
     .then(async (matches) => {
       if (!matches) {
-        const apiError = new ApiError404("Wrong password.");
+        const apiError = new ApiError401("Wrong password.");
         throw apiError;
       }
       const token = jwt.sign(
@@ -467,6 +474,7 @@ const handleGoogleLogin = async (req, res, next) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         password: " ",
+        gmailLogin: true,
       };
 
       UserModel.create(newUser, (err, doc) => {

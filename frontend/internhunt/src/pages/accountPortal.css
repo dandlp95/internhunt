@@ -2,3 +2,33 @@
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
 }
+
+.account-portal-main .account-info{
+  background-color:white;
+  height: fit-content;
+  width: fit-content;
+  margin-top: 1rem;
+  border-radius: 7px;
+}
+
+.account-portal-main .account-info{
+  padding: 0.5rem 1rem;
+}
+
+/* .account-info div{
+  float:right;
+} */
+
+.account-info .account-info-flexbox{
+  display: flex;
+}
+
+.account-info div p{
+  font-size: 0.75rem;
+  padding-left: 0.75rem;
+  
+}
+
+.account-info div{
+  text-align: start;
+}
