@@ -10,10 +10,11 @@ const Comment = (props) => {
   const [commentUser, setCommentUser] = useState("");
   const [isCommentCreator, setIsCommentCreator] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [commentEdit, setCommentEdit] = useState("");
+  const [commentEdit, setCommentEdit] = useState(props.comment.content);
   const [comment, setComment] = useState(props.comment);
   const [voteCount, setVoteCount] = useState(props.comment.rating);
   const [rerenderChild, setRerenderChild] = useState(true);
+  const [isUserDeleted, setIsUserDeleted] = useState(false);
 
   const route = "comments";
 
@@ -39,12 +40,9 @@ const Comment = (props) => {
       setCommentUser(`${comment.owner.firstName} ${comment.owner.lastName}`);
     } else {
       setCommentUser("[Deleted user]");
+      setIsUserDeleted(true);
     }
   }, []);
-
-  const activateEdit = () => {
-    setEditMode(true);
-  };
 
   const handleEditClick = async () => {
     setEditMode(false);
@@ -109,7 +107,7 @@ const Comment = (props) => {
       setComment();
     }
   };
-
+  console.log(isUserDeleted)
   if (comment) {
     if (!editMode) {
       return (
@@ -125,7 +123,7 @@ const Comment = (props) => {
           <div className="flexbox-2">
             <div>
               <div className="comment-owner-data">
-                {comment.owner ? (
+                {!isUserDeleted ? (
                   <Link to={`/account-portal/${comment.owner._id}`}>
                     {commentUser}
                   </Link>
@@ -141,7 +139,7 @@ const Comment = (props) => {
             <div className="comment-edit-delete-div">
               {isCommentCreator && (
                 <div className="button-flexbox">
-                  <button onClick={(e) => activateEdit()}>Edit</button>
+                  <button onClick={(e) => setEditMode(true)}>Edit</button>
                   <button onClick={(e) => deleteContent()}>Delete</button>
                 </div>
               )}
@@ -152,27 +150,40 @@ const Comment = (props) => {
     } else {
       return (
         <div className="comment-main">
-          <div>
-            <p>{commentUser.firstName}</p>
-          </div>
-          <div>
-            <input
-              type="text"
-              value={commentEdit}
-              onChange={(e) => setCommentEdit(e.target.value)}
+          <div className="flexbox-1">
+            <VotingInterface
+              voteCount={voteCount}
+              addVoteHandler={addVotePost}
+              postInfo={comment}
+              key={rerenderChild}
             />
           </div>
-          <div>
-            {isCommentCreator && (
-              <Button text="Save" action={handleEditClick} />
-            )}
+          <div className="flexbox-2">
+            <div className="comment-owner-data">
+              {!isUserDeleted ? (
+                <Link to={`/account-portal/${comment.owner._id}`}>
+                  {commentUser}
+                </Link>
+              ) : (
+                <div>{commentUser}</div>
+              )}
+            </div>
+            <div className="comment-input-div">
+              <textarea
+                type="text"
+                value={commentEdit}
+                onChange={(e) => setCommentEdit(e.target.value)}
+              />
+            </div>
+            <div className="comment-save-div">
+              {isCommentCreator && (
+                <div>
+                  <button onClick={(e) => handleEditClick()}>Save</button>
+                  <button onClick={(e) => setEditMode(false)}>Cancel</button>
+                </div>
+              )}
+            </div>
           </div>
-          <VotingInterface
-            voteCount={voteCount}
-            addVoteHandler={addVotePost}
-            postInfo={comment}
-            key={rerenderChild}
-          />
         </div>
       );
     }

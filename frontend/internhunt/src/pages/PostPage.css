@@ -205,19 +205,27 @@
   font-size: 1.5rem;
 }
 
-.post-page-main .comment-edit-delete-div button{
+.post-page-main .comment-edit-delete-div button,
+.post-page-main .comment-main .comment-save-div button {
   border: none;
   cursor: pointer;
   font-weight: 700;
-  color:#878a8c;
+  color: #878a8c;
   background-color: white;
 }
 
-.post-page-main  .comment-edit-delete-div button:hover{
-  background-color: rgba(131,131,131,0.5);
+.post-page-main .comment-edit-delete-div button:hover,
+.post-page-main .comment-main .comment-save-div button:hover {
+  background-color: rgba(131, 131, 131, 0.5);
 }
 
-.post-page-main .comment-edit-delete-div .button-flexbox{
+.post-page-main .comment-edit-delete-div .button-flexbox {
   display: flex;
+}
 
+.post-page-main .comment-main .comment-input-div textarea{
+  width: 50rem;
+  height: 7rem;
+  border-radius: 7px;
+  padding: 0.5rem 0.7rem;
 }

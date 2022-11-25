@@ -184,12 +184,14 @@ const PostPage = () => {
                 action={postComment}
                 buttonText="Comment"
               />
-              {comments.map((comment) => (
-                <div>
-                  <Comment comment={comment} key={comment._id} />
-                  <hr />
-                </div>
-              ))}
+              <div>
+                {comments.map((comment) => (
+                  <div>
+                    <Comment comment={comment} key={comment._id} />
+                    <hr />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           <div></div>
