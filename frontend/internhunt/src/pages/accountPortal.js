@@ -5,6 +5,7 @@ import PostPreview from "../components/postPreview";
 import FetchCalls from "../utils/fetchCalls";
 import Button from "../components/button";
 import CommentPreview from "../components/commentPreview";
+import "./accountPortal.css";
 
 const AccountPortal = () => {
   const { id } = useParams();
@@ -73,22 +74,14 @@ const AccountPortal = () => {
   if (user) {
     return (
       <div>
-        {console.log(user)}
         <Header accountId={user._id} />
-        <div>
-          <div>
-            <section>
-              <h2>Personal Information</h2>
-              <p>
-                {user.firstName} {user.lastName}
-              </p>
-              <p>{user.major ? user.major.name : <div>No major found</div>}</p>
-              {owner && <Button text="Change Password" action={editPassword} />}
-            </section>
+        <div className="account-portal-main">
+          <div></div>
+          <div className="posted-content-container">
             <section>
               <h2>{pronoun} Posts</h2>
               {posts.map((post) => (
-                <PostPreview post={post} key={post._id}/>
+                <PostPreview post={post} key={post._id} />
               ))}
             </section>
             <section>
@@ -96,11 +89,19 @@ const AccountPortal = () => {
               {comments.map((comment) => (
                 <div>
                   {console.log(comment)}
-                  <CommentPreview comment={comment} key={comment._id}/>
+                  <CommentPreview comment={comment} key={comment._id} />
                 </div>
               ))}
             </section>
           </div>
+          <section className="account-info">
+            <h2>Personal Information</h2>
+            <p>
+              {user.firstName} {user.lastName}
+            </p>
+            <p>{user.major ? user.major.name : <div>No major found</div>}</p>
+            {owner && <Button text="Change Password" action={editPassword} />}
+          </section>
         </div>
       </div>
     );
