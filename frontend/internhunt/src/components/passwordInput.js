@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./passwordInput.css"
 
 const PasswordInput = (props) => {
-  const [newPassword, setNewPassword] = useState();
-  const [newPasswordConfirm, setNewPasswordConfirm] = useState();
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
 
   return (
     <div className="password-input-main">
@@ -21,7 +21,7 @@ const PasswordInput = (props) => {
       </div>
       <div className="buttons">
         <button
-          onClick={(e) => props.passwordChange(newPassword, newPasswordConfirm)}
+          onClick={(e) => props.passwordChangeFunction(newPassword, newPasswordConfirm)}
         >
           Change Password
         </button>

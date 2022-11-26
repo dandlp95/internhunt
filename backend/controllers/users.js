@@ -338,11 +338,9 @@ const editPassword = async (req, res, next) => {
 
 const requestPasswordReset = async (req, res, next) => {
   try {
-    console.log("this endpoint was called");
     const code = Math.floor(Math.random() * 99999) + 1;
     const user = await UserModel.findOne({ email: req.body.email });
-    console.log("req.body.email ", req.body.email);
-    console.log("user ", user);
+
     if (!user) {
       throw new ApiError404("Account was not found.");
     }
@@ -364,17 +362,22 @@ const requestPasswordReset = async (req, res, next) => {
 
 const approvePasswordReset = async (req, res, next) => {
   try {
+    if (!req.body.verificationCode) {
+      throw new ApiError400("No verification code provided");
+    }
     const user = await UserModel.findOne({
       verificationCode: req.body.verificationCode,
     });
-    console.log(req.body.verificationCode);
+    console.log("verification code ", req.body.verificationCode);
     if (!user) {
       throw new ApiError400("Verification code is not correct");
     }
     user.verificationCode = null;
     const encryptedPassword = await encryptPassword(req.body.password);
     user.password = encryptedPassword;
+    user.customPassword = true;
     user.save();
+    console.log("USER: ", user);
     res.status(200).send("Success.");
   } catch (err) {
     next(err);
