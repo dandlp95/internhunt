@@ -116,7 +116,7 @@ const AccountPortal = () => {
             </div>
             {/* {owner && <Button text="Change Password" action={editPassword} />} */}
             {owner && (
-              <div>
+              <div className="buttons">
                 <button onClick={(e) => setDeclareMajor(true)}>
                   Declare Major
                 </button>

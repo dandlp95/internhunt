@@ -15,10 +15,6 @@
   padding: 0.5rem 1rem;
 }
 
-/* .account-info div{
-  float:right;
-} */
-
 .account-info .account-info-flexbox{
   display: flex;
 }
@@ -31,4 +27,20 @@
 
 .account-info div{
   text-align: start;
+}
+.account-portal-main .buttons{
+  margin-top:0.5rem;
+}
+
+.account-portal-main .buttons button{
+  border: 1px solid lightgrey;
+  padding: 0.25rem 2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  background-color: #EDEFF1;
+}
+
+.account-portal-main .buttons button:first-child{
+  margin-right: 0.5rem;
 }
