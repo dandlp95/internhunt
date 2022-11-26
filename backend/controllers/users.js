@@ -290,7 +290,6 @@ const removeSuspension = async (req, res, next) => {
 const editPassword = async (req, res, next) => {
   try {
     if (!req.accountId || req.accountId != req.params.id) {
-      console.log("you have no access to request changes to this account...");
       throw authError;
     }
     const user = await UserModel.findById(req.params.id);
@@ -315,6 +314,7 @@ const editPassword = async (req, res, next) => {
             );
 
             user.password = encryptedPassword;
+            user.customPassword = true;
             user.save((err) => {
               if (err) {
                 next(new ApiError400(err.message));
@@ -436,7 +436,7 @@ const isLoggedIn = async (req, res, next) => {
     } else {
       UserModel.findById(
         req.accountId,
-        "firstName lastName active email",
+        "firstName lastName active email customPassword",
         (err, doc) => {
           if (err) {
             next(new ApiError400(err.message));
@@ -475,6 +475,7 @@ const handleGoogleLogin = async (req, res, next) => {
         lastName: req.body.lastName,
         password: " ",
         gmailLogin: true,
+        customPassword: false,
       };
 
       UserModel.create(newUser, (err, doc) => {

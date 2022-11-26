@@ -10,6 +10,7 @@ import CreatePost from "./pages/createPost";
 import MajorsPage from "./pages/majorsPage";
 import ResetPasswordPage from "./pages/resetPasswordPage";
 import ForgotPassword from "./pages/forgotPassword";
+import PersonalSettings from "./pages/personalSettings";
 
 const router = () => {
   return (
@@ -25,6 +26,7 @@ const router = () => {
         <Route path="/majors" element={<MajorsPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+        <Route path="/password-change" element={<PersonalSettings />} />
       </Routes>
     </Router>
   );

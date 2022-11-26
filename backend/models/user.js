@@ -67,6 +67,10 @@ const UserSchema = new Schema({
   gmailLogin: {
     type: Boolean,
     default: false
+  },
+  customPassword: {
+    type: Boolean,
+    default: true
   }
 });
 
