@@ -26,7 +26,7 @@ const router = () => {
         <Route path="/majors" element={<MajorsPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/password-change" element={<PersonalSettings />} />
+        <Route path="/account-settings" element={<PersonalSettings />} />
       </Routes>
     </Router>
   );

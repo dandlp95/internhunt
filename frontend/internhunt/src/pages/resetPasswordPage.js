@@ -1,66 +1,23 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "../components/button";
+import React, { useEffect, useState } from "react";
 import FetchCalls from "../utils/fetchCalls";
 import Header from "../components/header";
+import PasswordInput from "../components/passwordInput";
+import "./resetPasswordPage.css";
 
 const ResetPasswordPage = () => {
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const [renderErrorMessage, setRenderErrorMessage] = useState(false);
-  const navigate = useNavigate();
-
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const verificationCode = urlParams.get("code");
-
-  const handleResetPassword = async () => {
-    if (password && confirmPassword) {
-      if (password === confirmPassword) {
-        const body = { verificationCode, password };
-
-        const apiCaller = new FetchCalls(
-          "/users/approve-password-reset",
-          "PATCH",
-          null,
-          body
-        );
-
-        const response = await apiCaller.protectedBody();
-        if (response.ok) {
-          navigate("/");
-        }
-      } else {
-        setRenderErrorMessage(true);
-      }
-    }
+  const requestPasswordChange = async () => {
+    const backendCaller = new FetchCalls("/users/");
   };
 
+  useEffect(() => {}, []);
+
   return (
-    <div>
-      <div>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div>
-            <input
-              required
-              placeholder="Enter new password"
-              type="text"
-              name="newPassword"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div>
-            <input
-              required
-              placeholder="Enter password again"
-              type="text"
-              name="confirmPassword"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
-          <Button text="Reset password" action={handleResetPassword} />
-        </form>
-        {renderErrorMessage && <div>Error in your request</div>}
+    <div className="reset-password-page">
+      <Header />
+      <div className="reset-password-container">
+        <h2>Change Password</h2>
+        <hr/>
+        <PasswordInput />
       </div>
     </div>
   );

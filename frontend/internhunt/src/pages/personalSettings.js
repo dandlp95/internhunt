@@ -4,12 +4,13 @@ import FetchCalls from "../utils/fetchCalls";
 import { isAuth } from "../utils/isLoggedIn";
 import Header from "../components/header";
 import "./personalSettings.css";
+import PasswordInput from "../components/passwordInput";
 
 const PersonalSettings = (props) => {
   const [user, setUser] = useState();
   const [oldPassword, setOldPassword] = useState();
-  const [newPassword, setNewPassword] = useState();
-  const [newPasswordConfirm, setNewPasswordConfirm] = useState();
+  // const [newPassword, setNewPassword] = useState();
+  // const [newPasswordConfirm, setNewPasswordConfirm] = useState();
   const [oldPasswordExists, setOldPasswordExists] = useState(false);
 
   const [message1, setMessage1] = useState(null);
@@ -31,7 +32,7 @@ const PersonalSettings = (props) => {
     }
   };
 
-  const requestPasswordChange = async () => {
+  const requestPasswordChange = async (newPassword, newPasswordConfirm) => {
     const user = JSON.parse(localStorage.getItem("userData"));
 
     if (!oldPassword) {
@@ -119,21 +120,7 @@ const PersonalSettings = (props) => {
                 onChange={(e) => setOldPassword(e.target.value)}
                 className="old-password-input"
               />
-              <div className="new-password-container">
-                <input
-                  type="text"
-                  placeholder="Enter your new password"
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-                <input
-                  type="text"
-                  placeholder="Enter your new password again"
-                  onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                />
-              </div>
-              <div className="buttons">
-                <button>Change Password</button>
-              </div>
+              <PasswordInput passwordChange={requestPasswordChange} />
             </div>
           </div>
         </div>

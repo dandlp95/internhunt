@@ -120,7 +120,7 @@ const AccountPortal = () => {
                 <button onClick={(e) => setDeclareMajor(true)}>
                   Declare Major
                 </button>
-                <button onClick={(e) => navigate("/password-change")}>
+                <button onClick={(e) => navigate("/account-settings")}>
                   Personal Settings
                 </button>
               </div>
