@@ -343,7 +343,7 @@ const requestPasswordReset = async (req, res, next) => {
     const user = await UserModel.findOne({ email: req.body.email });
     console.log("req.body.email ", req.body.email);
     console.log("user ", user);
-    if (user) {
+    if (!user) {
       throw new ApiError404("Account was not found.");
     }
     await user.updateOne({ verificationCode: code });

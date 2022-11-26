@@ -1,4 +1,3 @@
-// api404Error.js
 const httpStatusCodes = require("./httpStatusCodes");
 const BaseError = require("./baseError");
 

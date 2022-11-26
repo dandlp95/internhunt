@@ -1,49 +1,75 @@
-.password-change-main .password-ui-container{
-    background-color: white;
-    width: 50rem;
-    margin: 1rem auto;
-    padding: 0.2rem 1rem;
-    border-radius: 7px;
-    border: 1px
+.password-change-main .password-ui-container {
+  background-color: white;
+  width: 50rem;
+  margin: 1rem auto;
+  padding: 0.2rem 1rem;
+  border-radius: 7px;
+  border: 1px;
 }
 
-.password-change-main .password-ui-container .password-header hr{
-    margin-top: -1rem;
+.password-change-main .password-ui-container .password-header hr {
+  margin-top: -1rem;
 }
 
-.password-change-main .password-ui-container .passwords-inputs{
-    margin-top: 2rem;
+.password-change-main .password-ui-container .passwords-inputs {
+  margin-top: 2rem;
 }
 
-.password-change-main .password-ui-container .passwords-inputs input{
-    width: 15rem;
-    height: 1.5rem;
-    border: 1px solid lightgrey;
-    border-radius: 7px;
+.password-change-main .password-ui-container .passwords-inputs input {
+  width: 15rem;
+  height: 1.5rem;
+  border: 1px solid lightgrey;
+  border-radius: 7px;
 }
 
-.password-change-main .password-ui-container .passwords-inputs .new-password-container{
-    margin-top: 2rem;
+.password-change-main
+  .password-ui-container
+  .passwords-inputs
+  .new-password-container {
+  margin-top: 2rem;
 }
 
-.password-change-main .password-ui-container .passwords-inputs .new-password-container input{
-    display: block;
+.password-change-main
+  .password-ui-container
+  .passwords-inputs
+  .new-password-container
+  input {
+  display: block;
 }
 
-.password-change-main .password-ui-container .passwords-inputs .new-password-container input:first-child{
-    margin-bottom: 0.1rem;
+.password-change-main
+  .password-ui-container
+  .passwords-inputs
+  .new-password-container
+  input:first-child {
+  margin-bottom: 0.1rem;
 }
 
-.password-change-main .buttons button:first-child{
-    margin-right: 0.5rem;
+.password-change-main .buttons button:first-child {
+  margin-right: 0.5rem;
 }
-.password-change-main .buttons button{
-    margin-top: 2rem;
-    background-color: #014980;
-    color: white;
-    font-weight: 500;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 15px;
-    cursor: pointer;
+.password-change-main .buttons button {
+  margin-top: 2rem;
+  background-color: #014980;
+  color: white;
+  font-weight: 500;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.password-change-main .error-response,
+.password-change-main .confirmation-response {
+  margin-top: 0.2rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.password-change-main .error-response {
+  color: red;
+}
+
+.password-change-main .confirmation-response{
+    color: #0F7B00
 }

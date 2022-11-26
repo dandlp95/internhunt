@@ -15,6 +15,7 @@ const PersonalSettings = (props) => {
   const [message1, setMessage1] = useState(null);
   const [message2, setMessage2] = useState(null);
   const [confirmationResponse, setConfirmationResponse] = useState();
+  const [isErr, setIsErr] = useState(false);
   const navigate = useNavigate();
 
   const fetchUserData = async () => {
@@ -67,7 +68,7 @@ const PersonalSettings = (props) => {
 
   const requestEmailCode = async () => {
     var user;
-    
+
     const res = await isAuth();
     if (res.ok) {
       user = await res.json();
@@ -87,11 +88,13 @@ const PersonalSettings = (props) => {
 
     const response = await backendCaller.protectedBody();
     if (response.ok) {
-      console.log("AWAIT RESPONSE ", await response.json());
-      setConfirmationResponse("Success");
+      setConfirmationResponse(
+        "The link was sent to your registered email address. Use it to set a new password"
+      );
     } else {
-      console.log("AWAIT RESPONSE ", await response.json());
-      setConfirmationResponse("Fail");
+      setIsErr(true);
+      const error = await response.json();
+      setConfirmationResponse(error.message);
     }
   };
 
@@ -159,7 +162,9 @@ const PersonalSettings = (props) => {
               </button>
             </div>
             {confirmationResponse && (
-              <div className="confirmation-response">
+              <div
+                className={isErr ? "error-response" : "confirmation-response"}
+              >
                 {confirmationResponse}
               </div>
             )}
