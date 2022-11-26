@@ -81,20 +81,26 @@ const AccountPortal = () => {
         <div className="account-portal-main">
           <div></div>
           <div className="posted-content-container">
-            <section>
+            <section className="posts-section">
               <h2>{pronoun} Posts</h2>
-              {posts.map((post) => (
-                <PostPreview post={post} key={post._id} />
-              ))}
+              <hr />
+              <div className="posts-list">
+                {posts.map((post) => (
+                  <PostPreview post={post} key={post._id} />
+                ))}
+              </div>
             </section>
-            <section>
+            <section className="comments-section">
               <h2>{pronoun} Comments</h2>
-              {comments.map((comment) => (
-                <div>
-                  {console.log(comment)}
-                  <CommentPreview comment={comment} key={comment._id} />
-                </div>
-              ))}
+              <hr />
+              <div className="comments-list">
+                {comments.map((comment) => (
+                  <div>
+                    {console.log(comment)}
+                    <CommentPreview comment={comment} key={comment._id} />
+                  </div>
+                ))}
+              </div>
             </section>
           </div>
           <section className="account-info">

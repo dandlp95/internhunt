@@ -116,12 +116,13 @@ const addPost = async (req, res, next) => {
   }
 };
 
-const getPostByUser = (req, res, next) => {
-  PostModel.find({ owner: req.params.id }, (err, docs) => {
+const getPostByUser = async (req, res, next) => {
+  PostModel.find({ owner: req.params.id }, async (err, docs) => {
     if (err) {
       const apiError400 = new ApiError400();
       next(apiError400);
     } else {
+      await PostModel.populate(docs, "owner");
       res.status(200).send(docs);
     }
   });
