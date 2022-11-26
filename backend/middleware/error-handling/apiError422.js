@@ -4,9 +4,9 @@ const BaseError = require("./baseError");
 
 class Api422Error extends BaseError {
   constructor(
-    name,
+    description,
+    name = "Unprocessable entity.",
     statusCode = httpStatusCodes.UNPROCESSABLE_ENTITY,
-    description = "Unprocessable entity.",
     isOperational = true
   ) {
     super(name, statusCode, isOperational, description);

@@ -1,13 +1,13 @@
 const express = require("express");
 const app = express();
-const cookieParser = require('cookie-parser')
+const cookieParser = require("cookie-parser");
 const PORT = process.env.PORT || 8080;
 const db = require("./db/db");
 const cors = require("cors");
 require("dotenv").config();
 const {
   returnError,
-  logErrorMiddleware
+  logErrorMiddleware,
 } = require("./middleware/error-handling/errorHandler");
 
 db.then(() => {
@@ -20,6 +20,7 @@ db.then(() => {
         "Access-Control-Allow-Headers",
         "Content-Type, Authorization"
       );
+      res.setHeader("Content-Type", "application/json");
       next();
     })
     .use("/", require("./routes"))
@@ -30,4 +31,3 @@ db.then(() => {
     console.log(`Listening on port ${PORT}`);
   });
 });
-

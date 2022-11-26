@@ -3,9 +3,9 @@ const BaseError = require("./baseError");
 
 class Api401Error extends BaseError {
   constructor(
-    name,
+    description,
+    name = "Unautharized.",
     statusCode = httpStatusCodes.UNAUTHORIZED,
-    description = "Unautharized.",
     isOperational = true
   ) {
     super(name, statusCode, isOperational, description);

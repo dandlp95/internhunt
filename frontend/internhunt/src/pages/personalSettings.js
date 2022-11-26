@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import FetchCalls from "../utils/fetchCalls";
 import { isAuth } from "../utils/isLoggedIn";
 import Header from "../components/header";
-import "./personalSettings.css"
+import "./personalSettings.css";
 
 const PersonalSettings = (props) => {
   const [user, setUser] = useState();
@@ -30,8 +30,9 @@ const PersonalSettings = (props) => {
     }
   };
 
-  const sendRequest = async () => {
-    const user = localStorage.getItem("userData");
+  const requestPasswordChange = async () => {
+    const user = JSON.parse(localStorage.getItem("userData"));
+
     if (!oldPassword) {
       setMessage1(null);
       if (newPassword === newPasswordConfirm) {
@@ -41,21 +42,56 @@ const PersonalSettings = (props) => {
         };
 
         const backendCaller = new FetchCalls(
-          `/users/edit-password${user.userId}`,
+          `/users/edit-password/${user.userId}`,
           "PATCH",
           user.jwt,
           body
         );
 
         const response = await backendCaller.protectedBody();
-        if (response.status === 200) {
-          setMessage2("Your password has been succesfully changed.");
+        if (response.ok) {
+          setConfirmationResponse(
+            "Your password has been succesfully changed."
+          );
+        } else {
+          const data = await response.json();
+          console.log("this is the error", data);
         }
       } else {
         setMessage2("Passwords don't match");
       }
     } else {
       setMessage1("Please enter your old password.");
+    }
+  };
+
+  const requestEmailCode = async () => {
+    var user;
+    
+    const res = await isAuth();
+    if (res.ok) {
+      user = await res.json();
+    } else {
+      alert("Please login");
+      navigate("/");
+    }
+
+    const email = user.email;
+
+    const backendCaller = new FetchCalls(
+      "/users/request-password-reset",
+      "PATCH",
+      null,
+      { email }
+    );
+
+    const response = await backendCaller.protectedBody();
+    if (response.ok) {
+      console.log("AWAIT RESPONSE ", await response.json());
+      setConfirmationResponse("Success");
+    } else {
+      console.log("AWAIT RESPONSE ", await response.json());
+      setConfirmationResponse("Fail");
     }
   };
 
@@ -94,7 +130,6 @@ const PersonalSettings = (props) => {
               </div>
               <div className="buttons">
                 <button>Change Password</button>
-                <button onClick={(e) => props.closeUI(false)}>Cancel</button>
               </div>
             </div>
           </div>
@@ -104,12 +139,31 @@ const PersonalSettings = (props) => {
       return (
         <div className="password-change-main">
           <Header accountId={user._id} />
-          <div></div>
-          <div>
-            An email will be sent to your registered email address with a link
-            to reset your password.
+          <div className="password-ui-container">
+            <div className="password-header">
+              <h2>Change Password</h2>
+              <hr />
+            </div>
+            <div>
+              To set a password through the website, click the "Send Link"
+              button to receive a link to your email, which you can use to set a
+              new password.
+            </div>
+            <div className="buttons">
+              <button
+                onClick={(e) => {
+                  requestEmailCode();
+                }}
+              >
+                Send Link
+              </button>
+            </div>
+            {confirmationResponse && (
+              <div className="confirmation-response">
+                {confirmationResponse}
+              </div>
+            )}
           </div>
-          <button>Send Link</button>
         </div>
       );
     }

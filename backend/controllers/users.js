@@ -338,12 +338,13 @@ const editPassword = async (req, res, next) => {
 
 const requestPasswordReset = async (req, res, next) => {
   try {
+    console.log("this endpoint was called");
     const code = Math.floor(Math.random() * 99999) + 1;
     const user = await UserModel.findOne({ email: req.body.email });
     console.log("req.body.email ", req.body.email);
     console.log("user ", user);
-    if (!user) {
-      throw new ApiError404("No user associated with this email");
+    if (user) {
+      throw new ApiError404("Account was not found.");
     }
     await user.updateOne({ verificationCode: code });
     const userName = user.firstName;
@@ -355,7 +356,7 @@ const requestPasswordReset = async (req, res, next) => {
     </a>`;
 
     await emailClient("Verification code", message, req.body.email);
-    res.status(200).send("Success.");
+    res.status(200).send({ message: "Success." });
   } catch (err) {
     next(err);
   }
