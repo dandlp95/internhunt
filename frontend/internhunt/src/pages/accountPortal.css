@@ -105,3 +105,31 @@
 .account-portal-main .postpreview{
   margin-top: 2.5rem;
 }
+
+.account-portal-main .comment-main .comment-info-container{
+  display:flex;
+}
+
+.account-portal-main .comment-main .comment-info{
+  margin-left:0.5rem;
+}
+
+.account-portal-main .comment-main .comment-info-container .comment-info{
+  font-size:0.8rem;
+}
+
+.account-portal-main .comment-main .comment-info-container{
+  color: grey;
+}
+
+.account-portal-main .comment-main .comment-content{
+  margin-top: -0.7rem;
+}
+
+.account-portal-main .comment-main .comment-content p{
+  margin-bottom: 2rem;
+  border: 1px dashed #e5e5e5;
+  border-radius: 7px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+}
