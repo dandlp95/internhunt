@@ -65,11 +65,6 @@
   text-decoration: none;
 }
 
-.header-component a:hover,
-.sign-out-div button:hover {
-  background-color: rgb(215, 223, 226, 0.5);
-}
-
 .header-component .search-icon{
   position:absolute;
   margin-top: 2.1rem;
