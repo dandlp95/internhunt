@@ -46,6 +46,7 @@ const ResetPasswordPage = () => {
   return (
     <div className="reset-password-page">
       <Header />
+      <div class="spacer">&nbsp;</div>
       <div className="reset-password-container">
         <h2>Change Password</h2>
         <hr />

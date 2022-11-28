@@ -108,6 +108,7 @@ const PersonalSettings = (props) => {
       return (
         <div className="password-change-main">
           <Header accountId={user._id} />
+          <div class="spacer">&nbsp;</div>
           <div className="password-ui-container">
             <div className="password-header">
               <h2>Change Password</h2>

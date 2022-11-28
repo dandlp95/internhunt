@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import FetchCalls from "../utils/fetchCalls";
 import Button from "../components/button";
+import Header from "../components/header";
 
 const InstructionsSuccess = (props) => {
   return <div className="resetPasswordInstructions">{props.message}</div>;
@@ -37,6 +38,8 @@ const ForgotPassword = () => {
   console.log(email);
   return (
     <div>
+      <Header />
+      <div class="spacer">&nbsp;</div>
       <div>
         <form onSubmit={(e) => e.preventDefault()}>
           <input

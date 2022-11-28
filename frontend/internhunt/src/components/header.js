@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./header.css";
-import logo5 from "../assets/Internhunt-7.png";
+import altlogo from "../assets/alt3.png"
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,10 +36,10 @@ const Header = () => {
         <div className="headerflex logo">
           {userDataJson ? (
             <Link to={`/posts?major=${encodeURI(userDataJson.major)}`}>
-              <img src={logo5} alt="transparent-logo" width="200px" />
+              <img src={altlogo} alt="transparent-logo" width="200px" />
             </Link>
           ) : (
-            <img src={logo5} alt="transparent-logo" width="200px" />
+            <img src={altlogo} alt="transparent-logo" width="200px" />
           )}
         </div>
         <div className="headerflex header-about">
@@ -56,7 +56,7 @@ const Header = () => {
           <input
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => isKeyEntered(e)}
-            placeholder="  Search..."
+            placeholder="  Search Internhunt"
             disabled={!userDataJson}
           />
         </div>

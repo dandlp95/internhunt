@@ -78,6 +78,7 @@ const AccountPortal = () => {
     return (
       <div>
         <Header accountId={user._id} />
+        <div class="spacer">&nbsp;</div>
         <div className="account-portal-main">
           <div></div>
           <div className="posted-content-container">

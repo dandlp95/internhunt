@@ -29,6 +29,7 @@ const Guidelines = () => {
   return (
     <div>
       <Header accountId={user} />
+      <div class="spacer">&nbsp;</div>
       <div className="guidelines-main">
         <div>
           <h2>Community Standards</h2>

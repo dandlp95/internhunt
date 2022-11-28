@@ -3,10 +3,8 @@ import Button from "../components/button";
 import FetchCalls from "../utils/fetchCalls";
 import { isAuth } from "../utils/isLoggedIn";
 import { useNavigate } from "react-router-dom";
-import getUserById from "../utils/getUserId";
 import Header from "../components/header";
 import "./createPost.css";
-import { Link } from "react-router-dom";
 import Rules from "../components/rules";
 
 /* MajorInput component */
@@ -45,8 +43,6 @@ const MajorInput = (props) => {
     </div>
   );
 };
-
-
 
 /* CreatePost component */
 const CreatePost = () => {
@@ -139,7 +135,8 @@ const CreatePost = () => {
   if (user) {
     return (
       <div className="create-post-main">
-        <Header accountId={user._id} />
+        <Header />
+        <div class="spacer">&nbsp;</div>
         <div className="create-post-page">
           <div className="grid-column-one"></div>
           <div className="grid-column-two">

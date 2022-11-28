@@ -14,7 +14,7 @@ import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { AiFillFire } from "react-icons/ai";
 import FetchCalls from "../utils/fetchCalls";
 import "./posts.css";
-import i from "../assets/i.png";
+import i from "../assets/plain-logo.png";
 import workImg from "../assets/work-meeting2.jpg";
 
 const MajorsContainer = (props) => {
@@ -187,17 +187,20 @@ const Posts = () => {
     return (
       <div className="posts-page">
         <Header accountId={user._id} />
+        <div class="spacer">&nbsp;</div>
         <div className="posts-main">
           <div></div>
           <div className="posts-container">
             <div className="create-post">
               <img src={i} width="75px" />
-              <Link to={`/create-post`}>
-                <input placeholder="Create post" />
-              </Link>
+              <div className="input">
+                <Link to={`/create-post`}>
+                  <input placeholder="Create post" />
+                </Link>
+              </div>
             </div>
             <div className="posts-queries">
-              <div>
+              <div className="first-button">
                 <button
                   className={isButton1Active ? "active-button" : ""}
                   onClick={(e) => {

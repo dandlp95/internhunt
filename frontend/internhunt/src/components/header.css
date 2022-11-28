@@ -1,19 +1,26 @@
+.header-component{
+  position:fixed;
+  width: 100%;
+  border: 1px solid lightgrey;
+}
 .header-component header {
   display: flex;
   font-family: "verdana";
-  background-color: #08090a;
+  background-color: white;
   align-items: center;
+  font-size: 0.9rem;
 }
 
 .searchBar input {
   width: 70%;
   height: 2rem;
   font-family: "verdana";
-  font-size: 1.2rem;
+  font-size: 1rem;
   border-color: #d3d3d3;
   margin: 1.5rem 0;
   border-radius: 15px;
   border: 0;
+  background-color: #f5f4f3;
 }
 
 .searchBar {
@@ -42,18 +49,22 @@
   min-width: 150px;
 }
 
-.sign-out-div button{
+.sign-out-div button {
   min-width: 100px;
-  background: none!important;
+  background: none !important;
   border: none;
-  color: white;
+  color: black;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 0.9rem !important;
   font-family: "verdana";
 }
 
 .header-component a {
-  color: white;
+  color: black;
   text-decoration: none;
 }
 
+.header-component a:hover,
+.sign-out-div button:hover {
+  background-color: rgb(215, 223, 226, 0.5);
+}

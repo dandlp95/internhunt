@@ -53,6 +53,7 @@ const MajorsPage = () => {
   return (
     <div>
       <Header accountId={user} />
+      <div class="spacer">&nbsp;</div>
       <div>
         {departments.map((department) => (
           <div key={department._id}>

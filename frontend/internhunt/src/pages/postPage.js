@@ -168,6 +168,7 @@ const PostPage = () => {
     return (
       <div className="post-page-main">
         <Header accountId={user} />
+        <div class="spacer">&nbsp;</div>
         <div className="main-grid-container">
           <div></div>
           <div className="grid-column-2">

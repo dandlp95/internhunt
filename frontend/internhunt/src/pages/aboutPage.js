@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/header";
 import { isAuth } from "../utils/isLoggedIn";
 import about from "../utils/about.json";
-import "./aboutPage.css#"
+import "./aboutPage.css#";
 
 const AboutPage = () => {
   const [user, setUser] = useState([]);
@@ -27,6 +27,7 @@ const AboutPage = () => {
   return (
     <div>
       <Header accountId={user} />
+      <div class="spacer">&nbsp;</div>
       <div className="about-page">
         <h2>{about.title}</h2>
         <p>{about.paragraph}</p>
