@@ -5,6 +5,7 @@ import { isAuth } from "../utils/isLoggedIn";
 import guidelines from "../utils/guidelines.json";
 import examples from "../utils/examples.json";
 import tips from "../utils/tips.json";
+import "./guidelines.css";
 
 const Guidelines = () => {
   const [user, setUser] = useState([]);
@@ -28,9 +29,9 @@ const Guidelines = () => {
   return (
     <div>
       <Header accountId={user} />
-      <div className="guidelinesMain">
+      <div className="guidelines-main">
         <div>
-          <h3>Community Standards</h3>
+          <h2>Community Standards</h2>
           <div className="communityStandardsIntro">
             <p>
               The Community Standards helps us build a community culture based
@@ -43,7 +44,8 @@ const Guidelines = () => {
             </p>
           </div>
           <div className="guidelines">
-            <h2>Unacceptable Behavior</h2>
+            <h2>Rules</h2>
+            <hr />
             <div className="guidelines-container">
               {guidelines.map((guideline) => (
                 <section className="guideline-container">
@@ -53,7 +55,8 @@ const Guidelines = () => {
               ))}
             </div>
             <div className="tips">
-              <h2>Help us create a place with high-quality content!</h2>
+              <h2>How to create high-quality content</h2>
+              <hr />
               <div className="tips-container">
                 {tips.map((tip) => (
                   <section className="tip-container">
@@ -65,16 +68,18 @@ const Guidelines = () => {
             </div>
             <div className="examples">
               <table className="examplesTable">
-                <tr>
+                <thead>
                   <th>Friendly</th>
                   <th>Unfriendly</th>
-                </tr>
-                {examples.map((example) => (
-                  <tr>
-                    <th>{example.friendly}</th>
-                    <th>{example.unfriendly}</th>
-                  </tr>
-                ))}
+                </thead>
+                <tbody>
+                  {examples.map((example) => (
+                    <tr>
+                      <td>{example.friendly}</td>
+                      <td>{example.unfriendly}</td>
+                    </tr>
+                  ))}
+                </tbody>
               </table>
             </div>
           </div>
