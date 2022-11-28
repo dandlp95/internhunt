@@ -17,6 +17,7 @@ import "./posts.css";
 import i from "../assets/plain-logo.png";
 import workImg from "../assets/work-meeting2.jpg";
 
+
 const MajorsContainer = (props) => {
   const [majors, setMajors] = useState();
   const navigate = useNavigate();
@@ -291,6 +292,7 @@ const Posts = () => {
                 <PostPreview post={post} />
               </div>
             ))}
+
           </div>
           <div className="majors-div">
             <MajorsContainer styleActiveButton={styleActiveButtons} />

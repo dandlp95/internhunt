@@ -8,10 +8,11 @@ import { timeDifference } from "../utils/timeDifference";
 
 const PostPreview = (props) => {
   const [post, setPost] = useState(props.post);
+  const [postContent, setPostContent] = useState(props.post.content)
   const [postOwner, setPostOwner] = useState(props.post.owner);
   const [voteCount, setVoteCount] = useState(props.post.rating);
   const timeDiff = timeDifference(new Date(), new Date(post.date));
-  console.log("props.post ", props.post)
+  console.log("props.post ", props.post);
 
   const addVotePost = async (userVote) => {
     var voteReq;
@@ -44,6 +45,9 @@ const PostPreview = (props) => {
     if (!postOwner) {
       setPostOwner({ firstName: "[Deleted ", lastName: "User]" });
     }
+    if(postContent.length > 350){
+      setPostContent(post.content.substring(0, 350) + "..."
+)    }
   }, []);
 
   if (postOwner) {
@@ -74,7 +78,7 @@ const PostPreview = (props) => {
               <div>
                 <h3>{post.title}</h3>
               </div>
-              <p>{post.content}</p>
+              <p>{postContent}</p>
             </section>
           </Link>
         </div>
