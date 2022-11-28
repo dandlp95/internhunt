@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./header.css";
-import altlogo from "../assets/alt3.png"
+import altlogo from "../assets/alt3.png";
+import { SlMagnifier } from "react-icons/sl";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,10 +54,13 @@ const Header = () => {
           </Link>
         </div>
         <div className="headerflex searchBar">
+          <div className="search-icon">
+            <SlMagnifier className="magnifying-glass"/>
+          </div>
           <input
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => isKeyEntered(e)}
-            placeholder="  Search Internhunt"
+            placeholder="Search Internhunt"
             disabled={!userDataJson}
           />
         </div>

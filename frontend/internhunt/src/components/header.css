@@ -21,6 +21,7 @@
   border-radius: 15px;
   border: 0;
   background-color: #f5f4f3;
+  padding-left: 2.3rem;
 }
 
 .searchBar {
@@ -67,4 +68,15 @@
 .header-component a:hover,
 .sign-out-div button:hover {
   background-color: rgb(215, 223, 226, 0.5);
+}
+
+.header-component .search-icon{
+  position:absolute;
+  margin-top: 2.1rem;
+  font-weight: lighter;
+  margin-left:1rem;
+}
+
+.header-component .search-icon .magnifying-glass{
+  color: grey;
 }

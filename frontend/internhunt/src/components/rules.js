@@ -33,7 +33,7 @@ const Rules = () => {
         <div className="guidelines-reference">
           <p>
             Please be mindful of Internhunt's{" "}
-            <Link to="/guidelines">Community guidelines</Link>
+            <Link to="/guidelines">Community Guidelines</Link>
           </p>
         </div>
       </div>
