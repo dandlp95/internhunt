@@ -5,6 +5,7 @@
   margin: 2rem auto;
   border-radius: 7px;
   font-size: 0.9rem;
+  text-align: justify;
 }
 
 .guidelines-main hr {
@@ -31,12 +32,6 @@
   padding-bottom: 1rem;
 }
 
-/* .guidelines-main .examples table,
-.guidelines-main .examples table th {
-  border: 1px solid grey;
-}
- */
-
 .guidelines-main .examples table {
   border-collapse: collapse;
 }
@@ -49,6 +44,7 @@
   color: #ffffff;
   font-weight: bold;
   font-size: 1rem;
+  text-align: center;
   border: 1px solid #54585d;
 }
 .guidelines-main table tbody td {
