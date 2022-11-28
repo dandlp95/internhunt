@@ -13,7 +13,6 @@ const AccountPortal = () => {
   const [user, setUser] = useState();
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
-  const [displayDeclareMajor, setDeclareMajor] = useState(false);
 
   const navigate = useNavigate();
 
@@ -123,9 +122,6 @@ const AccountPortal = () => {
             {/* {owner && <Button text="Change Password" action={editPassword} />} */}
             {owner && (
               <div className="buttons">
-                <button onClick={(e) => setDeclareMajor(true)}>
-                  Declare Major
-                </button>
                 <button onClick={(e) => navigate("/account-settings")}>
                   Personal Settings
                 </button>

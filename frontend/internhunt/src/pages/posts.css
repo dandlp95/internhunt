@@ -120,11 +120,7 @@
   font-size: 0.85rem;
   padding: 0 1rem;
   font-weight: bold;
-}
-
-.majors-options a {
-  text-decoration: none;
-  color: black;
+  cursor: pointer;
 }
 
 .majors-button-div {

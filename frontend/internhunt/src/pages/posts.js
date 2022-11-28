@@ -17,7 +17,7 @@ import "./posts.css";
 import i from "../assets/i.png";
 import workImg from "../assets/work-meeting2.jpg";
 
-const MajorsContainer = () => {
+const MajorsContainer = (props) => {
   const [majors, setMajors] = useState();
   const navigate = useNavigate();
 
@@ -35,6 +35,11 @@ const MajorsContainer = () => {
     }
   };
 
+  const handleMajorClick = (url) => {
+    props.styleActiveButton(0);
+    navigate(url);
+  };
+
   useEffect(() => {
     getMajors();
   }, []);
@@ -47,7 +52,11 @@ const MajorsContainer = () => {
         <div className="majors-list-container">
           {majors.slice(0, 8).map((major) => (
             <div key={major._id} className="major-option">
-              <Link to={`/posts?major=${major.name}`}>{major.name}</Link>
+              <div
+                onClick={(e) => handleMajorClick(`/posts?major=${major.name}`)}
+              >
+                {major.name}
+              </div>
               <div className="major-option-line">
                 <hr />
               </div>
@@ -78,19 +87,21 @@ const Posts = () => {
   const [isButton4Active, setIsButton4Active] = useState(false);
   const [isButton5Active, setIsButton5Active] = useState(false);
   const [isdropdownActive, setIsdropdownActive] = useState(false);
+  const [major, setMajor] = useState();
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const getPostByType = async (postType) => {
-    const userData = localStorage.getItem("userData");
-    const userDataJson = JSON.parse(userData);
+    // const userData = localStorage.getItem("userData");
+    // const userDataJson = JSON.parse(userData);
+    const urlParams = new URLSearchParams(window.location.search);
+    const myParam = urlParams.get("major");
+
     if (postType !== "all") {
-      navigate(
-        `/posts?major=${encodeURI(userDataJson.major)}&type=${postType}`
-      );
+      navigate(`/posts?major=${encodeURI(myParam)}&type=${postType}`);
     } else {
-      navigate(`/posts?major=${encodeURI(userDataJson.major)}`);
+      navigate(`/posts?major=${encodeURI(myParam)}`);
     }
   };
 
@@ -279,7 +290,7 @@ const Posts = () => {
             ))}
           </div>
           <div className="majors-div">
-            <MajorsContainer />
+            <MajorsContainer styleActiveButton={styleActiveButtons} />
           </div>
         </div>
       </div>
