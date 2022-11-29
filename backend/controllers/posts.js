@@ -148,6 +148,9 @@ const getPosts = async (req, res, next) => {
   let search = req.query.search;
   let sortByParam = req.query.sort;
 
+  const pagination = req.body.pagination ? parseInt(req.body.pagination) : 10;
+  const pageNumber = req.body.page ? parseInt(req.body.page) : 1;
+
   if (!sortByParam || sortByParam == "null" || sortByParam == "date") {
     sortByParam = { date: -1 };
   } else if (sortByParam == "rating") {
@@ -190,6 +193,8 @@ const getPosts = async (req, res, next) => {
     })
       .populate("owner", "firstName lastName")
       .sort(sortByParam)
+      .skip((pageNumber - 1) * pagination)
+      .limit(pagination)
       .exec((err, docs) => {
         if (err) {
           const apiError = new ApiError400(err.message);
@@ -210,6 +215,8 @@ const getPosts = async (req, res, next) => {
     })
       .populate("owner", "lastName")
       .sort(sortByParam)
+      .skip((pageNumber - 1) * pagination)
+      .limit(pagination)
       .exec((err, docs) => {
         if (err) {
           const apiError = new ApiError400(err.message);
