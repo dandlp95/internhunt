@@ -144,9 +144,17 @@ const getPostsByDepartment = (req, res, next) => {
 };
 
 const getPosts = async (req, res, next) => {
-  // add query by department... remember it's either query by major or department
   let postType = req.query.type;
   let search = req.query.search;
+  let sortByParam = req.query.sort;
+
+  if (!sortByParam || sortByParam == "null" || sortByParam == "date") {
+    sortByParam = { date: -1 };
+  } else if (sortByParam == "rating") {
+    sortByParam = { rating: -1 };
+  } else {
+    sortByParam = { date: -1 };
+  }
 
   let QString;
   if (search != "null" && search != null) {
@@ -173,15 +181,16 @@ const getPosts = async (req, res, next) => {
     if (foundMajor) {
       department = foundMajor.department;
     }
-    PostModel.find(
-      {
-        $and: [
-          { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
-          { departments: department },
-          { type: { $in: PTypeString } },
-        ],
-      },
-      async (err, docs) => {
+    PostModel.find({
+      $and: [
+        { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
+        { departments: department },
+        { type: { $in: PTypeString } },
+      ],
+    })
+      .populate("owner", "firstName lastName")
+      .sort(sortByParam)
+      .exec((err, docs) => {
         if (err) {
           const apiError = new ApiError400(err.message);
           next(apiError);
@@ -189,23 +198,19 @@ const getPosts = async (req, res, next) => {
           const apiError404 = new ApiError404("No documents found");
           next(apiError404);
         } else {
-          await PostModel.populate(docs, {
-            path: "owner",
-            select: { firstName: 1, lastName: 1 },
-          });
           res.status(200).send(docs);
         }
-      }
-    );
+      });
   } else {
-    PostModel.find(
-      {
-        $and: [
-          { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
-          { type: { $in: PTypeString } },
-        ],
-      },
-      async (err, docs) => {
+    PostModel.find({
+      $and: [
+        { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
+        { type: { $in: PTypeString } },
+      ],
+    })
+      .populate("owner", "lastName")
+      .sort(sortByParam)
+      .exec((err, docs) => {
         if (err) {
           const apiError = new ApiError400(err.message);
           next(apiError);
@@ -213,14 +218,9 @@ const getPosts = async (req, res, next) => {
           const apiError404 = new ApiError404("No documents found");
           next(apiError404);
         } else {
-          await PostModel.populate(docs, {
-            path: "owner",
-            select: { firstName: 1, lastName: 1, _id: 1 },
-          });
           res.status(200).send(docs);
         }
-      }
-    );
+      });
   }
 };
 
@@ -234,3 +234,54 @@ module.exports = {
   getPosts,
   votePost,
 };
+
+// Ill keep these here just in case...
+
+// PostModel.find(
+//   {
+//     $and: [
+//       { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
+//       { departments: department },
+//       { type: { $in: PTypeString } },
+//     ],
+//   },
+//   async (err, docs) => {
+//     if (err) {
+//       const apiError = new ApiError400(err.message);
+//       next(apiError);
+//     } else if (!docs) {
+//       const apiError404 = new ApiError404("No documents found");
+//       next(apiError404);
+//     } else {
+//       await PostModel.populate(docs, {
+//         path: "owner",
+//         select: { firstName: 1, lastName: 1 },
+//       });
+//       res.status(200).send(docs);
+//     }
+//   }
+// );
+
+// PostModel.find(
+//   {
+//     $and: [
+//       { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
+//       { type: { $in: PTypeString } },
+//     ],
+//   },
+//   async (err, docs) => {
+//     if (err) {
+//       const apiError = new ApiError400(err.message);
+//       next(apiError);
+//     } else if (!docs) {
+//       const apiError404 = new ApiError404("No documents found");
+//       next(apiError404);
+//     } else {
+//       await PostModel.populate(docs, {
+//         path: "owner",
+//         select: { firstName: 1, lastName: 1, _id: 1 },
+//       });
+//       res.status(200).send(docs);
+//     }
+//   }
+// );

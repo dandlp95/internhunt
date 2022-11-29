@@ -17,7 +17,6 @@ import "./posts.css";
 import i from "../assets/plain-logo.png";
 import workImg from "../assets/work-meeting2.jpg";
 
-
 const MajorsContainer = (props) => {
   const [majors, setMajors] = useState();
   const navigate = useNavigate();
@@ -81,7 +80,7 @@ const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [sortedPosts, setSortedPosts] = useState([]);
   const [user, setUser] = useState();
-  const [sortBy, setSortBy] = useState();
+  // const [sortBy, setSortBy] = useState();
   const [isButton1Active, setIsButton1Active] = useState(true);
   const [isButton2Active, setIsButton2Active] = useState(false);
   const [isButton3Active, setIsButton3Active] = useState(false);
@@ -94,8 +93,6 @@ const Posts = () => {
   const location = useLocation();
 
   const getPostByType = async (postType) => {
-    // const userData = localStorage.getItem("userData");
-    // const userDataJson = JSON.parse(userData);
     const urlParams = new URLSearchParams(window.location.search);
     const myParam = urlParams.get("major");
 
@@ -148,6 +145,7 @@ const Posts = () => {
     const major = urlParams.get("major");
     const search = urlParams.get("search");
     const type = urlParams.get("type");
+    const sort = urlParams.get("sort");
 
     const getPosts = async () => {
       const options = {
@@ -155,7 +153,7 @@ const Posts = () => {
         headers: { "Content-type": "application/json" },
       };
 
-      const URIQuery = `search=${search}&major=${major}&type=${type}`;
+      const URIQuery = `search=${search}&major=${major}&type=${type}&sort=${sort}`;
 
       const response = await fetch(
         getApiRoot() + "/posts/getPosts?" + encodeURI(URIQuery),
@@ -165,7 +163,6 @@ const Posts = () => {
       if (response.ok) {
         const foundPosts = await response.json();
         setPosts(foundPosts);
-        setSortBy("date");
       } else {
         console.log("something failed", response);
       }
@@ -173,17 +170,14 @@ const Posts = () => {
     getPosts();
   }, [location]);
 
-  useEffect(() => {
-    var postsCopy = [...posts];
-    if (sortBy === "date") {
-      postsCopy.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-    } else if (sortBy === "popularity") {
-      postsCopy.sort((a, b) => b.rating - a.rating);
-    }
-    setSortedPosts(postsCopy);
-  }, [sortBy, posts]);
+  const sortBy = (sortParam) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const majorParam = urlParams.get("major");
+    const typeParam = urlParams.get("type");
 
-  console.log("sorted", sortedPosts);
+    navigate(`/posts?major=${encodeURI(majorParam)}&type=${typeParam}&sort=${sortParam}`);
+  };
+
   if (user) {
     return (
       <div className="posts-page">
@@ -270,7 +264,7 @@ const Posts = () => {
                     <div>
                       <button
                         onClick={(e) => {
-                          setSortBy("popularity");
+                          sortBy("rating");
                         }}
                       >
                         <GiShinyEntrance />
@@ -278,7 +272,7 @@ const Posts = () => {
                       </button>
                     </div>
                     <div>
-                      <button onClick={(e) => setSortBy("date")}>
+                      <button onClick={(e) => sortBy("date")}>
                         <AiFillFire />
                         New
                       </button>
@@ -287,12 +281,11 @@ const Posts = () => {
                 )}
               </div>
             </div>
-            {sortedPosts.map((post) => (
+            {posts.map((post) => (
               <div className="post-preview-container" key={post._id}>
                 <PostPreview post={post} />
               </div>
             ))}
-
           </div>
           <div className="majors-div">
             <MajorsContainer styleActiveButton={styleActiveButtons} />
@@ -304,3 +297,14 @@ const Posts = () => {
 };
 
 export default Posts;
+
+// just in case...
+  // useEffect(() => {
+  //   var postsCopy = [...posts];
+  //   if (sortBy === "date") {
+  //     postsCopy.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+  //   } else if (sortBy === "popularity") {
+  //     postsCopy.sort((a, b) => b.rating - a.rating);
+  //   }
+  //   setSortedPosts(postsCopy);
+  // }, [sortBy, posts]);
