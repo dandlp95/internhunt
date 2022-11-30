@@ -16,6 +16,7 @@ import FetchCalls from "../utils/fetchCalls";
 import "./posts.css";
 import i from "../assets/plain-logo.png";
 import workImg from "../assets/work-meeting2.jpg";
+import PaginationPage from "../components/paginationPage";
 
 const MajorsContainer = (props) => {
   const [majors, setMajors] = useState();
@@ -28,7 +29,6 @@ const MajorsContainer = (props) => {
     const response = await apiCaller.publicGet();
     if (response.ok) {
       const fetchedMajors = await response.json();
-      console.log(fetchedMajors);
       setMajors(fetchedMajors);
     } else {
       console.log(response);
@@ -78,16 +78,16 @@ const MajorsContainer = (props) => {
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
-  const [sortedPosts, setSortedPosts] = useState([]);
   const [user, setUser] = useState();
-  // const [sortBy, setSortBy] = useState();
+  const [currPage, setCurrPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(1);
   const [isButton1Active, setIsButton1Active] = useState(true);
   const [isButton2Active, setIsButton2Active] = useState(false);
   const [isButton3Active, setIsButton3Active] = useState(false);
   const [isButton4Active, setIsButton4Active] = useState(false);
   const [isButton5Active, setIsButton5Active] = useState(false);
   const [isdropdownActive, setIsdropdownActive] = useState(false);
-  const [major, setMajor] = useState();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -101,6 +101,37 @@ const Posts = () => {
     } else {
       navigate(`/posts?major=${encodeURI(myParam)}`);
     }
+  };
+
+  const nextpage = (pageNumber) => {
+    setCurrPage(pageNumber);
+    setPosts([]);
+
+    //getPosts(pageNumber);
+  };
+
+  const tenChange = (pageNumber, isposOrneg) => {
+    var finalPage;
+    if (isposOrneg > 0) {
+      finalPage = pageNumber + 10;
+    } else {
+      finalPage = pageNumber - 10;
+    }
+    setCurrPage(finalPage);
+    setPosts([]);
+    //getPosts(finalPage);
+  };
+
+  const hundreadChange = (pageNumber, isposOrneg) => {
+    var finalPage;
+    if (isposOrneg > 0) {
+      finalPage = pageNumber + 100;
+    } else {
+      finalPage = pageNumber - 100;
+    }
+    setCurrPage(finalPage);
+    setPosts([]);
+    //getPosts(finalPage);
   };
 
   const isLoggedIn = async () => {
@@ -139,6 +170,18 @@ const Posts = () => {
     isLoggedIn();
   }, []);
 
+  const sortBy = (sortParam) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const majorParam = urlParams.get("major");
+    const typeParam = urlParams.get("type");
+
+    navigate(
+      `/posts?major=${encodeURI(
+        majorParam
+      )}&type=${typeParam}&sort=${sortParam}`
+    );
+  };
+
   useEffect(() => {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -153,36 +196,48 @@ const Posts = () => {
         headers: { "Content-type": "application/json" },
       };
 
-      const URIQuery = `search=${search}&major=${major}&type=${type}&sort=${sort}`;
+      const URIQuery = `search=${search}&major=${major}&type=${type}&sort=${sort}&page=${currPage}`;
+      const URIQuery2 = `search=${search}&major=${major}&type=${type}`;
 
       const response = await fetch(
         getApiRoot() + "/posts/getPosts?" + encodeURI(URIQuery),
         options
       );
 
-      if (response.ok) {
+      const response2 = await fetch(
+        getApiRoot() + "/posts/getPostsCount?" + encodeURI(URIQuery2),
+        options
+      );
+
+      if (response.ok && response2.ok) {
         const foundPosts = await response.json();
+        const totalPostsCount = await response2.json();
+        console.log("foundPosts: ", foundPosts);
+        console.log("totalPostCount: ", totalPostsCount);
+
+        setTotalPosts(totalPostsCount.count);
         setPosts(foundPosts);
       } else {
         console.log("something failed", response);
       }
     };
     getPosts();
-  }, [location]);
+  }, [location, currPage]);
 
-  const sortBy = (sortParam) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const majorParam = urlParams.get("major");
-    const typeParam = urlParams.get("type");
+  useEffect(() => {
+    console.log("total posts: ", totalPosts);
+    if (totalPosts % 10 === 0) {
+      setNumberOfPages(Math.floor(totalPosts / 10));
+    } else {
+      setNumberOfPages(Math.floor(totalPosts / 10) + 1);
+    }
+  }, [totalPosts]);
 
-    navigate(`/posts?major=${encodeURI(majorParam)}&type=${typeParam}&sort=${sortParam}`);
-  };
-
-  if (user) {
+  if (user && posts && totalPosts) {
     return (
       <div className="posts-page">
         <Header accountId={user._id} />
-        <div class="spacer">&nbsp;</div>
+        <div className="spacer">&nbsp;</div>
         <div className="posts-main">
           <div></div>
           <div className="posts-container">
@@ -291,6 +346,15 @@ const Posts = () => {
             <MajorsContainer styleActiveButton={styleActiveButtons} />
           </div>
         </div>
+        {totalPosts > 10 && (
+          <PaginationPage
+            pages={numberOfPages}
+            nextPage={nextpage}
+            currentPage={currPage}
+            hundreadChange={hundreadChange}
+            tenChange={tenChange}
+          ></PaginationPage>
+        )}
       </div>
     );
   }
@@ -299,12 +363,12 @@ const Posts = () => {
 export default Posts;
 
 // just in case...
-  // useEffect(() => {
-  //   var postsCopy = [...posts];
-  //   if (sortBy === "date") {
-  //     postsCopy.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-  //   } else if (sortBy === "popularity") {
-  //     postsCopy.sort((a, b) => b.rating - a.rating);
-  //   }
-  //   setSortedPosts(postsCopy);
-  // }, [sortBy, posts]);
+// useEffect(() => {
+//   var postsCopy = [...posts];
+//   if (sortBy === "date") {
+//     postsCopy.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+//   } else if (sortBy === "popularity") {
+//     postsCopy.sort((a, b) => b.rating - a.rating);
+//   }
+//   setSortedPosts(postsCopy);
+// }, [sortBy, posts]);

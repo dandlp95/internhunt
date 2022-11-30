@@ -18,4 +18,6 @@ router.get("/getPostsByDepartment", postController.getPostsByDepartment);
 
 router.get("/getPosts", postController.getPosts);
 
+router.get("/getPostsCount", postController.getPostsCount);
+
 module.exports = router;

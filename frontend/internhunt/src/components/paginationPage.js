@@ -4,7 +4,7 @@ import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
 const PaginationPage = (props) => {
   const pageLinks = [];
   const { currentPage, pages } = props;
-
+  
   let start = currentPage - (currentPage % 10);
   if (start <= 0) start = 1;
   for (let i = start; i <= start + 11 && i <= pages; i++) {

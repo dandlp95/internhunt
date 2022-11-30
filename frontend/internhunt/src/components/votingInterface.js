@@ -30,7 +30,7 @@ const VotingInterface = (props) => {
         const votingHistory = await response.json();
         // console.log(votingHistory)
         if (votingHistory.lastVote) {
-          console.log(votingHistory.lastVote);
+          // console.log(votingHistory.lastVote);
           lastVote = votingHistory.lastVote;
         } else {
           lastVote = 0;

@@ -185,3 +185,6 @@ hr {
   -webkit-transform: rotate(45deg);
 }
 
+.posts-page .post-content .post-metadata{
+  margin-bottom:-0.5rem !important;
+}
