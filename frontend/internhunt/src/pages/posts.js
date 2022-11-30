@@ -94,13 +94,24 @@ const Posts = () => {
 
   const getPostByType = async (postType) => {
     const urlParams = new URLSearchParams(window.location.search);
-    const myParam = urlParams.get("major");
+    const majorParam = urlParams.get("major");
+    const search = urlParams.get("search");
 
-    if (postType !== "all") {
-      navigate(`/posts?major=${encodeURI(myParam)}&type=${postType}`);
-    } else {
-      navigate(`/posts?major=${encodeURI(myParam)}`);
+    var searchString = "";
+    var majorString = `major=${majorParam}`;
+    var postTypeString = "";
+    var url;
+
+    if (search) {
+      searchString = `&search=${search}`;
     }
+    if (postType !== "all") {
+      postTypeString = `&type=${postType}`;
+    }
+
+    url = `/posts?${majorString}${postTypeString}${searchString}`;
+
+    navigate(url);
   };
 
   const nextpage = (pageNumber) => {
@@ -170,12 +181,19 @@ const Posts = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const majorParam = urlParams.get("major");
     const typeParam = urlParams.get("type");
+    const search = urlParams.get("search");
 
-    navigate(
-      `/posts?major=${encodeURI(
-        majorParam
-      )}&type=${typeParam}&sort=${sortParam}`
-    );
+    var searchString = "";
+    var majorString = `major=${majorParam}`;
+    var postTypeString = "";
+    var url;
+
+    if (search) searchString = `&search=${search}`;
+
+    if (typeParam) postTypeString = `&type=${typeParam}`;
+
+    url = `/posts?${majorString}${searchString}${postTypeString}&sort=${sortParam}`;
+    navigate(url);
   };
 
   useEffect(() => {
@@ -194,7 +212,7 @@ const Posts = () => {
 
       const URIQuery = `search=${search}&major=${major}&type=${type}&sort=${sort}&page=${currPage}`;
       const URIQuery2 = `search=${search}&major=${major}&type=${type}`;
-      console.log("URIQUERY: ", URIQuery)
+      console.log("URIQUERY: ", URIQuery);
       const response = await fetch(
         getApiRoot() + "/posts/getPosts?" + encodeURI(URIQuery),
         options
@@ -227,7 +245,7 @@ const Posts = () => {
     }
   }, [totalPosts]);
 
-  if (user && posts && totalPosts) {
+  if (user) {
     return (
       <div className="posts-page">
         <Header />
