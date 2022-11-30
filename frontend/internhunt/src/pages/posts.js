@@ -106,8 +106,6 @@ const Posts = () => {
   const nextpage = (pageNumber) => {
     setCurrPage(pageNumber);
     setPosts([]);
-
-    //getPosts(pageNumber);
   };
 
   const tenChange = (pageNumber, isposOrneg) => {
@@ -119,7 +117,6 @@ const Posts = () => {
     }
     setCurrPage(finalPage);
     setPosts([]);
-    //getPosts(finalPage);
   };
 
   const hundreadChange = (pageNumber, isposOrneg) => {
@@ -131,7 +128,6 @@ const Posts = () => {
     }
     setCurrPage(finalPage);
     setPosts([]);
-    //getPosts(finalPage);
   };
 
   const isLoggedIn = async () => {
@@ -198,7 +194,7 @@ const Posts = () => {
 
       const URIQuery = `search=${search}&major=${major}&type=${type}&sort=${sort}&page=${currPage}`;
       const URIQuery2 = `search=${search}&major=${major}&type=${type}`;
-
+      console.log("URIQUERY: ", URIQuery)
       const response = await fetch(
         getApiRoot() + "/posts/getPosts?" + encodeURI(URIQuery),
         options
@@ -234,7 +230,7 @@ const Posts = () => {
   if (user && posts && totalPosts) {
     return (
       <div className="posts-page">
-        <Header accountId={user._id} />
+        <Header />
         <div className="spacer">&nbsp;</div>
         <div className="posts-main">
           <div></div>

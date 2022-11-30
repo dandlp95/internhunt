@@ -11,8 +11,11 @@ const Header = () => {
   const navigate = useNavigate();
 
   const searchPost = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const majorParam = urlParams.get("major");
+    
     navigate(
-      `/posts?major=${encodeURI(userDataJson.major)}&search=${encodeURI(
+      `/posts?major=${encodeURI(majorParam)}&search=${encodeURI(
         searchQuery
       )}`
     );
