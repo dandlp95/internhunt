@@ -212,8 +212,6 @@ const Posts = () => {
       if (response.ok && response2.ok) {
         const foundPosts = await response.json();
         const totalPostsCount = await response2.json();
-        console.log("foundPosts: ", foundPosts);
-        console.log("totalPostCount: ", totalPostsCount);
 
         setTotalPosts(totalPostsCount.count);
         setPosts(foundPosts);
