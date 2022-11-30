@@ -359,14 +359,3 @@ const Posts = () => {
 };
 
 export default Posts;
-
-// just in case...
-// useEffect(() => {
-//   var postsCopy = [...posts];
-//   if (sortBy === "date") {
-//     postsCopy.sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
-//   } else if (sortBy === "popularity") {
-//     postsCopy.sort((a, b) => b.rating - a.rating);
-//   }
-//   setSortedPosts(postsCopy);
-// }, [sortBy, posts]);

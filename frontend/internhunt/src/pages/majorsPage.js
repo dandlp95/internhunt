@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import FetchCalls from "../utils/fetchCalls";
-import getLocalStorage from "../utils/getLocalStorage";
 import Header from "../components/header";
 import { isAuth } from "../utils/isLoggedIn";
+import Card from "../components/card";
+import "./majorsPage.css";
 
 const MajorsPage = () => {
   const [majors, setMajors] = useState([]);
@@ -51,27 +52,37 @@ const MajorsPage = () => {
   };
 
   return (
-    <div>
+    <div className="majors-main">
       <Header accountId={user} />
-      <div class="spacer">&nbsp;</div>
-      <div>
-        {departments.map((department) => (
-          <div key={department._id}>
-            <button onClick={() => handleDepartmentClick(department._id)}>
-              {department.name}
-            </button>
+      <div className="spacer">&nbsp;</div>
+      <div className="majors-grid">
+        <div className="department-options">
+          <h3>Departments</h3>
+          <div className="departments-list-container">
+            {departments.map((department) => (
+              <div key={department._id} className="department-option">
+                <div onClick={() => handleDepartmentClick(department._id)}>
+                  {department.name}
+                </div>
+                <div className="department-option-line">
+                  <hr />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div>
-        {majors.map((major) => (
-          <Link to={`/posts?major=${encodeURI(major.name)}`} key={major._id}>
-            <section>
-              <h2>{major.name}</h2>
-              <p>{major.description}</p>
-            </section>
-          </Link>
-        ))}
+        </div>
+        <div className="majors-grid-two">
+          {majors.map((major) => (
+            <div className="card-link-container">
+              <Link
+                to={`/posts?major=${encodeURI(major.name)}`}
+                key={major._id}
+              >
+                <Card major={major} />
+              </Link>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
