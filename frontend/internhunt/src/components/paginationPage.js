@@ -1,16 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
+import "./paginationPage.css";
 
 const PaginationPage = (props) => {
+  const [activeButton, setActiveButton] = useState();
   const pageLinks = [];
   const { currentPage, pages } = props;
-  
+
   let start = currentPage - (currentPage % 10);
   if (start <= 0) start = 1;
   for (let i = start; i <= start + 11 && i <= pages; i++) {
     pageLinks.push(
       <PaginationItem active={currentPage === i}>
-        <PaginationLink onClick={() => props.nextPage(i)}>{i}</PaginationLink>
+        <PaginationLink
+          onClick={() => {
+            props.nextPage(i);
+            setActiveButton(i);
+          }}
+          className={activeButton === i ? "active-page" : ""}
+        >
+          {i}
+        </PaginationLink>
       </PaginationItem>
     );
   }
@@ -31,7 +41,9 @@ const PaginationPage = (props) => {
         <PaginationItem>
           <PaginationLink
             className="addbuttons"
-            onClick={() => props.tenChange(currentPage, -1)}
+            onClick={() => {
+              props.tenChange(currentPage, -1);
+            }}
           >
             - 10
           </PaginationLink>
