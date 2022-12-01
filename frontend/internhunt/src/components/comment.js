@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { isAuth } from "../utils/isLoggedIn";
-import Button from "./button";
 import FetchCalls from "../utils/fetchCalls";
 import getLocalStorage from "../utils/getLocalStorage";
 import VotingInterface from "./votingInterface";
