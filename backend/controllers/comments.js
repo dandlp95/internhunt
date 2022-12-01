@@ -1,4 +1,3 @@
-const UserModel = require("../models/user");
 const CommentModel = require("../models/comment");
 const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError401 = require("../middleware/error-handling/apiError401");

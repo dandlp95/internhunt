@@ -15,6 +15,11 @@ const MajorSchema = new Schema({
     type: String,
     required: true,
   },
+  image: {
+    type: Schema.Types.ObjectId,
+    ref: "MajorImage",
+    required: true,
+  }
 });
 
 const Major = mongoose.model("Major", MajorSchema);

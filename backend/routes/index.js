@@ -12,4 +12,6 @@ router.use("/votingHistory", require("./votingHistory"))
 
 router.use("/departments", require("./departments"))
 
+router.use("/majorImages", require("./majorimages"))
+
 module.exports = router;
