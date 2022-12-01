@@ -2,7 +2,6 @@ import React from "react";
 import "./login.css";
 import { useState, useEffect } from "react";
 import { getApiRoot } from "../utils/getApiRoot";
-import Background from "./background";
 import { useNavigate, Link } from "react-router-dom";
 import "./login.css";
 import FailMessage from "./failMessage";

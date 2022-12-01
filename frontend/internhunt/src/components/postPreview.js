@@ -12,7 +12,6 @@ const PostPreview = (props) => {
   const [postOwner, setPostOwner] = useState(props.post.owner);
   const [voteCount, setVoteCount] = useState(props.post.rating);
   const timeDiff = timeDifference(new Date(), new Date(post.date));
-  //console.log("props.post ", props.post);
 
   const addVotePost = async (userVote) => {
     var voteReq;
