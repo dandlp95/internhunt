@@ -24,6 +24,16 @@ const MajorsPage = () => {
     setDepartments(await data.json());
   };
 
+  const handleDepartmentClick = async (departmentId) => {
+    // Change this so that the obtained data is filtered instead of making a call every time...
+    const fetchData = new FetchCalls(
+      `/majors/getByDepartment/${departmentId}`,
+      "GET"
+    );
+    const data = await fetchData.publicGet();
+    setMajors(await data.json());
+  };
+
   const isLoggedIn = async () => {
     const res = await isAuth();
     if (!res.ok) {
@@ -40,16 +50,6 @@ const MajorsPage = () => {
     getMajors();
     getByDepartments();
   }, []);
-
-  const handleDepartmentClick = async (departmentId) => {
-    // Change this so that the obtained data is filtered instead of making a call every time...
-    const fetchData = new FetchCalls(
-      `/majors/getByDepartment/${departmentId}`,
-      "GET"
-    );
-    const data = await fetchData.publicGet();
-    setMajors(await data.json());
-  };
 
   return (
     <div className="majors-main">
@@ -78,7 +78,7 @@ const MajorsPage = () => {
                 to={`/posts?major=${encodeURI(major.name)}`}
                 key={major._id}
               >
-                <Card major={major} />
+                <Card major={major} key={major._id}/>
               </Link>
             </div>
           ))}
