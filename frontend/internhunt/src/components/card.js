@@ -41,7 +41,7 @@ const Card = (props) => {
             <h2>{props.major.name}</h2>
           </div>
         </div>
-        <div>
+        <div className="major-description">
           <p>{props.major.description}</p>
         </div>
       </div>
