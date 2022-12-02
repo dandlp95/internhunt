@@ -49,8 +49,8 @@ const UserSchema = new Schema({
     },
   ],
   active: {
-    type: Boolean, // This will be used to verify if a user has confirmed their account...
-    default: true, // It is set to true by default just for testing purposes. Once I implement email confirmation, this should be changed to false.
+    type: Boolean, 
+    default: true, 
   },
   major: {
     type: Schema.Types.ObjectId,

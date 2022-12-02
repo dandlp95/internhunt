@@ -440,7 +440,7 @@ const isLoggedIn = async (req, res, next) => {
     } else {
       UserModel.findById(
         req.accountId,
-        "firstName lastName active email customPassword",
+        "firstName lastName active email customPassword accessLevel",
         (err, doc) => {
           if (err) {
             next(new ApiError400(err.message));

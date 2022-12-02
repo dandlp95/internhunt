@@ -16,6 +16,8 @@ const Post = (props) => {
   const [voteCount, setVoteCount] = useState(props.post.rating);
   const [rerenderChild, setRerenderChild] = useState(true);
   const [displayOwnerOptions, setDisplayOwnerOptions] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [priviledges, setPriviledges] = useState("user");
   const route = "posts";
   const timeDiff = timeDifference(new Date(), new Date(props.post.date));
 
@@ -60,22 +62,35 @@ const Post = (props) => {
     setRerenderChild(!rerenderChild);
   };
 
-  const checkIsPostCreator = async () => {
-    const response = await isAuth();
-    if (response.ok) {
-      const user = await response.json();
-      if (user._id === props.user._id) {
-        setIsPostCreator(true);
-      } else {
-        setIsPostCreator(false);
-      }
-    }
-  };
-
   useEffect(() => {
+    const checkIsPostCreator = async () => {
+      const response = await isAuth();
+      if (response.ok) {
+        const user = await response.json();
+        console.log("fetched user: ", user)
+        if (user._id === props.user._id) {
+          setIsPostCreator(true);
+        } else {
+          setIsPostCreator(false);
+        }
+        if (user.accessLevel === 1) {
+          setIsAdmin(true);
+        }
+      }
+    };
     checkIsPostCreator();
   }, []);
 
+  useEffect(() => {
+    if (isPostCreator) {
+      setPriviledges("creator");
+    } else if (isAdmin) {
+      setPriviledges("admin");
+    } else if (!isAdmin && !isPostCreator) {
+      setPriviledges("user");
+    }
+  }, [isAdmin, isPostCreator]);
+  console.log("priviledges: ", priviledges);
   if (!editMode) {
     return (
       <div className="post-main">
@@ -122,6 +137,28 @@ const Post = (props) => {
                   <div className="post-owner-options">
                     <div onClick={(e) => activateEdit()}>Edit</div>
                     <hr />
+                    <div
+                      onClick={(e) => handleDeleteClick()}
+                      className="second"
+                    >
+                      Delete
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            {isAdmin && (
+              <div className="owner-options-container">
+                <div className="owner-options-dots">
+                  <BiDotsHorizontalRounded
+                    onClick={(e) =>
+                      setDisplayOwnerOptions(!displayOwnerOptions)
+                    }
+                    className="dots"
+                  />
+                </div>
+                {displayOwnerOptions && (
+                  <div className="post-owner-options">
                     <div
                       onClick={(e) => handleDeleteClick()}
                       className="second"
@@ -184,6 +221,7 @@ const Post = (props) => {
                 </button>
               </div>
             )}
+
             <div className="post-lower-section">
               <div className="comment-info-section">
                 <BsChatRightText />
