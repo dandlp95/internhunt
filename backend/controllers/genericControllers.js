@@ -13,7 +13,7 @@ const getAll = (Schema) => {
         const apiError = new ApiError400(err.message);
         next(apiError);
       } else if (!docs) {
-        const apiError = new ApiError404(err.message);
+        const apiError = new ApiError404("No documents found");
         next(apiError);
       } else {
         res.status(200).send(docs);
