@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import FetchCalls from "../utils/fetchCalls";
 import Button from "../components/button";
 import Header from "../components/header";
+import "./forgotPassword.css";
 
 const InstructionsSuccess = (props) => {
   return <div className="resetPasswordInstructions">{props.message}</div>;
@@ -35,22 +36,31 @@ const ForgotPassword = () => {
     setDisplayInstructions(true);
   };
 
-  console.log(email);
   return (
-    <div>
+    <div className="password-reset-main">
       <Header />
       <div class="spacer">&nbsp;</div>
-      <div>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <input
-            required
-            placeholder="Enter your email account"
-            type="text"
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Button text="Send code" action={handleRequestPasswordReset} />
-        </form>
+      <div className="password-reset-container">
+        <div>
+          <h2>Reset Password</h2>
+          <hr />
+        </div>
+        <div>
+          <form onSubmit={(e) => e.preventDefault()}>
+            <input
+              required
+              placeholder="Enter your email account"
+              type="text"
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <div>
+              <button onClick={(e) => handleRequestPasswordReset()}>
+                Send Code
+              </button>
+            </div>
+          </form>
+        </div>
         <div>
           {displayInstructions && (
             <InstructionsSuccess message={instructionsMessage} />
