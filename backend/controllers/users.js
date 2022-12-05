@@ -465,6 +465,7 @@ const handleGoogleLogin = async (req, res, next) => {
   // This will need more security, maybe decode the jwt here rather than the frontend?
   try {
     const user = await UserModel.findOne({ email: req.body.email });
+    console.log("logged in user: ", user);
     if (user) {
       if (user.currStatus == "inactive") {
         throw new ApiError404("Account not found.");
@@ -474,7 +475,13 @@ const handleGoogleLogin = async (req, res, next) => {
         process.env.JWT_SECRET_KEY,
         { expiresIn: "1h" }
       );
-      res.status(200).send({ token: token, userId: user._id, major: null });
+      res
+        .status(200)
+        .send({
+          token: token,
+          userId: user._id,
+          major: user.major ? user.major : null,
+        });
     } else {
       const newUser = {
         email: req.body.email,
