@@ -5,12 +5,11 @@ import { isAuth } from "../utils/isLoggedIn";
 import Header from "../components/header";
 import "./personalSettings.css";
 import PasswordInput from "../components/passwordInput";
+import ChangeMajor from "../components/changeMajor";
 
 const PersonalSettings = (props) => {
   const [user, setUser] = useState();
   const [oldPassword, setOldPassword] = useState();
-  // const [newPassword, setNewPassword] = useState();
-  // const [newPasswordConfirm, setNewPasswordConfirm] = useState();
   const [oldPasswordExists, setOldPasswordExists] = useState(false);
 
   const [message1, setMessage1] = useState(null);
@@ -123,6 +122,9 @@ const PersonalSettings = (props) => {
               />
               <PasswordInput passwordChange={requestPasswordChange} />
             </div>
+          </div>
+          <div className="change-major-ui-container">
+            <ChangeMajor />
           </div>
         </div>
       );

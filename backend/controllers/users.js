@@ -10,11 +10,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const authError = new ApiError401("Not authorized.");
 const { emailClient } = require("../utils/emailClient");
-const mongoose = require("mongoose");
 const Api401Error = require("../middleware/error-handling/apiError401");
+const mongoose = require("mongoose");
 
 const getAllUsers = (req, res, next) => {
-  // Double checks Ids arent sent...
   UserModel.find({}, "firstName lastName", (err, docs) => {
     if (err) {
       const apiError = new ApiError400(err.message);
@@ -105,15 +104,19 @@ const getUserByIdPrivate = async (req, res, next) => {
   }
 };
 
-const editUser = (req, res, next) => {
+const editUser = async (req, res, next) => {
   try {
     if (!req.accountId || req.accountId != req.params.id) {
       throw authError;
     }
-
+    const major = await MajorModel.findOne({ name: req.body.major });
+    if (!major) {
+      throw ApiError400("Not a valid major.");
+    }
     const edits = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
+      major: mongoose.Types.ObjectId(major._id),
     };
 
     UserModel.findByIdAndUpdate(req.params.id, edits, (err, doc) => {
