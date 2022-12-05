@@ -462,7 +462,6 @@ const isLoggedIn = async (req, res, next) => {
 };
 
 const handleGoogleLogin = async (req, res, next) => {
-  // This will need more security, maybe decode the jwt here rather than the frontend?
   try {
     const user = await UserModel.findOne({ email: req.body.email });
     console.log("logged in user: ", user);
