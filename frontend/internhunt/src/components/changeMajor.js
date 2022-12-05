@@ -6,7 +6,6 @@ import "./changeMajor.css";
 const ChangeMajor = () => {
   var userData = JSON.parse(localStorage.getItem("userData"));
   var localStorageMajor;
-  console.log("local storage info: ", userData);
   if (!userData.major || userData.major === "null") {
     localStorageMajor = null;
   }
@@ -14,6 +13,7 @@ const ChangeMajor = () => {
   const [major, setMajor] = useState(localStorageMajor);
   const [edit, setEdit] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState(false);
+  const [majorsList, setMajorsList] = useState([]);
 
   const requestMajorChange = async () => {
     const backendCaller = new FetchCalls(
@@ -24,9 +24,11 @@ const ChangeMajor = () => {
     );
     const response = await backendCaller.protectedBody();
     if (response.ok) {
-      setConfirmationMessage("Your major has been changed.");
+      alert("Your major has been changed.");
     } else {
+      setConfirmationMessage("An error has ocurred.");
     }
+    setEdit(false);
   };
 
   const handleCancel = () => {
@@ -34,8 +36,20 @@ const ChangeMajor = () => {
     setEdit(false);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const getMajors = async () => {
+      const options = {
+        method: "GET",
+        headers: { "Content-type": "application/json" },
+      };
+      const response = await fetch(getApiRoot() + "/majors", options);
+      const majors = await response.json();
 
+      setMajorsList(majors);
+    };
+    getMajors();
+  }, [edit]); // Use this use effect to get a list of majors and add it to the drop down menu
+  console.log("majors list: ", majorsList);
   if (!edit) {
     return (
       <div className="change-major-main">
@@ -51,7 +65,7 @@ const ChangeMajor = () => {
         </div>
       </div>
     );
-  } else {
+  } else if (edit && majorsList) {
     return (
       <div className="change-major-main">
         <div className="change-major-title">
@@ -59,10 +73,22 @@ const ChangeMajor = () => {
           <hr />
         </div>
         <div className="change-major-input">
-          <input
-            value={major ? major : setMajor(" ")}
-            onChange={(e) => setMajor(e.target.value)}
-          />
+          <div>
+            <input
+              value={major ? major : setMajor(" ")}
+              onChange={(e) => setMajor(e.target.value)}
+              list="majors"
+            />
+          </div>
+          <datalist id="majors">
+            {majorsList.map((major) => (
+              <option
+                data-value={major._id}
+                value={major.name}
+                key={major._id}
+              />
+            ))}
+          </datalist>
           <div className="change-major-button-container">
             <button onClick={(e) => requestMajorChange()}>Save</button>
             <button onClick={(e) => handleCancel()}>Cancel</button>
