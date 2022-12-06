@@ -1,5 +1,6 @@
 const PostModel = require("../models/Post");
 const MajorModel = require("../models/major");
+const UserModel = require("../models/user");
 const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
@@ -55,9 +56,9 @@ const deletePost = async (req, res, next) => {
     if (!req.accountId) {
       throw apiAuthError;
     }
-    PostModel.findOneAndDelete(
-      { _id: req.params.id, owner: req.accountId },
-      (err, doc) => {
+    const user = await UserModel.findById(req.accountId);
+    if (user.accessLevel === 1) {
+      PostModel.findOneAndDelete({ _id: req.params.id }, (err, doc) => {
         if (err) {
           const apiError = new ApiError400(err.message);
           next(apiError);
@@ -67,8 +68,23 @@ const deletePost = async (req, res, next) => {
         } else {
           res.status(200).send(doc);
         }
-      }
-    );
+      });
+    } else {
+      PostModel.findOneAndDelete(
+        { _id: req.params.id, owner: req.accountId },
+        (err, doc) => {
+          if (err) {
+            const apiError = new ApiError400(err.message);
+            next(apiError);
+          } else if (!doc) {
+            const apiError = new Api404Error("No document found");
+            next(apiError);
+          } else {
+            res.status(200).send(doc);
+          }
+        }
+      );
+    }
   } catch (err) {
     next(err);
   }
