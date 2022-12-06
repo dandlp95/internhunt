@@ -31,9 +31,9 @@ const AccountPortal = () => {
   } else {
     pronoun = "";
   }
-  const banUser = async () => {
+  const banUser = async (action) => {
     const backendCaller = new FetchCalls(
-      `/users/ban/${id}/false`,
+      `/users/ban/${user.email}/${action}`,
       "PATCH",
       userData.jwt
     );
@@ -182,7 +182,13 @@ const AccountPortal = () => {
                   )}
                 </div>
                 <div className="ban-button">
-                  <button onClick={() => banUser()}>Ban User</button>
+                  {user.active ? (
+                    <button onClick={() => banUser("false")}>Ban User</button>
+                  ) : (
+                    <button onClick={() => banUser("true")}>
+                      Remove User Ban
+                    </button>
+                  )}
                 </div>
               </div>
             )}

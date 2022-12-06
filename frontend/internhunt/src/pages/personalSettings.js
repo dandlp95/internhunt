@@ -6,6 +6,7 @@ import Header from "../components/header";
 import "./personalSettings.css";
 import PasswordInput from "../components/passwordInput";
 import ChangeMajor from "../components/changeMajor";
+import UserManager from "../components/userManager";
 
 const PersonalSettings = (props) => {
   const [user, setUser] = useState();
@@ -16,15 +17,18 @@ const PersonalSettings = (props) => {
   const [message2, setMessage2] = useState(null);
   const [confirmationResponse, setConfirmationResponse] = useState();
   const [isErr, setIsErr] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const fetchUserData = async () => {
     const response = await isAuth();
     if (response.ok) {
       const fetchUser = await response.json();
-      console.log(fetchUser);
+      console.log("fetch User: ", fetchUser);
       setUser(fetchUser);
       setOldPasswordExists(fetchUser.customPassword);
+
+      if (fetchUser.accessLevel > 0) setIsAdmin(true);
     } else {
       alert("Please log in");
       navigate("/");
@@ -103,11 +107,12 @@ const PersonalSettings = (props) => {
   }, []);
 
   if (user) {
+    console.log("the user: ", user)
     if (oldPasswordExists) {
       return (
         <div className="password-change-main">
           <Header accountId={user._id} />
-          <div class="spacer">&nbsp;</div>
+          <div className="spacer">&nbsp;</div>
           <div className="password-ui-container">
             <div className="password-header">
               <h2>Change Password</h2>
@@ -126,6 +131,11 @@ const PersonalSettings = (props) => {
           <div className="change-major-ui-container">
             <ChangeMajor />
           </div>
+          {isAdmin && (
+            <div>
+              <UserManager />
+            </div>
+          )}
         </div>
       );
     } else {
@@ -158,6 +168,10 @@ const PersonalSettings = (props) => {
                 {confirmationResponse}
               </div>
             )}
+          </div>
+          {/* Test this part... */}
+          <div className="change-major-ui-container">
+            <ChangeMajor />
           </div>
         </div>
       );

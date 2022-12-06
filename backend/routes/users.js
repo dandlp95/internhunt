@@ -45,9 +45,15 @@ router.patch("/request-password-reset", userController.requestPasswordReset);
 router.patch("/approve-password-reset", userController.approvePasswordReset);
 
 router.patch(
-  "/ban/:id/:action",
+  "/ban/:email/:action",
   isAuth.getAuthToken,
   userController.banHandler
+);
+
+router.get(
+  "/getBannedUsers",
+  isAuth.getAuthToken,
+  userController.getBannedUsers
 );
 
 module.exports = router;

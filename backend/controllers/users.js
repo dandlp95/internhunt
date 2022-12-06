@@ -258,8 +258,8 @@ const banHandler = async (req, res, next) => {
       throw new ApiError400("Invalid param");
     }
 
-    UserModel.findByIdAndUpdate(
-      req.params.id,
+    UserModel.findOneAndUpdate(
+      {email: req.params.email},
       { active: ban },
       { new: true },
       async (err, doc) => {
@@ -285,6 +285,26 @@ const banHandler = async (req, res, next) => {
         }
       }
     );
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getBannedUsers = async (req, res, next) => {
+  try {
+    if (!req.accountId) throw authError;
+    const user = UserModel.findById(req.accountId);
+    if (user.accessLevel < 1) throw authError;
+
+    UserModel.find({ active: false }, (err, docs) => {
+      if (err) {
+        throw new ApiError400(err.message);
+      } else if (!docs) {
+        throw new ApiError404("No users found");
+      } else {
+        res.status(200).send(docs);
+      }
+    });
   } catch (err) {
     next(err);
   }
@@ -572,4 +592,5 @@ module.exports = {
   requestPasswordReset,
   approvePasswordReset,
   banHandler,
+  getBannedUsers
 };
