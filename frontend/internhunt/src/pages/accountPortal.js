@@ -33,13 +33,17 @@ const AccountPortal = () => {
   }
   const banUser = async () => {
     const backendCaller = new FetchCalls(
-      getApiRoot() + `/users/ban/${id}/true`,
+      `/users/ban/${id}/false`,
       "PATCH",
       userData.jwt
     );
     const response = await backendCaller.protectedNoBody();
     if (response.ok) {
       const bannedUser = await response.json();
+      console.log("banned user response: ", bannedUser);
+      setUser(bannedUser);
+    } else {
+      alert("Error banning user.");
     }
   };
 
@@ -65,13 +69,14 @@ const AccountPortal = () => {
         const response = await backendApi.protectedNoBody();
         if (response.ok) {
           const usersResponse = await response.json();
+          console.log("usersResponse: ", usersResponse);
           setUser(usersResponse);
         } else {
           alert("error fetching user.");
         }
       } else {
         url = `/users/getById/${id}`;
-        const backendApi = new FetchCalls(url, "GET", userData.jwt);
+        const backendApi = new FetchCalls(url, "GET");
         const response = await backendApi.publicGet();
         if (response.ok) {
           const usersResponse = await response.json();
@@ -176,8 +181,8 @@ const AccountPortal = () => {
                     <div>Account Status: Inactive</div>
                   )}
                 </div>
-                <div>
-                  <button>Ban User</button>
+                <div className="ban-button">
+                  <button onClick={() => banUser()}>Ban User</button>
                 </div>
               </div>
             )}

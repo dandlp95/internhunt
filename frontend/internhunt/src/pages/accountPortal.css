@@ -28,11 +28,11 @@
 .account-info div {
   text-align: start;
 }
-.account-portal-main .buttons {
+.account-portal-main .buttons, .ban-button button{
   margin-top: 0.5rem;
 }
 
-.account-portal-main .buttons button {
+.account-portal-main .buttons button, .ban-button button{
   border: 1px solid lightgrey;
   padding: 0.25rem 2rem;
   border-radius: 10px;

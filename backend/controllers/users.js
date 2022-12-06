@@ -128,7 +128,7 @@ const editUser = async (req, res, next) => {
         const apiError = new ApiError404("No doc found");
         next(apiError);
       } else {
-        res.status(200).send("success");
+        res.status(200).send({ message: "success" });
       }
     });
   } catch (err) {
@@ -149,7 +149,7 @@ const deleteUser = (req, res, next) => {
         const apiError = new ApiError404("No doc found");
         next(apiError);
       } else {
-        res.status(200).send("user deleted.");
+        res.status(200).send({ message: "user deleted." });
       }
     });
   } catch (err) {
@@ -234,7 +234,7 @@ const warnUser = async (req, res, next) => {
 
       await user.save(); // If doc doesn't exist, mongoose throws doc not found err.
 
-      doc.status(200).send("success");
+      doc.status(200).send({ message: "success" });
     }
   } catch (err) {
     next(err);
@@ -245,7 +245,8 @@ const banHandler = async (req, res, next) => {
   try {
     if (!req.accountId) throw authError;
     const admin = await UserModel.findById(req.accountId);
-    
+    console.log("admin: ", admin);
+
     if (!admin || admin.accessLevel != 1) throw authError;
 
     var ban;
@@ -257,15 +258,33 @@ const banHandler = async (req, res, next) => {
       throw new ApiError400("Invalid param");
     }
 
-    UserModel.findByIdAndUpdate(req.params.id, { active: ban }, (err, doc) => {
-      if (err) {
-        throw new ApiError400(err.message);
-      } else if (!doc) {
-        throw new ApiError404("Document not found");
-      } else {
-        res.status(200).send(doc);
+    UserModel.findByIdAndUpdate(
+      req.params.id,
+      { active: ban },
+      { new: true },
+      async (err, doc) => {
+        if (err) {
+          throw new ApiError400(err.message);
+        } else if (!doc) {
+          throw new ApiError404("Document not found");
+        } else {
+          // major firstName lastName email accessLevel suspension warnings active
+          const major = await MajorModel.findById(doc.major);
+
+          const responseDoc = {
+            major: major,
+            firstName: doc.firstName,
+            lastName: doc.lastName,
+            email: doc.email,
+            accessLevel: doc.accessLevel,
+            suspension: doc.suspension,
+            warnings: doc.warnings,
+            active: doc.active,
+          };
+          res.status(200).send(responseDoc);
+        }
       }
-    });
+    );
   } catch (err) {
     next(err);
   }
