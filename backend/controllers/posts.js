@@ -215,8 +215,8 @@ const getPosts = async (req, res, next) => {
 
   const pagination = req.query.pagination ? parseInt(req.query.pagination) : 10;
   const pageNumber = req.query.page ? parseInt(req.query.page) : 1;
-  console.log("search: ", search)
-  console.log("page number: ", pageNumber)
+  console.log("search: ", search);
+  console.log("page number: ", pageNumber);
 
   if (!sortByParam || sortByParam == "null" || sortByParam == "date") {
     sortByParam = { date: -1 };
@@ -245,12 +245,24 @@ const getPosts = async (req, res, next) => {
   }
 
   const major = req.query.major;
+  var queryMajor = false;
+  let department;
+
   if (major != "null" && major != null) {
-    const foundMajor = await MajorModel.findOne({ name: major }); // Add error handling here in case no major is returned.
-    let department;
+    const foundMajor = await MajorModel.findOne({ name: major });
+    console.log("found major: ", foundMajor);
     if (foundMajor) {
       department = foundMajor.department;
+      queryMajor = true;
+    } else {
+      next(new ApiError400("Major does not exist."));
     }
+  } else {
+    queryMajor = false;
+  }
+
+  if (queryMajor) {
+    console.log("departent: ", department);
     PostModel.find({
       $and: [
         { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
@@ -309,54 +321,3 @@ module.exports = {
   votePost,
   getPostsCount,
 };
-
-// Ill keep these here just in case...
-
-// PostModel.find(
-//   {
-//     $and: [
-//       { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
-//       { departments: department },
-//       { type: { $in: PTypeString } },
-//     ],
-//   },
-//   async (err, docs) => {
-//     if (err) {
-//       const apiError = new ApiError400(err.message);
-//       next(apiError);
-//     } else if (!docs) {
-//       const apiError404 = new ApiError404("No documents found");
-//       next(apiError404);
-//     } else {
-//       await PostModel.populate(docs, {
-//         path: "owner",
-//         select: { firstName: 1, lastName: 1 },
-//       });
-//       res.status(200).send(docs);
-//     }
-//   }
-// );
-
-// PostModel.find(
-//   {
-//     $and: [
-//       { $or: [{ title: { $in: QString } }, { content: { $in: QString } }] },
-//       { type: { $in: PTypeString } },
-//     ],
-//   },
-//   async (err, docs) => {
-//     if (err) {
-//       const apiError = new ApiError400(err.message);
-//       next(apiError);
-//     } else if (!docs) {
-//       const apiError404 = new ApiError404("No documents found");
-//       next(apiError404);
-//     } else {
-//       await PostModel.populate(docs, {
-//         path: "owner",
-//         select: { firstName: 1, lastName: 1, _id: 1 },
-//       });
-//       res.status(200).send(docs);
-//     }
-//   }
-// );

@@ -8,6 +8,8 @@ const ChangeMajor = () => {
   var localStorageMajor;
   if (!userData.major || userData.major === "null") {
     localStorageMajor = null;
+  } else {
+    localStorageMajor = userData.major
   }
 
   const [major, setMajor] = useState(localStorageMajor);
@@ -32,7 +34,7 @@ const ChangeMajor = () => {
   };
 
   const handleCancel = () => {
-    setMajor(false);
+    setMajor(localStorageMajor);
     setEdit(false);
   };
 

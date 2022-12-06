@@ -464,6 +464,7 @@ const isLoggedIn = async (req, res, next) => {
 const handleGoogleLogin = async (req, res, next) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
+    const userMajor = await MajorModel.findById(user.major);
     console.log("logged in user: ", user);
     if (user) {
       if (user.currStatus == "inactive") {
@@ -474,13 +475,11 @@ const handleGoogleLogin = async (req, res, next) => {
         process.env.JWT_SECRET_KEY,
         { expiresIn: "1h" }
       );
-      res
-        .status(200)
-        .send({
-          token: token,
-          userId: user._id,
-          major: user.major ? user.major : null,
-        });
+      res.status(200).send({
+        token: token,
+        userId: user._id,
+        major: userMajor ? userMajor.name : null,
+      });
     } else {
       const newUser = {
         email: req.body.email,
