@@ -147,7 +147,7 @@ const Post = (props) => {
                 )}
               </div>
             )}
-            {isAdmin && (
+            {isAdmin && !isPostCreator && (
               <div className="owner-options-container">
                 <div className="owner-options-dots">
                   <BiDotsHorizontalRounded

@@ -14,6 +14,7 @@ const Comment = (props) => {
   const [voteCount, setVoteCount] = useState(props.comment.rating);
   const [rerenderChild, setRerenderChild] = useState(true);
   const [isUserDeleted, setIsUserDeleted] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const route = "comments";
 
@@ -27,6 +28,9 @@ const Comment = (props) => {
             setIsCommentCreator(true);
           } else {
             setIsCommentCreator(false);
+          }
+          if (user.accessLevel === 1) {
+            setIsAdmin(true);
           }
         } else {
           setIsCommentCreator(false);
@@ -106,7 +110,7 @@ const Comment = (props) => {
       setComment();
     }
   };
-  console.log(isUserDeleted)
+
   if (comment) {
     if (!editMode) {
       return (
@@ -139,6 +143,11 @@ const Comment = (props) => {
               {isCommentCreator && (
                 <div className="button-flexbox">
                   <button onClick={(e) => setEditMode(true)}>Edit</button>
+                  <button onClick={(e) => deleteContent()}>Delete</button>
+                </div>
+              )}
+              {!isCommentCreator && isAdmin && (
+                <div className="button-flexbox">
                   <button onClick={(e) => deleteContent()}>Delete</button>
                 </div>
               )}
