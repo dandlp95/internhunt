@@ -85,9 +85,7 @@ function Login(props) {
       method: "POST",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
-        email: credentials.email,
-        firstName: credentials.given_name,
-        lastName: credentials.family_name,
+        googleJWT: res.credential,
       }),
     };
     const response = await fetch(

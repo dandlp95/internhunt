@@ -12,6 +12,7 @@ const authError = new ApiError401("Not authorized.");
 const { emailClient } = require("../utils/emailClient");
 const Api401Error = require("../middleware/error-handling/apiError401");
 const mongoose = require("mongoose");
+const axios = require("axios");
 
 const getAllUsers = (req, res, next) => {
   UserModel.find({}, "firstName lastName", (err, docs) => {
@@ -530,10 +531,20 @@ const isLoggedIn = async (req, res, next) => {
 };
 
 const handleGoogleLogin = async (req, res, next) => {
+
   try {
-    const user = await UserModel.findOne({ email: req.body.email });
+    const googleJWT = req.body.googleJWT;
+    const response = await axios.get(
+      `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${googleJWT}`
+    );
+    console.log("RESPONSE: ", response);
+    if (response.status !== 200) throw authError;
+
+    const userData = response.data;
+
+    const user = await UserModel.findOne({ email: userData.email });
     const userMajor = await MajorModel.findById(user.major);
-    console.log("logged in user: ", user);
+
     if (user) {
       if (user.currStatus == "inactive") {
         throw new ApiError404("Account not found.");
@@ -541,7 +552,7 @@ const handleGoogleLogin = async (req, res, next) => {
       const token = jwt.sign(
         { email: req.body.email, id: user._id },
         process.env.JWT_SECRET_KEY,
-        { expiresIn: "1h" }
+        { expiresIn: "3h" }
       );
       res.status(200).send({
         token: token,
@@ -550,9 +561,9 @@ const handleGoogleLogin = async (req, res, next) => {
       });
     } else {
       const newUser = {
-        email: req.body.email,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
+        email: userData.email,
+        firstName: userData.given_name,
+        lastName: userData.family_name,
         password: " ",
         gmailLogin: true,
         customPassword: false,
