@@ -28,7 +28,7 @@
 
 .posts-page .posts-queries button {
   border: none;
-  background-color: white;
+  background-color: transparent;
   padding: 1rem;
   width: 100%;
   color:#0b3954
@@ -83,9 +83,17 @@
 }
 
 .posts-page .posts-queries button:hover {
-  background-color: #0b3954;
-  color: white;
+  background-color: rgb(11, 57, 84, 0.3);
+  color: black;
   transition: 0.5s;
+}
+
+.sort-rating button{
+  border-radius: 10px 10px 0 0;
+}
+
+.sort-new button{
+  border-radius: 0 0 10px 10px;
 }
 
 .posts-page .active-button {
@@ -96,7 +104,9 @@
 .posts-page .first-button .active-button{
   border-radius: 3px 0 0 3px;
 }
-
+.sort-dropdown{
+  text-align: center;
+}
 .dots-icon {
   font-size: 2rem;
 }
@@ -104,7 +114,9 @@
 .sort-dropdownOptions {
   position: absolute;
   border: 1px solid lightgrey;
-  border-radius: 5px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px 0;
+  background-color: white;
 }
 
 .majors-options {
@@ -172,6 +184,16 @@ hr {
   color: #898989;
   font-weight: 600;
   font-size: 1rem;
+}
+
+.button-category-selected{
+  border: solid 1px #898989;
+  padding: 0.5rem 2rem;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  background-color: #0b3954;
 }
 
 .arrow {

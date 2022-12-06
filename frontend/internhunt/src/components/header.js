@@ -4,7 +4,7 @@ import "./header.css";
 import altlogo from "../assets/alt3.png";
 import { SlMagnifier } from "react-icons/sl";
 
-const Header = () => {
+const Header = (props) => {
   const [searchQuery, setSearchQuery] = useState("");
   const userData = localStorage.getItem("userData");
   const userDataJson = JSON.parse(userData);

@@ -328,7 +328,7 @@ const Posts = () => {
                 />
                 {isdropdownActive && (
                   <div className="sort-dropdownOptions">
-                    <div>
+                    <div className="sort-rating">
                       <button
                         onClick={(e) => {
                           sortBy("rating");
@@ -338,7 +338,7 @@ const Posts = () => {
                         Popular
                       </button>
                     </div>
-                    <div>
+                    <div className="sort-new">
                       <button onClick={(e) => sortBy("date")}>
                         <AiFillFire />
                         New

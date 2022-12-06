@@ -28,7 +28,6 @@ const getAllUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  console.log(req.params.id);
   UserModel.findById(
     req.params.id,
     "firstName lastName major accessLevel",
@@ -40,7 +39,6 @@ const getUserById = (req, res, next) => {
         const apiError = new ApiError404("No doc found");
         next(apiError);
       } else {
-        console.log("doc to be sent: ", doc);
         res.status(200).send(await doc.populate("major"));
       }
     }

@@ -70,25 +70,23 @@ const CreatePost = () => {
     setState(e.target.value);
   };
 
-  const isLoggedIn = async () => {
-    const res = await isAuth();
-    if (!res.ok) {
-      alert("Please log in");
-      navigate("/");
-    } else {
-      const userData = localStorage.getItem("userData");
-      const userDataJson = JSON.parse(userData);
-      const info = await res.json();
-      setUser(info);
-    }
-  };
-
   const displayCategoriesHandler = (option = false) => {
     setDisplayCategories(option);
   };
 
-  // Maybe instead of using 2 useEffects, create the isLoggedIn function outside and call it inside the next one
   useEffect(() => {
+    const isLoggedIn = async () => {
+      const res = await isAuth();
+      if (!res.ok) {
+        alert("Please log in");
+        navigate("/");
+      } else {
+        const userData = localStorage.getItem("userData");
+        const userDataJson = JSON.parse(userData);
+        const info = await res.json();
+        setUser(info);
+      }
+    };
     isLoggedIn();
   }, []);
 
@@ -158,7 +156,9 @@ const CreatePost = () => {
               </div>
               <div className="category-div">
                 <button
-                  className="button-category"
+                  className={
+                    !type ? "button-category" : "button-category-selected"
+                  }
                   onClick={(e) => displayCategoriesHandler(true)}
                 >
                   Category <i className="arrow down"></i>

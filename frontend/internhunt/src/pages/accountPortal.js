@@ -52,6 +52,7 @@ const AccountPortal = () => {
       const response = await isAuth();
       if (response.ok) {
         const visitorInfo = await response.json();
+        console.log("visitor info: ", visitorInfo);
         if (visitorInfo.accessLevel === 1) {
           setIsAdmin(true);
         }
@@ -71,6 +72,7 @@ const AccountPortal = () => {
           const usersResponse = await response.json();
           console.log("usersResponse: ", usersResponse);
           setUser(usersResponse);
+          if (usersResponse.accessLevel === 1) setIsAdmin(true);
         } else {
           alert("error fetching user.");
         }
@@ -81,6 +83,7 @@ const AccountPortal = () => {
         if (response.ok) {
           const usersResponse = await response.json();
           setUser(usersResponse);
+          if (usersResponse.accessLevel === 1) setIsAdmin(true);
         } else {
           alert("error fetching user.");
         }
@@ -171,7 +174,7 @@ const AccountPortal = () => {
                 </button>
               </div>
             )}
-            {isAdmin && owner && <div>You are an admin</div>}
+            {isAdmin &&<div className="admin-status">Moderator Account</div>}
             {isAdmin && !owner && (
               <div>
                 <div>
