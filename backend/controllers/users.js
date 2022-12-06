@@ -245,11 +245,11 @@ const banHandler = async (req, res, next) => {
   try {
     if (!req.accountId) throw authError;
     const admin = await UserModel.findById(req.accountId);
-    console.log("admin: ", admin);
 
     if (!admin || admin.accessLevel != 1) throw authError;
 
     var ban;
+    console.log("action: ", req.params.action);
     if (req.params.action === "true") {
       ban = true;
     } else if (req.params.action === "false") {
@@ -259,14 +259,14 @@ const banHandler = async (req, res, next) => {
     }
 
     UserModel.findOneAndUpdate(
-      {email: req.params.email},
+      { email: req.params.email },
       { active: ban },
       { new: true },
       async (err, doc) => {
         if (err) {
-          throw new ApiError400(err.message);
+          next(new ApiError400(err.message));
         } else if (!doc) {
-          throw new ApiError404("Document not found");
+          next(new ApiError404("Document not found"));
         } else {
           // major firstName lastName email accessLevel suspension warnings active
           const major = await MajorModel.findById(doc.major);
@@ -592,5 +592,5 @@ module.exports = {
   requestPasswordReset,
   approvePasswordReset,
   banHandler,
-  getBannedUsers
+  getBannedUsers,
 };

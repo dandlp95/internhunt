@@ -3,10 +3,26 @@ import FetchCalls from "../utils/fetchCalls";
 
 const UserManager = () => {
   const [bannedUsers, setBannedUsers] = useState([]);
-  const [errMessage, setErrMessage] = useState();
+  const [message, setMessage] = useState();
   const [bannedUser, setBannedUser] = useState();
 
-  const removeBan = async () => {};
+  const removeBan = async () => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    const jwt = userData.jwt;
+
+    const backendCaller = new FetchCalls(
+      `/users/ban/${bannedUser}/true`,
+      "PATCH",
+      jwt
+    );
+    const response = await backendCaller.protectedNoBody();
+    if (response.ok) {
+      setMessage(`User: ${bannedUser} has been unsuspended.`);
+    } else {
+      const err = await response.json();
+      setMessage(err.message);
+    }
+  };
 
   useEffect(() => {
     const getUsers = async () => {
@@ -22,7 +38,7 @@ const UserManager = () => {
         setBannedUsers(users);
       } else {
         const errMessage = await response.json();
-        setErrMessage(errMessage.message);
+        setMessage(errMessage.message);
       }
     };
     getUsers();
@@ -30,19 +46,28 @@ const UserManager = () => {
 
   return (
     <div className="user-manager-main">
-      <input
-        value={bannedUser}
-        onChange={(e) => setBannedUser(e.target.value)}
-        list="users"
-      />
-      <datalist id="users">
-        {bannedUsers.map((user) => (
-          <option data-value={user._id} value={user.email} key={user._id} />
-        ))}
-      </datalist>
+      <div>
+        <h2>User Manager</h2>
+        <hr />
+      </div>
+      <div className="user-inputs">
+        <input
+          value={bannedUser}
+          onChange={(e) => setBannedUser(e.target.value)}
+          list="users"
+        />
+        <datalist id="users">
+          {bannedUsers.map((user) => (
+            <option data-value={user._id} value={user.email} key={user._id} />
+          ))}
+        </datalist>
+      </div>
+
       <div className="ban-button">
         <button onClick={() => removeBan()}>Remove Ban</button>
       </div>
+
+      <div>{message && <div>{message}</div>}</div>
     </div>
   );
 };

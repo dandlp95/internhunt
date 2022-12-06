@@ -1,4 +1,5 @@
-.password-change-main .password-ui-container {
+.password-change-main .password-ui-container,
+.user-manager-main {
   background-color: white;
   width: 50rem;
   margin: 1rem auto;
@@ -7,15 +8,18 @@
   border: 1px;
 }
 
-.password-change-main .password-ui-container .password-header hr {
+.password-change-main .password-ui-container .password-header hr,
+.user-manager-main hr {
   margin-top: -1rem;
 }
 
-.password-change-main .password-ui-container .passwords-inputs {
+.password-change-main .password-ui-container .passwords-inputs,
+.user-inputs {
   margin-top: 2rem;
 }
 
-.password-change-main .password-ui-container .passwords-inputs input {
+.password-change-main .password-ui-container .passwords-inputs input,
+.user-manager-main input {
   width: 35%;
   height: 1.5rem;
   border: 1px solid lightgrey;
@@ -40,7 +44,8 @@
 .password-change-main .buttons button:first-child {
   margin-right: 0.5rem;
 }
-.password-change-main .buttons button {
+.password-change-main .buttons button,
+.user-manager-main button {
   margin-top: 2rem;
   background-color: #014980;
   color: white;
@@ -62,6 +67,6 @@
   color: red;
 }
 
-.password-change-main .confirmation-response{
-    color: #0F7B00
+.password-change-main .confirmation-response {
+  color: #0f7b00;
 }
