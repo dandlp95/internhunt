@@ -31,7 +31,7 @@ const getUserById = (req, res, next) => {
   console.log(req.params.id);
   UserModel.findById(
     req.params.id,
-    "firstName lastName major",
+    "firstName lastName major accessLevel",
     async (err, doc) => {
       if (err) {
         const apiError = new ApiError400(err.message);
@@ -40,6 +40,7 @@ const getUserById = (req, res, next) => {
         const apiError = new ApiError404("No doc found");
         next(apiError);
       } else {
+        console.log("doc to be sent: ", doc);
         res.status(200).send(await doc.populate("major"));
       }
     }
@@ -77,7 +78,7 @@ const getAllUsersPrivate = async (req, res, next) => {
 
 const getUserByIdPrivate = async (req, res, next) => {
   try {
-    if (!req.accountId || req.accountId != req.params.id) {
+    if (!req.accountId && req.accountId != req.params.id) {
       throw authError;
     }
     const user = await UserModel.findById(req.accountId);
@@ -86,7 +87,7 @@ const getUserByIdPrivate = async (req, res, next) => {
     }
     UserModel.findById(
       req.params.id,
-      "major firstName lastName email accessLevel suspension warnings",
+      "major firstName lastName email accessLevel suspension warnings active",
       async (err, doc) => {
         if (err) {
           const apiError = new ApiError400(err.message);
@@ -235,6 +236,36 @@ const warnUser = async (req, res, next) => {
 
       doc.status(200).send("success");
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const banHandler = async (req, res, next) => {
+  try {
+    if (!req.accountId) throw authError;
+    const admin = await UserModel.findById(req.accountId);
+    
+    if (!admin || admin.accessLevel != 1) throw authError;
+
+    var ban;
+    if (req.params.action === "true") {
+      ban = true;
+    } else if (req.params.action === "false") {
+      ban = false;
+    } else {
+      throw new ApiError400("Invalid param");
+    }
+
+    UserModel.findByIdAndUpdate(req.params.id, { active: ban }, (err, doc) => {
+      if (err) {
+        throw new ApiError400(err.message);
+      } else if (!doc) {
+        throw new ApiError404("Document not found");
+      } else {
+        res.status(200).send(doc);
+      }
+    });
   } catch (err) {
     next(err);
   }
@@ -521,4 +552,5 @@ module.exports = {
   handleGoogleLogin,
   requestPasswordReset,
   approvePasswordReset,
+  banHandler,
 };
