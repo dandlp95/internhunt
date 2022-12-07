@@ -125,7 +125,3 @@
 .registrationPage .formDiv input::-ms-value {
   font-family: Consolas;
 }
-
-.registrationPage .loginFormDiv h2 {
-  margin-left: -17rem;
-}

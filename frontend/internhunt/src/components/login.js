@@ -16,7 +16,7 @@ function Login(props) {
   const navigate = useNavigate();
   const clientId =
     "774704710261-0486u3ih7ergh0t8iasbbsrmnphbsir2.apps.googleusercontent.com";
-
+  console.log("GOOGLE CLIENT ID: ", process.env.REACT_APP_GOOGLE_CLIENT_ID);
   useEffect(() => {
     const isLoggedIn = async () => {
       const userData = localStorage.getItem("userData");
@@ -124,13 +124,13 @@ function Login(props) {
     <div className="loginComponent">
       <div className="loginFormDiv">
         <form onSubmit={(e) => e.preventDefault()}>
-          <a
+          <div
             href="javascript:;"
             onClick={(e) => props.action(e)}
             className="closeBtn"
           >
-            Close
-          </a>
+            X
+          </div>
           <h2>Log in into your account</h2>
 
           <input
@@ -147,18 +147,22 @@ function Login(props) {
             onChange={(e) => setPassword(e.target.value)}
           />
           <input type="submit" value="Submit" onClick={handleLogin} />
-          <div>
+          <div className="forgot-password-option">
             <Link to="/forgot-password">Forgot your password?</Link>
           </div>
           <div>
-            <div>
-              <div>Or sign in with Google</div>
-              <GoogleOAuthProvider clientId="774704710261-0486u3ih7ergh0t8iasbbsrmnphbsir2.apps.googleusercontent.com">
-                <GoogleLogin
-                  onSuccess={onSuccess}
-                  onFailure={onFailure}
-                ></GoogleLogin>
-              </GoogleOAuthProvider>
+            <div className="google-btn-container">
+              <div>Sign in with Google</div>
+              <div className="google-btn">
+                <GoogleOAuthProvider
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                >
+                  <GoogleLogin
+                    onSuccess={onSuccess}
+                    onFailure={onFailure}
+                  ></GoogleLogin>
+                </GoogleOAuthProvider>
+              </div>
             </div>
           </div>
           {fail && <FailMessage action="log in" />}
