@@ -41,7 +41,8 @@
   font-family: Consolas;
 }
 
-.registrationPage .formDiv input[type="text"] {
+.registrationPage .formDiv input[type="text"],
+.registrationPage .formDiv input[type="password"] {
   margin-top: 5rem;
   width: 60%;
   height: 2rem;
