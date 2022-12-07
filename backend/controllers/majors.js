@@ -13,8 +13,7 @@ const getMajor = controllers.getById(MajorModel);
 const getMajorByDepartment = async (req, res, next) => {
   MajorModel.find({ department: req.params.department }, (err, docs) => {
     if (err) {
-      const apiError400 = new ApiError400(err.message);
-      next(apiError400);
+      next(new ApiError400(err.message));
     } else {
       res.status(200).send(docs);
     }
@@ -24,21 +23,18 @@ const getMajorByDepartment = async (req, res, next) => {
 const addMajor = async (req, res, next) => {
   try {
     const apiAuthError = new ApiError401("Unauthorized");
-    if (!req.accountId) {
-      throw apiAuthError;
-    }
+    if (!req.accountId) throw apiAuthError;
+
     const userDoc = await UserModel.findById(req.accountId);
-    if (!userDoc || userDoc.accessLevel != 1) {
-      throw apiAuthError;
-    }
+    if (!userDoc || userDoc.accessLevel != 1) throw apiAuthError;
+
     const newMajor = {
       name: req.body.name,
     };
 
     MajorModel.create(newMajor, (err, doc) => {
       if (err) {
-        const apiError400 = new ApiError400(err.message);
-        next(apiError400);
+        next(new ApiError400(err.message));
       } else {
         res.status(200).send(doc);
       }

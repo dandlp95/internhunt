@@ -10,11 +10,9 @@ const getAll = (Schema) => {
   return (req, res, next) => {
     Schema.find({}, (err, docs) => {
       if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
+        next(new ApiError400(err.message));
       } else if (!docs) {
-        const apiError = new ApiError404("No documents found");
-        next(apiError);
+        next(new ApiError404("No documents found"));
       } else {
         res.status(200).send(docs);
       }
@@ -29,8 +27,7 @@ const getById = (Schema) => {
         const apiError = new ApiError400(err.message);
         next(apiError);
       } else if (!doc) {
-        const apiError = new ApiError404("no document found");
-        next(apiError);
+        next(new ApiError404("no document found"));
       } else {
         res.status(200).send(doc);
       }
@@ -41,10 +38,8 @@ const getById = (Schema) => {
 const voteModel = (Schema, Schema2) => {
   return async (req, res, next) => {
     try {
-      console.log("entered here");
-      if (!req.accountId) {
-        throw apiAuthError;
-      }
+      if (!req.accountId) throw apiAuthError;
+      
       var addVote = false;
       var vote;
 

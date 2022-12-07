@@ -1,5 +1,5 @@
 const CommentModel = require("../models/comment");
-const UserModel = require("../models/user")
+const UserModel = require("../models/user");
 const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError401 = require("../middleware/error-handling/apiError401");
 const ApiError400 = require("../middleware/error-handling/apiError400");
@@ -14,11 +14,9 @@ const voteComment = controllers.voteModel(CommentModel);
 const getCommentByUser = (req, res, next) => {
   CommentModel.find({ owner: req.params.id }, async (err, docs) => {
     if (err) {
-      const apiError = new ApiError400(err.message);
-      next(apiError);
+      next(new ApiError400(err.message));
     } else if (!docs) {
-      const apiError = new ApiError404(err.message);
-      next(apiError);
+      next(new ApiError404("No comments found."));
     } else {
       await CommentModel.populate(docs, "post");
       await CommentModel.populate(docs, "owner");
@@ -31,11 +29,9 @@ const getCommentByPost = (req, res, next) => {
   const postId = req.params.id;
   CommentModel.find({ post: postId }, async (err, docs) => {
     if (err) {
-      const apiError = new ApiError400(err.message);
-      next(apiError);
+      next(new ApiError400(err.message));
     } else if (!docs) {
-      const apiError = new ApiError404(err.message);
-      next(apiError);
+      next(new ApiError404("No comments found."));
     } else {
       await CommentModel.populate(docs, "post");
       await CommentModel.populate(docs, "owner");
@@ -46,9 +42,8 @@ const getCommentByPost = (req, res, next) => {
 
 const editComment = async (req, res, next) => {
   try {
-    if (!req.accountId) {
-      throw new ApiError401("Unauthorized user.");
-    }
+    if (!req.accountId) throw new ApiError401("Unauthorized user.");
+
     const edit = {
       content: req.body.content,
       rating: req.body.rating,
@@ -59,11 +54,9 @@ const editComment = async (req, res, next) => {
       { new: true },
       (err, doc) => {
         if (err) {
-          const apiError = new ApiError400(err.message);
-          next(apiError);
+          next(new ApiError400(err.message));
         } else if (!doc) {
-          const apiError = new ApiError404("No document found");
-          next(apiError);
+          next(new ApiError404("No comment found"));
         } else {
           res.status(200).send(doc);
         }
@@ -76,18 +69,15 @@ const editComment = async (req, res, next) => {
 
 const deleteComment = async (req, res, next) => {
   try {
-    if (!req.accountId) {
-      throw new ApiError401("Unauthorized user.");
-    }
+    if (!req.accountId) throw new ApiError401("Unauthorized user.");
+    
     const user = await UserModel.findById(req.accountId);
     if (user.accessLevel === 1) {
       CommentModel.findOneAndDelete({ _id: req.params.id }, (err, doc) => {
         if (err) {
-          const apiError = new ApiError400(err.message);
-          next(apiError);
+          next(new ApiError400(err.message));
         } else if (!doc) {
-          const apiError = new ApiError404("No document found");
-          next(apiError);
+          next(new ApiError404("No comment found"));
         } else {
           res.status(200).send(doc);
         }
@@ -97,11 +87,9 @@ const deleteComment = async (req, res, next) => {
         { _id: req.params.id, owner: req.accountId },
         (err, doc) => {
           if (err) {
-            const apiError = new ApiError400(err.message);
-            next(apiError);
+            next(new ApiError400(err.message));
           } else if (!doc) {
-            const apiError = new ApiError404("No document found");
-            next(apiError);
+            next(new ApiError404("No comment found"));
           } else {
             res.status(200).send(doc);
           }
@@ -126,8 +114,7 @@ const addComment = (req, res, next) => {
 
     CommentModel.create(comment, (err, doc) => {
       if (err) {
-        const apiError400 = new ApiError400();
-        next(apiError400);
+        next(new ApiError400(err.message));
       } else {
         res.status(200).send(doc);
       }

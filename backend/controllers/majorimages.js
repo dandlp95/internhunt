@@ -12,10 +12,9 @@ const getMajorImageByMajor = (req, res, next) => {
   const id = mongoose.Types.ObjectId(req.params.id);
   MajorImage.findOne({ major: id }, (err, doc) => {
     if (err) {
-      console.log("there was an error");
       next(new ApiError400(err.message));
     } else if (!doc) {
-      next(new ApiError404("No document found"));
+      next(new ApiError404("No image found"));
     } else {
       res.status(200).send(doc);
     }

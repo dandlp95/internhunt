@@ -4,15 +4,13 @@ const ApiError400 = require("../middleware/error-handling/apiError400");
 
 const getVotingHistoryByIds = (req, res, next) => {
   try {
-    if (!req.accountId) {
-      throw new ApiError401("Not authorized.");
-    }
+    if (!req.accountId) throw new ApiError401("Not authorized.");
+    
     VotingHistory.findOne(
       { voter: req.accountId, post: req.params.id },
       (err, doc) => {
         if (err) {
-          const apiError = new ApiError400(err.message);
-          next(apiError);
+          next(new ApiError400(err.message));
         } else if (!doc) {
           res.status(200).send({});
         } else {

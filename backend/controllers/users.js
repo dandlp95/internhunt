@@ -8,20 +8,22 @@ const ApiError403 = require("../middleware/error-handling/apiError403");
 const { encryptPassword } = require("../utils/encrypt");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const authError = new ApiError401("Not authorized.");
 const { emailClient } = require("../utils/emailClient");
 const Api401Error = require("../middleware/error-handling/apiError401");
 const mongoose = require("mongoose");
 const axios = require("axios");
 
+const authError = new ApiError401("Not authorized.");
+const forbidden = new ApiError403(
+  "Authorization not sufficient to perform operation"
+);
+
 const getAllUsers = (req, res, next) => {
   UserModel.find({}, "firstName lastName", (err, docs) => {
     if (err) {
-      const apiError = new ApiError400(err.message);
-      next(apiError);
+      next(new ApiError400(err.message));
     } else if (!docs) {
-      const apiError = new ApiError404("No doc found");
-      next(apiError);
+      next(new ApiError404("No doc found"));
     } else {
       res.status(200).send(docs);
     }
@@ -34,11 +36,9 @@ const getUserById = (req, res, next) => {
     "firstName lastName major accessLevel",
     async (err, doc) => {
       if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
+        next(new ApiError400(err.message));
       } else if (!doc) {
-        const apiError = new ApiError404("No doc found");
-        next(apiError);
+        next(new ApiError404("No doc found"));
       } else {
         res.status(200).send(await doc.populate("major"));
       }
@@ -48,23 +48,18 @@ const getUserById = (req, res, next) => {
 
 const getAllUsersPrivate = async (req, res, next) => {
   try {
-    if (!req.accountId) {
-      throw authError;
-    }
+    if (!req.accountId) throw authError;
     const user = await UserModel.findById(req.accountId);
-    if (!user || user.accessLevel != 1) {
-      throw authError;
-    }
+    if (!user || user.accessLevel != 1) throw forbidden;
+
     UserModel.find(
       {},
       "firstName lastName email accessLevel suspension warnings",
       (err, doc) => {
         if (err) {
-          const apiError = new ApiError400(err.message);
-          next(apiError);
+          next(new ApiError400(err.message));
         } else if (!doc) {
-          const apiError = new ApiError404("No doc found");
-          next(apiError);
+          next(new ApiError404("No user found"));
         } else {
           res.status(200).send(doc);
         }
@@ -77,23 +72,18 @@ const getAllUsersPrivate = async (req, res, next) => {
 
 const getUserByIdPrivate = async (req, res, next) => {
   try {
-    if (!req.accountId && req.accountId != req.params.id) {
-      throw authError;
-    }
+    if (!req.accountId && req.accountId != req.params.id) throw authError;
     const user = await UserModel.findById(req.accountId);
-    if (!user && user.accessLevel != 1) {
-      throw authError;
-    }
+    if (!user && user.accessLevel != 1) throw forbidden;
+
     UserModel.findById(
       req.params.id,
       "major firstName lastName email accessLevel suspension warnings active",
       async (err, doc) => {
         if (err) {
-          const apiError = new ApiError400(err.message);
-          next(apiError);
+          next(new ApiError400(err.message));
         } else if (!doc) {
-          const apiError = new ApiError404("No doc found");
-          next(apiError);
+          next(new ApiError404("No user found"));
         } else {
           res.status(200).send(await doc.populate("major"));
         }
@@ -106,13 +96,11 @@ const getUserByIdPrivate = async (req, res, next) => {
 
 const editUser = async (req, res, next) => {
   try {
-    if (!req.accountId || req.accountId != req.params.id) {
-      throw authError;
-    }
+    if (!req.accountId) throw authError;
+    if (req.accountId != req.params.id) throw forbidden;
     const major = await MajorModel.findOne({ name: req.body.major });
-    if (!major) {
-      throw ApiError400("Not a valid major.");
-    }
+    if (!major) throw ApiError400("Not a valid major.");
+
     const edits = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -121,11 +109,9 @@ const editUser = async (req, res, next) => {
 
     UserModel.findByIdAndUpdate(req.params.id, edits, (err, doc) => {
       if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
+        next(new ApiError400(err.message));
       } else if (!doc) {
-        const apiError = new ApiError404("No doc found");
-        next(apiError);
+        next(new ApiError404("No doc found"));
       } else {
         res.status(200).send({ message: "success" });
       }
@@ -137,16 +123,14 @@ const editUser = async (req, res, next) => {
 
 const deleteUser = (req, res, next) => {
   try {
-    if (!req.accountId || req.accountId != req.params.id) {
-      throw authError;
-    }
+    if (!req.accountId) throw authError;
+    if (req.accountId != req.params.id) throw forbidden;
+
     UserModel.findByIdAndDelete(req.params.id, (err, doc) => {
       if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
+        next(new ApiError400(err.message));
       } else if (!doc) {
-        const apiError = new ApiError404("No doc found");
-        next(apiError);
+        next(new ApiError404("No user found"));
       } else {
         res.status(200).send({ message: "user deleted." });
       }
@@ -161,9 +145,8 @@ const addUser = async (req, res, next) => {
     const encryptedPassword = await encryptPassword(req.body.password);
     const major = await MajorModel.findOne({ name: req.body.major });
 
-    if (!major) {
-      throw new ApiError400("Invalid major");
-    }
+    if (!major) throw new ApiError400("Invalid major");
+
     const majorId = major._id;
 
     const newUser = {
@@ -176,11 +159,7 @@ const addUser = async (req, res, next) => {
 
     UserModel.create(newUser, (err, doc) => {
       if (err) {
-        const apiError = new ApiError400(err.message);
-        next(apiError);
-      } else if (!doc) {
-        const apiError = new ApiError404("No doc found");
-        next(apiError);
+        next(new ApiError400(err.message));
       } else {
         const token = jwt.sign(
           { email: req.body.email, id: doc._id },
@@ -199,19 +178,14 @@ const addUser = async (req, res, next) => {
 
 const warnUser = async (req, res, next) => {
   try {
-    if (!req.accountId) {
-      throw authError;
-    }
+    if (!req.accountId) throw authError;
+
     const admin = await UserModel.findById(req.accountId);
-    if (!admin || admin.accessLevel != 1) {
-      throw authError;
-    }
+    if (!admin || admin.accessLevel != 1) throw authError;
 
     const user = await UserModel.findById(req.params.id);
 
-    if (!user) {
-      throw new ApiError404("No user found.");
-    }
+    if (!user) throw new ApiError404("No user found.");
 
     const warning = {
       warningText: req.body.warningText,
@@ -245,10 +219,9 @@ const banHandler = async (req, res, next) => {
     if (!req.accountId) throw authError;
     const admin = await UserModel.findById(req.accountId);
 
-    if (!admin || admin.accessLevel != 1) throw authError;
+    if (!admin || admin.accessLevel != 1) throw forbidden;
 
     var ban;
-    console.log("action: ", req.params.action);
     if (req.params.action === "true") {
       ban = true;
     } else if (req.params.action === "false") {
@@ -293,7 +266,7 @@ const getBannedUsers = async (req, res, next) => {
   try {
     if (!req.accountId) throw authError;
     const user = UserModel.findById(req.accountId);
-    if (user.accessLevel < 1) throw authError;
+    if (user.accessLevel < 1) throw forbidden;
 
     UserModel.find({ active: false }, (err, docs) => {
       if (err) {
@@ -311,13 +284,10 @@ const getBannedUsers = async (req, res, next) => {
 
 const suspendUser = async (req, res, next) => {
   try {
-    if (!req.accountId) {
-      throw authError;
-    }
+    if (!req.accountId) throw authError;
+
     const admin = await UserModel.findById(req.accountId);
-    if (!admin || admin.accessLevel != 1) {
-      throw authError;
-    }
+    if (!admin || admin.accessLevel != 1) throw forbidden;
 
     const user = UserModel.findById(req.params.id);
 
@@ -336,13 +306,10 @@ const suspendUser = async (req, res, next) => {
 
 const removeSuspension = async (req, res, next) => {
   try {
-    if (!req.accountId) {
-      throw authError;
-    }
+    if (!req.accountId) throw authError;
+
     const admin = await UserModel.findById(req.accountId);
-    if (!admin || admin.accessLevel != 1) {
-      throw authError;
-    }
+    if (!admin || admin.accessLevel != 1) throw forbidden;
 
     const user = UserModel.findById(req.params.id);
 
@@ -361,14 +328,12 @@ const removeSuspension = async (req, res, next) => {
 
 const editPassword = async (req, res, next) => {
   try {
-    if (!req.accountId || req.accountId != req.params.id) {
-      throw authError;
-    }
+    if (!req.accountId) throw authError;
+    if (req.accountId != req.params.id) throw forbidden;
+
     const user = await UserModel.findById(req.params.id);
 
-    if (!user) {
-      throw new ApiError404("No user found.");
-    }
+    if (!user) throw new ApiError404("No account found.");
 
     bcrypt.compare(
       req.body.currPassword,
@@ -413,9 +378,8 @@ const requestPasswordReset = async (req, res, next) => {
     const code = Math.floor(Math.random() * 99999) + 1;
     const user = await UserModel.findOne({ email: req.body.email });
 
-    if (!user) {
-      throw new ApiError404("Account was not found.");
-    }
+    if (!user) throw new ApiError404("Account was not found.");
+
     await user.updateOne({ verificationCode: code });
     const userName = user.firstName;
 
@@ -434,22 +398,19 @@ const requestPasswordReset = async (req, res, next) => {
 
 const approvePasswordReset = async (req, res, next) => {
   try {
-    if (!req.body.verificationCode) {
+    if (!req.body.verificationCode)
       throw new ApiError400("No verification code provided");
-    }
+
     const user = await UserModel.findOne({
       verificationCode: req.body.verificationCode,
     });
-    console.log("verification code ", req.body.verificationCode);
-    if (!user) {
-      throw new ApiError400("Verification code is not correct");
-    }
+    if (!user) throw new ApiError400("Verification code is not correct");
+
     user.verificationCode = null;
     const encryptedPassword = await encryptPassword(req.body.password);
     user.password = encryptedPassword;
     user.customPassword = true;
     user.save();
-    console.log("USER: ", user);
     res.status(200).send("Success.");
   } catch (err) {
     next(err);
@@ -465,7 +426,6 @@ const login = (req, res, next) => {
   UserModel.findOne({ email: email })
     .then((account) => {
       if (account.currStatus == "inactive") {
-        // If account doc doesn't exist will default to false too.
         throw new ApiError404("Account not found.");
       }
       accountInfo = account;
@@ -479,8 +439,7 @@ const login = (req, res, next) => {
     })
     .then(async (matches) => {
       if (!matches) {
-        const apiError = new ApiError401("Wrong password.");
-        throw apiError;
+        throw new ApiError401("Wrong password.");
       }
       const token = jwt.sign(
         {
@@ -491,9 +450,8 @@ const login = (req, res, next) => {
         { expiresIn: "1h" }
       );
       var major = await MajorModel.findById(accountInfo.major);
-      if (!major) {
-        major = { name: null };
-      }
+      if (!major) major = { name: null };
+
       res.status(200).send({
         token: token,
         userId: accountInfo._id.toString(),
@@ -507,37 +465,32 @@ const login = (req, res, next) => {
 
 const isLoggedIn = async (req, res, next) => {
   try {
-    if (!req.accountId) {
-      throw new ApiError401("Not authenticated.");
-    } else {
-      UserModel.findById(
-        req.accountId,
-        "firstName lastName active email customPassword accessLevel",
-        (err, doc) => {
-          if (err) {
-            next(new ApiError400(err.message));
-          } else if (!doc || !doc.active) {
-            console.log("doc ", doc);
-            next(new ApiError404("Account not found"));
-          } else {
-            res.status(200).send(doc);
-          }
+    if (!req.accountId) throw new ApiError401("Not authenticated.");
+
+    UserModel.findById(
+      req.accountId,
+      "firstName lastName active email customPassword accessLevel",
+      (err, doc) => {
+        if (err) {
+          next(new ApiError400(err.message));
+        } else if (!doc || !doc.active) {
+          next(new ApiError404("Account not found"));
+        } else {
+          res.status(200).send(doc);
         }
-      );
-    }
+      }
+    );
   } catch (err) {
     next(err);
   }
 };
 
 const handleGoogleLogin = async (req, res, next) => {
-
   try {
     const googleJWT = req.body.googleJWT;
     const response = await axios.get(
       `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${googleJWT}`
     );
-    console.log("RESPONSE: ", response);
     if (response.status !== 200) throw authError;
 
     const userData = response.data;
@@ -570,9 +523,8 @@ const handleGoogleLogin = async (req, res, next) => {
       };
 
       UserModel.create(newUser, (err, doc) => {
-        if (err || !doc) {
-          const apiError400 = new ApiError400(err.message); // if !doc, this will cause a crash
-          next(apiError400);
+        if (err) {
+          next(new ApiError400(err.message));
         } else {
           res.status(200).send(doc);
         }
