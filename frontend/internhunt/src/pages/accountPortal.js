@@ -16,6 +16,7 @@ const AccountPortal = () => {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAccountAdmin, setIsAccountAdmin] = useState(false)
   const [confirmationMessage, setBanConfirmationMessage] = useState();
 
   const navigate = useNavigate();
@@ -70,9 +71,8 @@ const AccountPortal = () => {
         const response = await backendApi.protectedNoBody();
         if (response.ok) {
           const usersResponse = await response.json();
-          console.log("usersResponse: ", usersResponse);
           setUser(usersResponse);
-          if (usersResponse.accessLevel === 1) setIsAdmin(true);
+          if (usersResponse.accessLevel === 1) setIsAccountAdmin(true);
         } else {
           alert("error fetching user.");
         }
@@ -83,7 +83,7 @@ const AccountPortal = () => {
         if (response.ok) {
           const usersResponse = await response.json();
           setUser(usersResponse);
-          if (usersResponse.accessLevel === 1) setIsAdmin(true);
+          if (usersResponse.accessLevel === 1) setIsAccountAdmin(true);
         } else {
           alert("error fetching user.");
         }
@@ -174,7 +174,7 @@ const AccountPortal = () => {
                 </button>
               </div>
             )}
-            {isAdmin &&<div className="admin-status">Moderator Account</div>}
+            {isAccountAdmin &&<div className="admin-status">Moderator Account</div>}
             {isAdmin && !owner && (
               <div>
                 <div>
