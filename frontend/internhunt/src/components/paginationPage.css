@@ -4,9 +4,9 @@
 
 .paginationcss ul {
   list-style: none;
-  margin: 1rem auto; 
-  width: 50%; 
-}
+  margin: 1rem auto;
+  padding-left: 1.2rem; 
+ }
 
 .paginationcss ul li {
   display: inline;

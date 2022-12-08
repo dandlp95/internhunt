@@ -15,8 +15,8 @@ import { AiFillFire } from "react-icons/ai";
 import FetchCalls from "../utils/fetchCalls";
 import "./posts.css";
 import i from "../assets/plain-logo.png";
-import workImg from "../assets/work-meeting2.jpg";
 import PaginationPage from "../components/paginationPage";
+import LoadingSpinner from "../components/loadingSpin";
 
 const MajorsContainer = (props) => {
   const [majors, setMajors] = useState();
@@ -88,11 +88,13 @@ const Posts = () => {
   const [isButton4Active, setIsButton4Active] = useState(false);
   const [isButton5Active, setIsButton5Active] = useState(false);
   const [isdropdownActive, setIsdropdownActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const getPostByType = async (postType) => {
+    setIsLoading(true);
     const urlParams = new URLSearchParams(window.location.search);
     const majorParam = urlParams.get("major");
     const search = urlParams.get("search");
@@ -222,6 +224,7 @@ const Posts = () => {
         getApiRoot() + "/posts/getPostsCount?" + encodeURI(URIQuery2),
         options
       );
+      setIsLoading(false);
 
       if (response.ok && response2.ok) {
         const foundPosts = await response.json();
@@ -348,25 +351,31 @@ const Posts = () => {
                 )}
               </div>
             </div>
-            {posts.map((post) => (
-              <div className="post-preview-container" key={post._id}>
-                <PostPreview post={post} />
+            {!isLoading ? (
+              <div>
+                {posts.map((post) => (
+                  <div className="post-preview-container" key={post._id}>
+                    <PostPreview post={post} />
+                  </div>
+                ))}
+                {totalPosts > 10 && (
+                  <PaginationPage
+                    pages={numberOfPages}
+                    nextPage={nextpage}
+                    currentPage={currPage}
+                    hundreadChange={hundreadChange}
+                    tenChange={tenChange}
+                  ></PaginationPage>
+                )}
               </div>
-            ))}
+            ) : (
+              <LoadingSpinner />
+            )}
           </div>
           <div className="majors-div">
             <MajorsContainer styleActiveButton={styleActiveButtons} />
           </div>
         </div>
-        {totalPosts > 10 && (
-          <PaginationPage
-            pages={numberOfPages}
-            nextPage={nextpage}
-            currentPage={currPage}
-            hundreadChange={hundreadChange}
-            tenChange={tenChange}
-          ></PaginationPage>
-        )}
       </div>
     );
   }
