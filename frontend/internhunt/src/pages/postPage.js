@@ -20,9 +20,11 @@ const PostPage = () => {
   const [postUser, setPostuser] = useState(null);
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState();
-  const [sort, setSort] = useState(); // This will be used to add functionality to sort comments later.
+  const [sortComments, setSortComments] = useState("Best"); // This will be used to add functionality to sort comments later.
   const [fetchComments, setFetchComments] = useState(true);
   const [commentsLenght, setCommentsLength] = useState(10);
+  const [displaySortOptions, setDisplaySortOptions] = useState(false);
+  const [activeSortBtn, setActiveSortBtn] = useState("Best");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,6 +41,69 @@ const PostPage = () => {
     };
     isLoggedIn();
   }, []);
+
+  const sort = async (sortParam) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    var urlString = `sort=${sortParam}`;
+  };
+
+  const postComment = async (comment) => {
+    const userData = localStorage.getItem("userData");
+    const userDataJSON = JSON.parse(userData);
+    const token = userDataJSON.jwt;
+
+    const body = {
+      content: comment,
+      owner: userDataJSON.userId,
+      post: postId,
+    };
+
+    const ReqClass = new FetchCalls("/comments/add", "POST", token, body);
+    const response = await ReqClass.protectedBody();
+
+    if (response.ok) {
+      setFetchComments(!fetchComments); // Makes useEffect fetch comments again
+    } else {
+      alert("Error");
+    }
+  };
+
+  const editContent = async (route, id, bodyContent) => {
+    const body = {
+      content: bodyContent,
+    };
+    let userData = localStorage.getItem("userData");
+    userData = JSON.parse(userData);
+    const fetchCall = new FetchCalls(
+      `/${route}/edit/${id}`,
+      "PATCH",
+      userData.jwt,
+      body
+    );
+    const response = await fetchCall.protectedBody();
+    if (response.ok) {
+      const responseJson = await response.json();
+      setPost(responseJson);
+    }
+  };
+
+  const deleteContent = async (route, id, isRedirect) => {
+    let userData = localStorage.getItem("userData");
+    userData = JSON.parse(userData);
+    const fetchCall = new FetchCalls(
+      `/${route}/delete/${id}`,
+      "DELETE",
+      userData.jwt
+    );
+    const response = await fetchCall.protectedNoBody();
+    if (response.ok) {
+      if (isRedirect) {
+        navigate(`/posts?major=${encodeURI(userData.major)}`);
+      }
+    } else {
+      alert("error deleting the post");
+    }
+  };
 
   useEffect(() => {
     const options = {
@@ -106,64 +171,6 @@ const PostPage = () => {
     getComments();
   }, [postId, fetchComments]);
 
-  const postComment = async (comment) => {
-    const userData = localStorage.getItem("userData");
-    const userDataJSON = JSON.parse(userData);
-    const token = userDataJSON.jwt;
-
-    const body = {
-      content: comment,
-      owner: userDataJSON.userId,
-      post: postId,
-    };
-
-    const ReqClass = new FetchCalls("/comments/add", "POST", token, body);
-    const response = await ReqClass.protectedBody();
-
-    if (response.ok) {
-      setFetchComments(!fetchComments); // Makes useEffect fetch comments again
-    } else {
-      alert("Error");
-    }
-  };
-
-  const editContent = async (route, id, bodyContent) => {
-    const body = {
-      content: bodyContent,
-    };
-    let userData = localStorage.getItem("userData");
-    userData = JSON.parse(userData);
-    const fetchCall = new FetchCalls(
-      `/${route}/edit/${id}`,
-      "PATCH",
-      userData.jwt,
-      body
-    );
-    const response = await fetchCall.protectedBody();
-    if (response.ok) {
-      const responseJson = await response.json();
-      setPost(responseJson);
-    }
-  };
-
-  const deleteContent = async (route, id, isRedirect) => {
-    let userData = localStorage.getItem("userData");
-    userData = JSON.parse(userData);
-    const fetchCall = new FetchCalls(
-      `/${route}/delete/${id}`,
-      "DELETE",
-      userData.jwt
-    );
-    const response = await fetchCall.protectedNoBody();
-    if (response.ok) {
-      if (isRedirect) {
-        navigate(`/posts?major=${encodeURI(userData.major)}`);
-      }
-    } else {
-      alert("error deleting the post");
-    }
-  };
-
   if (postUser && post && comments) {
     return (
       <div className="post-page-main">
@@ -187,6 +194,41 @@ const PostPage = () => {
                 buttonText="Comment"
               />
               <div>
+                <div className="sort-ui">
+                  <div
+                    onClick={() => setDisplaySortOptions(!displaySortOptions)}
+                    className="display-options-ui"
+                  >
+                    <p>
+                      Sort By: {sortComments} <i className="arrow down"></i>
+                    </p>
+                  </div>
+                  {displaySortOptions && (
+                    <div className="sort-options">
+                      <div className="options">
+                        <div
+                          onClick={() => sort("best")}
+                          className={activeSortBtn === "best" ? "active" : " "}
+                        >
+                          <p>Best</p>
+                        </div>
+                        <div
+                          onClick={() => sort("new")}
+                          className={activeSortBtn === "new" ? "active" : " "}
+                        >
+                          <p>New</p>
+                        </div>
+                        <div
+                          onClick={() => sort("old")}
+                          className={activeSortBtn === "old" ? "active" : " "}
+                        >
+                          <p>Old</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <hr />
                 {comments.map((comment) => (
                   <div>
                     <Comment comment={comment} key={comment._id} />
