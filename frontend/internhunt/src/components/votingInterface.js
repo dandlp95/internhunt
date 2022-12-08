@@ -31,7 +31,6 @@ const VotingInterface = (props) => {
 
       if (response.ok) {
         const votingHistory = await response.json();
-        if (props.type === "comment") console.log("voting history: ", votingHistory);
 
         if (votingHistory.lastVote) {
           lastVote = votingHistory.lastVote;
@@ -39,7 +38,6 @@ const VotingInterface = (props) => {
           lastVote = 0;
         }
       } else {
-        console.log("not ok");
         lastVote = 0;
       }
 

@@ -18,7 +18,6 @@ const CommentSchema = new Schema({
   date: {
     type: Date,
     required: true,
-    default: new Date()
   },
   post: {
     type: Schema.Types.ObjectId,

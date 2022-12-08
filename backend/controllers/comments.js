@@ -130,6 +130,7 @@ const addComment = (req, res, next) => {
       content: req.body.content,
       owner: req.body.owner,
       post: req.body.post,
+      date: new Date(),
     };
 
     CommentModel.create(comment, (err, doc) => {

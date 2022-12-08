@@ -169,8 +169,6 @@ const PostPage = () => {
       if (response.ok) {
         const commentList = await response.json();
         setComments(commentList);
-
-        console.log("comment list len ", commentList.length);
         setCommentsLength(commentList.length);
       } else {
         setComments([]);
@@ -219,6 +217,7 @@ const PostPage = () => {
                             sort("best");
                             setActiveSortBtn("best");
                             setDisplaySortOptions(false);
+                            setSortComments("Best");
                           }}
                           className={activeSortBtn === "best" ? "active" : " "}
                         >
@@ -229,6 +228,7 @@ const PostPage = () => {
                             sort("new");
                             setActiveSortBtn("new");
                             setDisplaySortOptions(false);
+                            setSortComments("New");
                           }}
                           className={activeSortBtn === "new" ? "active" : " "}
                         >
@@ -239,6 +239,7 @@ const PostPage = () => {
                             sort("old");
                             setActiveSortBtn("old");
                             setDisplaySortOptions(false);
+                            setSortComments("Old");
                           }}
                           className={activeSortBtn === "old" ? "active" : " "}
                         >
@@ -250,8 +251,8 @@ const PostPage = () => {
                 </div>
                 <hr />
                 {comments.map((comment) => (
-                  <div>
-                    <Comment comment={comment} key={comment._id} />
+                  <div key={comment._id}>
+                    <Comment comment={comment} />
                     <hr />
                   </div>
                 ))}

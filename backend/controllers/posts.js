@@ -109,6 +109,7 @@ const addPost = async (req, res, next) => {
       company: req.body.company,
       type: req.body.type,
       departments: departments,
+      date: new Date()
     };
     PostModel.create(post, (err, doc) => {
       if (err) {
