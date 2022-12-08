@@ -97,22 +97,6 @@ const Comment = (props) => {
     setRerenderChild(!rerenderChild);
   };
 
-  // const deleteContent = async () => {
-  //   let userData = localStorage.getItem("userData");
-  //   userData = JSON.parse(userData);
-  //   const fetchCall = new FetchCalls(
-  //     `/${route}/delete/${comment._id}`,
-  //     "DELETE",
-  //     userData.jwt
-  //   );
-  //   const response = await fetchCall.protectedNoBody();
-  //   if (!response.ok) {
-  //     alert("error deleting the post");
-  //   } else {
-  //     setComment();
-  //   }
-  // };
-
   const handleDeleteClick = () => {
     props.deleteAction(route, comment._id);
   };

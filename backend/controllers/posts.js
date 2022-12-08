@@ -246,10 +246,8 @@ const getPosts = async (req, res, next) => {
 
   let QString;
   if (search != "null" && search != null) {
-    console.log("not null");
     QString = search.split(" ").map((string) => new RegExp(string, "i"));
   } else {
-    console.log("null");
     search = "";
     QString = search.split(" ").map((string) => new RegExp(string));
   }

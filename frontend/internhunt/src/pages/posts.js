@@ -292,7 +292,7 @@ const Posts = () => {
                 <button
                   className={isButton3Active ? "active-button" : ""}
                   onClick={(e) => {
-                    getPostByType("Internship opportunities");
+                    getPostByType("Internship opportunity");
                     styleActiveButtons(2);
                   }}
                 >
