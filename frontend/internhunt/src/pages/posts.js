@@ -36,7 +36,7 @@ const MajorsContainer = (props) => {
   };
 
   const handleMajorClick = (url) => {
-    props.styleActiveButton(0);
+    props.styleActiveButton(1);
     navigate(url);
   };
 
@@ -82,13 +82,9 @@ const Posts = () => {
   const [currPage, setCurrPage] = useState(1);
   const [totalPosts, setTotalPosts] = useState(0);
   const [numberOfPages, setNumberOfPages] = useState(1);
-  const [isButton1Active, setIsButton1Active] = useState(true);
-  const [isButton2Active, setIsButton2Active] = useState(false);
-  const [isButton3Active, setIsButton3Active] = useState(false);
-  const [isButton4Active, setIsButton4Active] = useState(false);
-  const [isButton5Active, setIsButton5Active] = useState(false);
   const [isdropdownActive, setIsdropdownActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeBtn, setActiveBtn] = useState(1);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -142,40 +138,31 @@ const Posts = () => {
     setCurrPage(finalPage);
     setPosts([]);
   };
-
-  const isLoggedIn = async () => {
-    const res = await isAuth();
-    if (!res.ok) {
-      alert("Please log in");
-      navigate("/");
-    } else {
-      const userData = localStorage.getItem("userData");
-      const userDataJson = JSON.parse(userData);
-      const info = await res.json();
-      setUser(info);
-    }
-  };
-
-  const styleActiveButtons = (buttonNumber) => {
-    const buttonNumbers = [false, false, false, false, false];
-    buttonNumbers[buttonNumber] = true;
-
-    for (let i = 0; i < buttonNumbers.length; i++) {
-      if (i === 0) {
-        setIsButton1Active(buttonNumbers[i]);
-      } else if (i === 1) {
-        setIsButton2Active(buttonNumbers[i]);
-      } else if (i === 2) {
-        setIsButton3Active(buttonNumbers[i]);
-      } else if (i === 3) {
-        setIsButton4Active(buttonNumbers[i]);
-      } else if (i === 4) {
-        setIsButton5Active(buttonNumbers[i]);
-      }
-    }
-  };
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeType = urlParams.get("type");
+    console.log("active type: ", activeType);
+    if (!activeType) setActiveBtn(1);
+    else if (activeType === "Review") setActiveBtn(2);
+    else if (activeType === "Internship opportunity") setActiveBtn(3);
+    else if (activeType === "Advise") setActiveBtn(4);
+    else if (activeType === "Question") setActiveBtn(5);
+  }, []);
 
   useEffect(() => {
+    const isLoggedIn = async () => {
+      const res = await isAuth();
+      if (!res.ok) {
+        alert("Please log in");
+        navigate("/");
+      } else {
+        const userData = localStorage.getItem("userData");
+        const userDataJson = JSON.parse(userData);
+        const info = await res.json();
+        setUser(info);
+      }
+    };
+
     isLoggedIn();
   }, []);
 
@@ -267,10 +254,10 @@ const Posts = () => {
             <div className="posts-queries">
               <div className="first-button">
                 <button
-                  className={isButton1Active ? "active-button" : ""}
-                  onClick={(e) => {
+                  className={activeBtn === 1 ? "active-button" : ""}
+                  onClick={() => {
                     getPostByType("all");
-                    styleActiveButtons(0);
+                    setActiveBtn(1);
                   }}
                 >
                   <VscOpenPreview className="icon" /> All Posts
@@ -278,10 +265,10 @@ const Posts = () => {
               </div>
               <div>
                 <button
-                  className={isButton2Active ? "active-button" : ""}
-                  onClick={(e) => {
+                  className={activeBtn === 2 ? "active-button" : ""}
+                  onClick={() => {
                     getPostByType("Review");
-                    styleActiveButtons(1);
+                    setActiveBtn(2);
                   }}
                 >
                   <MdRateReview className="icon" />
@@ -290,10 +277,10 @@ const Posts = () => {
               </div>
               <div>
                 <button
-                  className={isButton3Active ? "active-button" : ""}
-                  onClick={(e) => {
+                  className={activeBtn === 3 ? "active-button" : ""}
+                  onClick={() => {
                     getPostByType("Internship opportunity");
-                    styleActiveButtons(2);
+                    setActiveBtn(3);
                   }}
                 >
                   <MdWorkOff className="icon" />
@@ -302,10 +289,10 @@ const Posts = () => {
               </div>
               <div>
                 <button
-                  className={isButton4Active ? "active-button" : ""}
-                  onClick={(e) => {
+                  className={activeBtn === 4 ? "active-button" : ""}
+                  onClick={() => {
                     getPostByType("Advise");
-                    styleActiveButtons(3);
+                    setActiveBtn(4);
                   }}
                 >
                   <FaHandsHelping className="icon" />
@@ -314,10 +301,10 @@ const Posts = () => {
               </div>
               <div>
                 <button
-                  className={isButton5Active ? "active-button" : ""}
-                  onClick={(e) => {
+                  className={activeBtn === 5 ? "active-button" : ""}
+                  onClick={() => {
                     getPostByType("Question");
-                    styleActiveButtons(4);
+                    setActiveBtn(5);
                   }}
                 >
                   <GiHelp className="icon" />
@@ -373,7 +360,7 @@ const Posts = () => {
             )}
           </div>
           <div className="majors-div">
-            <MajorsContainer styleActiveButton={styleActiveButtons} />
+            <MajorsContainer styleActiveButton={setActiveBtn} />
           </div>
         </div>
       </div>
