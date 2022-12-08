@@ -102,6 +102,8 @@ const PostPage = () => {
     if (response.ok) {
       if (isRedirect) {
         navigate(`/posts?major=${encodeURI(userData.major)}`);
+      } else {
+        setFetchComments(!fetchComments);
       }
     } else {
       alert("error deleting the post");
@@ -252,7 +254,7 @@ const PostPage = () => {
                 <hr />
                 {comments.map((comment) => (
                   <div key={comment._id}>
-                    <Comment comment={comment} />
+                    <Comment comment={comment} deleteAction={deleteContent} />
                     <hr />
                   </div>
                 ))}

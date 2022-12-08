@@ -17,11 +17,10 @@ const Comment = (props) => {
   const [isUserDeleted, setIsUserDeleted] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const timeDiff = timeDifference(new Date(), new Date(props.comment.date));
-  
+
   const route = "comments";
 
   useEffect(() => {
-    console.log("vote count: ", props.comment.rating )
     const isCommentCreator = async () => {
       const response = await isAuth();
       if (response.ok) {
@@ -98,20 +97,24 @@ const Comment = (props) => {
     setRerenderChild(!rerenderChild);
   };
 
-  const deleteContent = async () => {
-    let userData = localStorage.getItem("userData");
-    userData = JSON.parse(userData);
-    const fetchCall = new FetchCalls(
-      `/${route}/delete/${comment._id}`,
-      "DELETE",
-      userData.jwt
-    );
-    const response = await fetchCall.protectedNoBody();
-    if (!response.ok) {
-      alert("error deleting the post");
-    } else {
-      setComment();
-    }
+  // const deleteContent = async () => {
+  //   let userData = localStorage.getItem("userData");
+  //   userData = JSON.parse(userData);
+  //   const fetchCall = new FetchCalls(
+  //     `/${route}/delete/${comment._id}`,
+  //     "DELETE",
+  //     userData.jwt
+  //   );
+  //   const response = await fetchCall.protectedNoBody();
+  //   if (!response.ok) {
+  //     alert("error deleting the post");
+  //   } else {
+  //     setComment();
+  //   }
+  // };
+
+  const handleDeleteClick = () => {
+    props.deleteAction(route, comment._id);
   };
 
   if (comment) {
@@ -147,13 +150,13 @@ const Comment = (props) => {
             <div className="comment-edit-delete-div">
               {isCommentCreator && (
                 <div className="button-flexbox">
-                  <button onClick={(e) => setEditMode(true)}>Edit</button>
-                  <button onClick={(e) => deleteContent()}>Delete</button>
+                  <button onClick={() => setEditMode(true)}>Edit</button>
+                  <button onClick={() => handleDeleteClick()}>Delete</button>
                 </div>
               )}
               {!isCommentCreator && isAdmin && (
                 <div className="button-flexbox">
-                  <button onClick={(e) => deleteContent()}>Delete</button>
+                  <button onClick={(e) => handleDeleteClick()}>Delete</button>
                 </div>
               )}
             </div>
