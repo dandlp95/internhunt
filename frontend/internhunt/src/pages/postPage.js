@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getApiRoot } from "../utils/getApiRoot";
 import Comment from "../components/comment";
 import Post from "../components/post";
@@ -24,8 +24,9 @@ const PostPage = () => {
   const [fetchComments, setFetchComments] = useState(true);
   const [commentsLenght, setCommentsLength] = useState(10);
   const [displaySortOptions, setDisplaySortOptions] = useState(false);
-  const [activeSortBtn, setActiveSortBtn] = useState("Best");
+  const [activeSortBtn, setActiveSortBtn] = useState("best");
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const isLoggedIn = async () => {
@@ -44,7 +45,9 @@ const PostPage = () => {
 
   const sort = async (sortParam) => {
     const urlParams = new URLSearchParams(window.location.search);
-    var urlString = `sort=${sortParam}`;
+    const postParam = urlParams.get("postId");
+    const url = `/post?postId=${postParam}&sort=${sortParam}`;
+    navigate(url);
   };
 
   const postComment = async (comment) => {
@@ -154,8 +157,13 @@ const PostPage = () => {
     };
 
     const getComments = async () => {
+      var sortParam;
+      const urlParams = new URLSearchParams(window.location.search);
+
+      if (urlParams.get("sort")) sortParam = urlParams.get("sort");
+
       const response = await fetch(
-        getApiRoot() + "/comments/getByPost/" + postId,
+        getApiRoot() + "/comments/getByPost/" + postId + `?sort=${sortParam}`,
         options
       );
       if (response.ok) {
@@ -169,7 +177,7 @@ const PostPage = () => {
       }
     };
     getComments();
-  }, [postId, fetchComments]);
+  }, [postId, fetchComments, location]);
 
   if (postUser && post && comments) {
     return (
@@ -207,19 +215,31 @@ const PostPage = () => {
                     <div className="sort-options">
                       <div className="options">
                         <div
-                          onClick={() => sort("best")}
+                          onClick={() => {
+                            sort("best");
+                            setActiveSortBtn("best");
+                            setDisplaySortOptions(false);
+                          }}
                           className={activeSortBtn === "best" ? "active" : " "}
                         >
                           <p>Best</p>
                         </div>
                         <div
-                          onClick={() => sort("new")}
+                          onClick={() => {
+                            sort("new");
+                            setActiveSortBtn("new");
+                            setDisplaySortOptions(false);
+                          }}
                           className={activeSortBtn === "new" ? "active" : " "}
                         >
                           <p>New</p>
                         </div>
                         <div
-                          onClick={() => sort("old")}
+                          onClick={() => {
+                            sort("old");
+                            setActiveSortBtn("old");
+                            setDisplaySortOptions(false);
+                          }}
                           className={activeSortBtn === "old" ? "active" : " "}
                         >
                           <p>Old</p>

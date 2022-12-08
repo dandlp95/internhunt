@@ -4,7 +4,6 @@ import { isAuth } from "../utils/isLoggedIn";
 import VotingInterface from "./votingInterface";
 import getLocalStorage from "../utils/getLocalStorage";
 import FetchCalls from "../utils/fetchCalls";
-import Button from "./button";
 import { timeDifference } from "../utils/timeDifference";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { BsChatRightText } from "react-icons/bs";
@@ -100,6 +99,7 @@ const Post = (props) => {
             addVoteHandler={addVotePost}
             postInfo={props.post}
             key={rerenderChild}
+            type="post"
           />
         </div>
         <div className="flex-box-2">

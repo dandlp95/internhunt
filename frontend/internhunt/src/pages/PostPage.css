@@ -190,6 +190,11 @@
   font-size: 0.9rem;
 }
 
+.post-page-main .comment-owner-data span {
+  color: rgb(120, 124, 126);
+  font-size: 0.85rem;
+}
+
 .post-page-main .comment-main p {
   margin-top: 0.3rem;
 }
@@ -265,4 +270,9 @@
 .sort-options .options div:hover {
   color: black;
   background-color: rgba(1, 73, 128, 0.2);
+}
+
+.sort-options .active p {
+  color: #286799 !important;
+  font-weight: 700 !important;
 }

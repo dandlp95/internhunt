@@ -8,4 +8,9 @@ router.get(
   votingHistoryController.getVotingHistoryByIds
 );
 
+router.get(
+  "/getById/comment/:id",
+  getAuthToken,
+  votingHistoryController.getVotingHistoryCommentByIds
+);
 module.exports = router;

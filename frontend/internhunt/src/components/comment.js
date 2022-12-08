@@ -4,6 +4,7 @@ import { isAuth } from "../utils/isLoggedIn";
 import FetchCalls from "../utils/fetchCalls";
 import getLocalStorage from "../utils/getLocalStorage";
 import VotingInterface from "./votingInterface";
+import { timeDifference } from "../utils/timeDifference";
 
 const Comment = (props) => {
   const [commentUser, setCommentUser] = useState("");
@@ -15,10 +16,12 @@ const Comment = (props) => {
   const [rerenderChild, setRerenderChild] = useState(true);
   const [isUserDeleted, setIsUserDeleted] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-
+  const timeDiff = timeDifference(new Date(), new Date(props.comment.date));
+  
   const route = "comments";
 
   useEffect(() => {
+    console.log("vote count: ", props.comment.rating )
     const isCommentCreator = async () => {
       const response = await isAuth();
       if (response.ok) {
@@ -80,7 +83,7 @@ const Comment = (props) => {
       console.log("no local storage data :(");
     } else {
       const caller = new FetchCalls(
-        `/posts/vote/${voteReq}/${comment._id}`,
+        `/comments/vote/${voteReq}/${comment._id}`,
         "PATCH",
         data.jwt,
         { rating: userVote }
@@ -121,6 +124,7 @@ const Comment = (props) => {
               addVoteHandler={addVotePost}
               postInfo={comment}
               key={rerenderChild}
+              type="comment"
             />
           </div>
           <div className="flexbox-2">
@@ -132,7 +136,8 @@ const Comment = (props) => {
                   </Link>
                 ) : (
                   <div>{commentUser}</div>
-                )}
+                )}{" "}
+                <span>{timeDiff}</span>
               </div>
               <div className="comment-content-div">
                 <p>{comment.content}</p>
