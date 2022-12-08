@@ -109,6 +109,7 @@ const addPost = async (req, res, next) => {
       company: req.body.company,
       type: req.body.type,
       departments: departments,
+      date: new Date()
     };
     PostModel.create(post, (err, doc) => {
       if (err) {
@@ -245,10 +246,8 @@ const getPosts = async (req, res, next) => {
 
   let QString;
   if (search != "null" && search != null) {
-    console.log("not null");
     QString = search.split(" ").map((string) => new RegExp(string, "i"));
   } else {
-    console.log("null");
     search = "";
     QString = search.split(" ").map((string) => new RegExp(string));
   }

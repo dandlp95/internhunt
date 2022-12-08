@@ -193,6 +193,15 @@ const CreatePost = () => {
                         />
                         Advise
                       </label>
+                      <label>
+                        <input
+                          type="radio"
+                          value="Internship opportunity"
+                          name="type"
+                          checked={type === "Internship opportunity"}
+                        />
+                        Opportunity
+                      </label>
                     </div>
                     <button
                       onClick={(e) => displayCategoriesHandler()}

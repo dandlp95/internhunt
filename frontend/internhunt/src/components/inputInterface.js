@@ -3,7 +3,6 @@ import React from "react";
 
 const InputInterface = (props) => {
   const [input, setInput] = useState("");
-  const [isInputValid, setIsInputValid] = useState(true);
 
   const sendData = () => {
     if (input) {

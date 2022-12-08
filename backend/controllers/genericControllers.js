@@ -2,7 +2,6 @@ const ApiError404 = require("../middleware/error-handling/apiError404");
 const ApiError400 = require("../middleware/error-handling/apiError400");
 const ApiError422 = require("../middleware/error-handling/apiError422");
 const ApiError401 = require("../middleware/error-handling/apiError401");
-const VotingHistory = require("../models/votingHistory");
 
 const apiAuthError = new ApiError401();
 

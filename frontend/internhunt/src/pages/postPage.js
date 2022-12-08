@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getApiRoot } from "../utils/getApiRoot";
 import Comment from "../components/comment";
 import Post from "../components/post";
@@ -20,10 +20,13 @@ const PostPage = () => {
   const [postUser, setPostuser] = useState(null);
   const [comments, setComments] = useState([]);
   const [user, setUser] = useState();
-  const [sort, setSort] = useState(); // This will be used to add functionality to sort comments later.
+  const [sortComments, setSortComments] = useState("Best"); // This will be used to add functionality to sort comments later.
   const [fetchComments, setFetchComments] = useState(true);
   const [commentsLenght, setCommentsLength] = useState(10);
+  const [displaySortOptions, setDisplaySortOptions] = useState(false);
+  const [activeSortBtn, setActiveSortBtn] = useState("best");
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const isLoggedIn = async () => {
@@ -40,71 +43,12 @@ const PostPage = () => {
     isLoggedIn();
   }, []);
 
-  useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: { "Content-type": "application/json" },
-    };
-
-    const deletedUser = {};
-    deletedUser.firstName = "[Deleted user]";
-
-    const unexistentPost = {};
-    unexistentPost.title = "Bad request title";
-    unexistentPost.content = "Bad content";
-
-    const getPost = async () => {
-      const response = await fetch(
-        getApiRoot() + "/posts/getById/" + postId,
-        options
-      );
-      if (response.ok) {
-        const foundPost = await response.json();
-        setPost(foundPost);
-
-        const userId = foundPost.owner;
-
-        const response2 = await fetch(
-          getApiRoot() + "/users/getById/" + userId
-        );
-
-        if (response2.ok) {
-          const foundUser = await response2.json();
-          setPostuser(foundUser);
-        } else {
-          setPostuser(deletedUser);
-        }
-      } else {
-        setPost(unexistentPost);
-        setPostuser(deletedUser);
-      }
-    };
-    getPost();
-  }, []);
-
-  useEffect(() => {
-    const options = {
-      method: "GET",
-      headers: { "Content-type": "application/json" },
-    };
-
-    const getComments = async () => {
-      const response = await fetch(
-        getApiRoot() + "/comments/getByPost/" + postId,
-        options
-      );
-      if (response.ok) {
-        const commentList = await response.json();
-        setComments(commentList);
-
-        console.log("comment list len ", commentList.length);
-        setCommentsLength(commentList.length);
-      } else {
-        setComments([]);
-      }
-    };
-    getComments();
-  }, [postId, fetchComments]);
+  const sort = async (sortParam) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const postParam = urlParams.get("postId");
+    const url = `/post?postId=${postParam}&sort=${sortParam}`;
+    navigate(url);
+  };
 
   const postComment = async (comment) => {
     const userData = localStorage.getItem("userData");
@@ -158,11 +102,82 @@ const PostPage = () => {
     if (response.ok) {
       if (isRedirect) {
         navigate(`/posts?major=${encodeURI(userData.major)}`);
+      } else {
+        setFetchComments(!fetchComments);
       }
     } else {
       alert("error deleting the post");
     }
   };
+
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      headers: { "Content-type": "application/json" },
+    };
+
+    const deletedUser = {};
+    deletedUser.firstName = "[Deleted user]";
+
+    const unexistentPost = {};
+    unexistentPost.title = "Bad request title";
+    unexistentPost.content = "Bad content";
+
+    const getPost = async () => {
+      const response = await fetch(
+        getApiRoot() + "/posts/getById/" + postId,
+        options
+      );
+      if (response.ok) {
+        const foundPost = await response.json();
+        setPost(foundPost);
+
+        const userId = foundPost.owner;
+
+        const response2 = await fetch(
+          getApiRoot() + "/users/getById/" + userId
+        );
+
+        if (response2.ok) {
+          const foundUser = await response2.json();
+          setPostuser(foundUser);
+        } else {
+          setPostuser(deletedUser);
+        }
+      } else {
+        setPost(unexistentPost);
+        setPostuser(deletedUser);
+      }
+    };
+    getPost();
+  }, []);
+
+  useEffect(() => {
+    const options = {
+      method: "GET",
+      headers: { "Content-type": "application/json" },
+    };
+
+    const getComments = async () => {
+      var sortParam;
+      const urlParams = new URLSearchParams(window.location.search);
+
+      if (urlParams.get("sort")) sortParam = urlParams.get("sort");
+
+      const response = await fetch(
+        getApiRoot() + "/comments/getByPost/" + postId + `?sort=${sortParam}`,
+        options
+      );
+      if (response.ok) {
+        const commentList = await response.json();
+        setComments(commentList);
+        setCommentsLength(commentList.length);
+      } else {
+        setComments([]);
+      }
+    };
+    getComments();
+  }, [postId, fetchComments, location]);
 
   if (postUser && post && comments) {
     return (
@@ -187,9 +202,59 @@ const PostPage = () => {
                 buttonText="Comment"
               />
               <div>
+                <div className="sort-ui">
+                  <div
+                    onClick={() => setDisplaySortOptions(!displaySortOptions)}
+                    className="display-options-ui"
+                  >
+                    <p>
+                      Sort By: {sortComments} <i className="arrow down"></i>
+                    </p>
+                  </div>
+                  {displaySortOptions && (
+                    <div className="sort-options">
+                      <div className="options">
+                        <div
+                          onClick={() => {
+                            sort("best");
+                            setActiveSortBtn("best");
+                            setDisplaySortOptions(false);
+                            setSortComments("Best");
+                          }}
+                          className={activeSortBtn === "best" ? "active" : " "}
+                        >
+                          <p>Best</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            sort("new");
+                            setActiveSortBtn("new");
+                            setDisplaySortOptions(false);
+                            setSortComments("New");
+                          }}
+                          className={activeSortBtn === "new" ? "active" : " "}
+                        >
+                          <p>New</p>
+                        </div>
+                        <div
+                          onClick={() => {
+                            sort("old");
+                            setActiveSortBtn("old");
+                            setDisplaySortOptions(false);
+                            setSortComments("Old");
+                          }}
+                          className={activeSortBtn === "old" ? "active" : " "}
+                        >
+                          <p>Old</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <hr />
                 {comments.map((comment) => (
-                  <div>
-                    <Comment comment={comment} key={comment._id} />
+                  <div key={comment._id}>
+                    <Comment comment={comment} deleteAction={deleteContent} />
                     <hr />
                   </div>
                 ))}

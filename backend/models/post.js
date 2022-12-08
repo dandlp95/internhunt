@@ -13,7 +13,6 @@ const PostSchema = new Schema({
   date: {
     type: Date,
     required: true,
-    default: new Date(),
   },
   owner: {
     type: Schema.Types.ObjectId,

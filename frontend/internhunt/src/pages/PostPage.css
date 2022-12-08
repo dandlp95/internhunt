@@ -190,6 +190,11 @@
   font-size: 0.9rem;
 }
 
+.post-page-main .comment-owner-data span {
+  color: rgb(120, 124, 126);
+  font-size: 0.85rem;
+}
+
 .post-page-main .comment-main p {
   margin-top: 0.3rem;
 }
@@ -223,9 +228,51 @@
   display: flex;
 }
 
-.post-page-main .comment-main .comment-input-div textarea{
+.post-page-main .comment-main .comment-input-div textarea {
   width: 50rem;
   height: 7rem;
   border-radius: 7px;
   padding: 0.5rem 0.7rem;
+}
+
+.post-page-main .sort-ui p {
+  color: #014980;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.sort-options {
+  position: absolute;
+  background: white;
+  border: 1px solid #edeff1;
+  width: 6rem;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px 0;
+  margin-top: -0.5rem;
+}
+
+.display-options-ui,
+.sort-options .options div {
+  cursor: pointer;
+}
+
+.sort-options > div {
+  width: 100%;
+  text-align: center;
+}
+
+.post-page-main .sort-ui .options p {
+  padding: 0.2rem 0rem;
+  margin: 0.2rem 0;
+  color: #878a8c;
+}
+
+.sort-options .options div:hover {
+  color: black;
+  background-color: rgba(1, 73, 128, 0.2);
+}
+
+.sort-options .active p {
+  color: #286799 !important;
+  font-weight: 700 !important;
 }

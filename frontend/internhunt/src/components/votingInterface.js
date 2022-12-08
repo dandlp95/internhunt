@@ -18,19 +18,21 @@ const VotingInterface = (props) => {
     const getVotingHistory = async () => {
       const userData = localStorage.getItem("userData");
       const userJWT = JSON.parse(userData).jwt;
-      const caller = new FetchCalls(
-        `/votingHistory/getById/${post._id}`,
-        "GET",
-        userJWT
-      );
+      var endpoint;
+      if (props.type === "post") {
+        endpoint = `/votingHistory/getById/${post._id}`;
+      } else if (props.type === "comment") {
+        endpoint = `/votingHistory/getById/comment/${post._id}`;
+      }
+
+      const caller = new FetchCalls(endpoint, "GET", userJWT);
       const response = await caller.protectedNoBody();
       var lastVote;
 
       if (response.ok) {
         const votingHistory = await response.json();
-        // console.log(votingHistory)
+
         if (votingHistory.lastVote) {
-          // console.log(votingHistory.lastVote);
           lastVote = votingHistory.lastVote;
         } else {
           lastVote = 0;
@@ -64,7 +66,7 @@ const VotingInterface = (props) => {
         onClick={(e) => handleVote(1)}
         disabled={isUpDisabled}
       >
-        <BiUpArrow className="arrow-icon"/>
+        <BiUpArrow className="arrow-icon" />
       </button>
       <span className="vote-number">{vote}</span>
       <button
@@ -72,7 +74,7 @@ const VotingInterface = (props) => {
         onClick={(e) => handleVote(-1)}
         disabled={isDownDisabled}
       >
-        <BiDownArrow className="arrow-icon"/>
+        <BiDownArrow className="arrow-icon" />
       </button>
     </div>
   );

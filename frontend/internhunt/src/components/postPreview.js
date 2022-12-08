@@ -57,6 +57,7 @@ const PostPreview = (props) => {
           addVoteHandler={addVotePost}
           postInfo={post}
           key={voteCount}
+          type="post"
         />
         <div className="post-content">
           <div className="post-metadata">
